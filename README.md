@@ -2,7 +2,8 @@
 
 **Human pose from Wi-Fi CSI. Camera-free inference, inspectable uncertainty, reproducible experiments.**
 
-GhostMesh turns synchronized channel-state information into a 17-joint 2D
+Channel-state information (CSI) describes how Wi-Fi signals change along radio
+paths. GhostMesh turns aligned CSI recordings into a 17-joint 2D
 skeleton. Its local application plays real recorded inference with a signal
 map, joint uncertainty, reference overlays and explicit failure states. No
 boards, camera, cloud account or billed API are required for replay.
@@ -17,16 +18,24 @@ claim is established yet. See
 ## Run locally
 
 Python 3.12 and [uv](https://docs.astral.sh/uv/) are the tested environment.
-From a checkout:
+Start with a fresh checkout:
+
+```bash
+git clone https://github.com/nazeeh111/GhostMesh.git
+cd GhostMesh
+uv run --isolated --no-project --python 3.12 python -m ghostmesh serve
+```
+
+Open the localhost address printed by the command. This plays the bundled
+held-out predictions with Python's standard library, without installing the ML
+stack. It does not recompute predictions in the browser.
+
+For training, evaluation or CSI-only inference, install the locked environment:
 
 ```bash
 uv sync --locked --extra test
 uv run ghostmesh serve
 ```
-
-Open the localhost address printed by the command. The release replay is
-selected by default. While experiments are unfinished, use an explicitly
-labeled diagnostic with `--replay examples/diagnostic-replay.json`.
 
 The viewer provides play/pause, frame stepping, timestamp seeking, playback
 speed, reference labels, a fixed sequence viewport and a full annotation-plane
@@ -61,20 +70,24 @@ frame number. It does not load camera images or convert the separate 3D labels
 into purported 2D truth.
 
 ```bash
-python scripts/fetch_mmfi.py --env E01 --actions A02 A06 --inventory
-python scripts/fetch_mmfi.py --env E01 --actions A02 A06 \
-  --out data/mmfi-raw --max-payload-mb 400
+uv run python scripts/fetch_cohort20.py --dry-run
+uv run python scripts/fetch_cohort20.py --inventory
+uv run python scripts/fetch_cohort20.py --out data/mmfi-raw
 ```
 
-Repeat for E02–E04. Follow [the data guide](docs/DATA_ACCESS.md) for the complete
-27-action acquisition, coordinate conventions, consent record and split rules.
+This selects the exact 20-person, 27-action cohort across E01–E04. It stops on
+provider errors. After quota access returns, `--resume` verifies and reuses
+identical local files. Follow [the data guide](docs/DATA_ACCESS.md) for access
+limits, the larger 40-person acquisition, consent and split rules.
 Preparation refuses an existing output directory:
 
 ```bash
 uv run ghostmesh prepare-mmfi \
   --source data/mmfi-raw --out data/mmfi-prepared \
   --width 640 --height 640 --fps 10 \
-  --provenance docs/mmfi-source.json
+  --subjects S01 S02 S03 S04 S05 S11 S12 S13 S14 S15 \
+    S21 S22 S23 S24 S25 S31 S32 S33 S34 S35 \
+  --provenance configs/cohort20-provenance.json
 uv run ghostmesh audit --manifest data/mmfi-prepared/manifest.json
 ```
 
@@ -124,7 +137,7 @@ It cannot make an ESP32 recording compatible with MM-Fi weights by reshaping it.
 ## Validation
 
 ```bash
-uv run pytest -q
+uv run pytest -q --ignore=tests/test_report_results.py
 node --test tests/test_replay.mjs
 ```
 
@@ -133,7 +146,11 @@ paths, exact frame joins, manifest integrity, split leakage, validation-only
 selection, metric definitions, uncertainty, paired comparisons, annotation-free
 inference, ESP32 parsing, actual HTTP responses and replay controls.
 
-PCK uses 20% of each frame's valid reference bounding-box diagonal. Normalized
+Scientific figure and report checks run in a separate optional plotting
+environment. See [the reporting guide](docs/RESULTS_FORMAT.md).
+
+The final test evaluates every complete causal endpoint; training and
+validation sample every eighth frame. PCK uses 20% of each frame's valid reference bounding-box diagonal. Normalized
 joint error is Euclidean joint error divided by that diagonal. Reports retain
 excluded-window coverage, per-person/environment/sequence scores, confidence
 reliability and measured processing latency. These 2D metrics are not directly
@@ -150,7 +167,7 @@ No hardware accuracy or cross-device transfer is claimed.
 uv sync --locked --extra hardware
 uv run ghostmesh esp-record --port /dev/cu.YOUR_DEVICE --out data/my-session \
   --seconds 60 --consent-note "Consenting participants in the authorized test area"
-uv run ghostmesh esp-convert --source data/my-session/csi.csv \
+uv run ghostmesh esp-convert --source data/my-session/serial.log \
   --out data/my-session/amplitude.npz
 ```
 

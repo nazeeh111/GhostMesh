@@ -152,7 +152,8 @@ subset. Temporal and baseline variants have seeds 2027 and 2028. A smaller
 budget can be fixed before a suite starts; it is saved in preregistration.
 The `cohort20` profile uses all 27 actions for the 20 people whose recordings
 were complete before the provider quota. It fixes packet-moment width 64,
-eight frames, stride 8, 40 epochs, batch 64 and one CPU thread. Primary temporal
+eight frames, training/validation stride 8, dense test stride 1, 40 epochs,
+batch 64 and one CPU thread. Primary temporal
 and last-frame encoder pairs use seeds 2027/2028 in both subject and environment
 protocols. Individual consistency/normalization/augmentation ablations use
 seed 2027. Configurations establish intended experiments, not completed results.
@@ -182,6 +183,13 @@ must retain their action/subject/room coverage and license attribution; a
 two-action result cannot stand in for the complete MM-Fi benchmark.
 
 ## Known limits
+
+CPU is the tested backend for this release. A synthetic check on the local
+Apple M4 GPU found that PyTorch 2.9.0 MPS cannot execute the packet encoder's
+non-divisible adaptive pooling from 114 subcarriers to 32 bins. It raised before
+prediction; no GPU accuracy or speed result is claimed. CUDA was unavailable.
+The CLI's device choices also serve other configurations and do not establish
+backend support for every architecture.
 
 The model assumes one labeled person, a fixed sensor layout and one defined
 2D coordinate view. Sensor placement, radio bandwidth, subcarrier layout,

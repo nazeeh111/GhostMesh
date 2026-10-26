@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "purpose": "supplemental descriptive signal-correspondence diagnostics",
+  "permutation_seed": 90210,
+  "variants": [
+    "cohort20-baseline",
+    "cohort20-temporal",
+    "cohort20-environment-baseline",
+    "cohort20-environment-temporal"
+  ],
+  "prior": "per-environment, per-joint training mean and isotropic variance; global training fallback for unseen rooms or missing room joints",
+  "oracle_metadata": "environment only; no action-conditioned fitting",
+  "training_stride": 8,
+  "test_stride": 1,
+  "permutation_unit": "complete accepted causal test window, within environment",
+  "rules": [
+    "Freeze code/config/runtime/manifests/suite preregistration before any main suite test.json exists",
+    "Evaluate only after all twelve training jobs and original main suite evaluation complete",
+    "Use one fixed permutation per protocol, shared by baseline and temporal seed 2027",
+    "Carry predicted pose and log_sigma together; hold targets, masks and endpoint coverage fixed",
+    "Aligned PCK/NJE/counts must match original test report within 1e-6",
+    "No significance tests, tuning, model selection or training updates",
+    "Diagnostic may retain person, action and recording cues; not proof of causal motion or localization"
+  ]
+}

@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "status": "frozen_before_test",
+  "scope": "Supplemental descriptive diagnostics of sample-specific CSI-target correspondence beyond static room pose distributions. Oracle room metadata; person/action/recording cues may remain. No significance tests, causal motion, localization, unseen-action or cross-dataset claim.",
+  "config": {
+    "schema_version": 1,
+    "purpose": "supplemental descriptive signal-correspondence diagnostics",
+    "permutation_seed": 90210,
+    "variants": [
+      "cohort20-baseline",
+      "cohort20-temporal",
+      "cohort20-environment-baseline",
+      "cohort20-environment-temporal"
+    ],
+    "prior": "per-environment, per-joint training mean and isotropic variance; global training fallback for unseen rooms or missing room joints",
+    "oracle_metadata": "environment only; no action-conditioned fitting",
+    "training_stride": 8,
+    "test_stride": 1,
+    "permutation_unit": "complete accepted causal test window, within environment",
+    "rules": [
+      "Freeze code/config/runtime/manifests/suite preregistration before any main suite test.json exists",
+      "Evaluate only after all twelve training jobs and original main suite evaluation complete",
+      "Use one fixed permutation per protocol, shared by baseline and temporal seed 2027",
+      "Carry predicted pose and log_sigma together; hold targets, masks and endpoint coverage fixed",
+      "Aligned PCK/NJE/counts must match original test report within 1e-6",
+      "No significance tests, tuning, model selection or training updates",
+      "Diagnostic may retain person, action and recording cues; not proof of causal motion or localization"
+    ]
+  },
+  "variants": {
+    "cohort20-baseline": {
+      "name": "cohort20-baseline",
+      "config": {
+        "schema_version": 1,
+        "protocol": "cross_subject",
+        "seed": 2027,
+        "threads": 1,
+        "model": {
+          "channels": 3,
+          "joints": 17,
+          "width": 64,
+          "temporal": false,
+          "dilations": [
+            1,
+            2,
+            4
+          ],
+          "encoder": "packet_moment",
+          "bins": 32,
+          "temporal_kernel": "direct"
+        },
+        "data": {
+          "window": 8,
+          "normalize": true,
+          "stride": 8,
+          "cache_windows": true,
+          "split_stride": {
+            "train": 8,
+            "validation": 8,
+            "test": 1
+          }
+        },
+        "training": {
+          "epochs": 40,
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "weight_decay": 0.01,
+          "augmentation_strength": 0.15,
+          "consistency_weight": 0,
+          "ema_decay": 0.99,
+          "consistency_mode": "bounded_precision"
+        },
+        "evaluation": {
+          "pck_threshold": 0.2
+        },
+        "note": "Balanced MM-Fi cohort: 27 actions, 20 subjects, four environments. These settings are frozen before final testing. The 40-subject expansion is blocked by a documented provider quota. No 3D or unseen-action claim.",
+        "name": "cohort20-baseline"
+      },
+      "manifest": "mmfi-cohort20/manifest.json",
+      "manifest_sha256": "0a97b3e76b896757e3c281f48e068939f100738ed2338ff1e136afc543ebb768"
+    },
+    "cohort20-temporal": {
+      "name": "cohort20-temporal",
+      "config": {
+        "schema_version": 1,
+        "protocol": "cross_subject",
+        "seed": 2027,
+        "threads": 1,
+        "model": {
+          "channels": 3,
+          "joints": 17,
+          "width": 64,
+          "temporal": true,
+          "dilations": [
+            1,
+            2,
+            4
+          ],
+          "encoder": "packet_moment",
+          "bins": 32,
+          "temporal_kernel": "direct"
+        },
+        "data": {
+          "window": 8,
+          "normalize": true,
+          "stride": 8,
+          "cache_windows": true,
+          "split_stride": {
+            "train": 8,
+            "validation": 8,
+            "test": 1
+          }
+        },
+        "training": {
+          "epochs": 40,
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "weight_decay": 0.01,
+          "augmentation_strength": 0.15,
+          "consistency_weight": 0.2,
+          "ema_decay": 0.99,
+          "consistency_mode": "bounded_precision"
+        },
+        "evaluation": {
+          "pck_threshold": 0.2
+        },
+        "note": "Balanced MM-Fi cohort: 27 actions, 20 subjects, four environments. These settings are frozen before final testing. The 40-subject expansion is blocked by a documented provider quota. No 3D or unseen-action claim.",
+        "name": "cohort20-temporal"
+      },
+      "manifest": "mmfi-cohort20/manifest.json",
+      "manifest_sha256": "0a97b3e76b896757e3c281f48e068939f100738ed2338ff1e136afc543ebb768"
+    },
+    "cohort20-environment-baseline": {
+      "name": "cohort20-environment-baseline",
+      "config": {
+        "schema_version": 1,
+        "protocol": "cross_environment",
+        "seed": 2027,
+        "threads": 1,
+        "model": {
+          "channels": 3,
+          "joints": 17,
+          "width": 64,
+          "temporal": false,
+          "dilations": [
+            1,
+            2,
+            4
+          ],
+          "encoder": "packet_moment",
+          "bins": 32,
+          "temporal_kernel": "direct"
+        },
+        "data": {
+          "window": 8,
+          "normalize": true,
+          "stride": 8,
+          "cache_windows": true,
+          "split_stride": {
+            "train": 8,
+            "validation": 8,
+            "test": 1
+          }
+        },
+        "training": {
+          "epochs": 40,
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "weight_decay": 0.01,
+          "augmentation_strength": 0.15,
+          "consistency_weight": 0,
+          "ema_decay": 0.99,
+          "consistency_mode": "bounded_precision"
+        },
+        "evaluation": {
+          "pck_threshold": 0.2
+        },
+        "note": "Balanced MM-Fi cohort: 27 actions, 20 subjects, four environments. These settings are frozen before final testing. The 40-subject expansion is blocked by a documented provider quota. No 3D or unseen-action claim.",
+        "name": "cohort20-environment-baseline"
+      },
+      "manifest": "mmfi-cohort20/cross-environment.json",
+      "manifest_sha256": "a02f2ebfd406c16fd46bfc8f45ed61cff7217c1dc5a2979f542b7de8a07fe360"
+    },
+    "cohort20-environment-temporal": {
+      "name": "cohort20-environment-temporal",
+      "config": {
+        "schema_version": 1,
+        "protocol": "cross_environment",
+        "seed": 2027,
+        "threads": 1,
+        "model": {
+          "channels": 3,
+          "joints": 17,
+          "width": 64,
+          "temporal": true,
+          "dilations": [
+            1,
+            2,
+            4
+          ],
+          "encoder": "packet_moment",
+          "bins": 32,
+          "temporal_kernel": "direct"
+        },
+        "data": {
+          "window": 8,
+          "normalize": true,
+          "stride": 8,
+          "cache_windows": true,
+          "split_stride": {
+            "train": 8,
+            "validation": 8,
+            "test": 1
+          }
+        },
+        "training": {
+          "epochs": 40,
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "weight_decay": 0.01,
+          "augmentation_strength": 0.15,
+          "consistency_weight": 0.2,
+          "ema_decay": 0.99,
+          "consistency_mode": "bounded_precision"
+        },
+        "evaluation": {
+          "pck_threshold": 0.2
+        },
+        "note": "Balanced MM-Fi cohort: 27 actions, 20 subjects, four environments. These settings are frozen before final testing. The 40-subject expansion is blocked by a documented provider quota. No 3D or unseen-action claim.",
+        "name": "cohort20-environment-temporal"
+      },
+      "manifest": "mmfi-cohort20/cross-environment.json",
+      "manifest_sha256": "a02f2ebfd406c16fd46bfc8f45ed61cff7217c1dc5a2979f542b7de8a07fe360"
+    }
+  },
+  "files_sha256": {
+    "ghostmesh/controls.py": "6ceaa30cd344511f73737452d4d17ac6b86aa1513df78a6dce14b5aa6630c007",
+    "scripts/run_signal_controls.py": "3b3d26f7e70a9e2b5cd890f5c3d6be87ea0ddd80735894529a86c94b2b451716",
+    "tests/test_controls.py": "e8bfc07413f26a15aedf6b8d7561367b01fa0a44cb2141ab276713af64fb8217",
+    "docs/SIGNAL_CONTROLS.md": "27d869459442d8730b60fd0d51afcf8fa24e8ad4eeee1f5bf3deeaf636786e8b",
+    "configs/signal-controls-v1.json": "15cc3f104ad3eae754577837fc55e757fc03706cb3ad5b0f4bf87ec019a009d6",
+    "scripts/report_results.py": "deba23ddfd7a532562f859c33403309f087a888927daf85a8d761b5972db3b53"
+  },
+  "config_sha256": "15cc3f104ad3eae754577837fc55e757fc03706cb3ad5b0f4bf87ec019a009d6",
+  "suite_configs_sha256": {
+    "cohort20-baseline": "350a8989da0bb692c5d292e34ccd3b57fd1b218dbc14bf6214e4f2004ea0b84a",
+    "cohort20-temporal": "cbaf2638ce4580606f6254741b5de52803b01dea1ebee238dcd20165698dfe19",
+    "cohort20-environment-baseline": "5769a9fc2888c8d4324f26bdfc89652efded552e804d11b3de5b0859a1aed175",
+    "cohort20-environment-temporal": "a789a43048637eb2cb9c24019f049c4bb2232e469e49c75b529275875edab89d"
+  },
+  "runtime_source_sha256": {
+    "engine.py": "05e0faad2c89c2fb7128ea89d22db66987232b0b1c9494557570d460ca8b5e8e",
+    "models.py": "f581f556f100a3dd3ec404c243bf5143c9e34d2c8259566ad8d49e5f1f25a6b9",
+    "data.py": "39828380f885a13e546395a7afc66687067423698b92ffbe0b2792c60943fac0",
+    "preprocess.py": "85319866a2694b3f6a416a09675e94b11684b33ff1a4f13d5ec03d7a45008c3c",
+    "metrics.py": "b4827f9f2f33890739f092b30a39e47af99e2ae08b3bc29e173da0134cef48a3"
+  },
+  "runtime_environment": {
+    "python": "3.12.13",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "torch": "2.9.0",
+    "numpy": "2.2.6",
+    "torch_cuda_build": null
+  },
+  "runner_sha256": "182bd84f1098095b1c4a8fced1c9232e0deee356ab4437bd71004239c92892b2",
+  "suite_preregistration_sha256": "3793044ca3a308a10e1736c8b3d83b9f0a256716eede59f143e8894a7b0a8deb",
+  "manifests_sha256": {
+    "cross_subject": "0a97b3e76b896757e3c281f48e068939f100738ed2338ff1e136afc543ebb768",
+    "cross_environment": "a02f2ebfd406c16fd46bfc8f45ed61cff7217c1dc5a2979f542b7de8a07fe360"
+  },
+  "checkpoint_binding": "At execution only, validation-selected best.pt SHA256 from completed suite; no selection by these diagnostics"
+}

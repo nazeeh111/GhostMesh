@@ -1,0 +1,3 @@
+# Optional reporting environment only. Do not install into an active training env.
+# Verified using Python 3.12 in an isolated disposable environment.
+matplotlib==3.11.2

@@ -45,14 +45,14 @@ Per-packet timestamps are not included in this prepared path. Algorithmic causal
 Run from the repository root. Python's standard library is sufficient for acquisition:
 
 ```bash
-python scripts/fetch_mmfi.py --env E01 --actions A02 A06 --inventory
+uv run python scripts/fetch_mmfi.py --env E01 --actions A02 A06 --inventory
 ```
 
 This reads bounded ZIP directory metadata and prints selected compressed size before extraction. Each environment archive is roughly 19–22 GB; the selected modalities/actions need only a fraction. Directory metadata across four archives totals about 266 MB. The verified full 27-action CSI/keypoint inventory contains 641,520 files, **14,628,683,489 compressed bytes** and **17,767,537,920 original bytes**, before filesystem overhead. Inventory establishes expected coverage, not completed downloads. Fetch the pilot with:
 
 ```bash
 for environment in E01 E02 E03 E04; do
-  python scripts/fetch_mmfi.py --env "$environment" \
+  uv run python scripts/fetch_mmfi.py --env "$environment" \
     --actions A02 A06 --out data/mmfi-raw \
     --inventory-dir data/mmfi-raw/provenance --max-payload-mb 400
 done
@@ -67,12 +67,12 @@ Once the provider restores access, a manually invoked `--resume` verifies existi
 Preparation requires a provenance JSON with `dataset`, `source`, `license` and `consent_basis`; [mmfi-source.json](mmfi-source.json) supplies the factual record:
 
 ```bash
-python -m ghostmesh prepare-mmfi \
+uv run ghostmesh prepare-mmfi \
   --source data/mmfi-raw --out data/mmfi-subset \
   --width 640 --height 640 --fps 10 --labels rgb \
   --provenance docs/mmfi-source.json
 
-python -m ghostmesh audit --manifest data/mmfi-subset/manifest.json
+uv run ghostmesh audit --manifest data/mmfi-subset/manifest.json
 ```
 
 Existing output directories are refused. CSI and keypoints join by exact frame number, not filesystem position. Prepared NPZ files retain complete sequences, raw-file hashes and manifest content hashes. Use a fresh directory when rebuilding.

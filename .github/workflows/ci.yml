@@ -31,7 +31,7 @@ jobs:
       - name: Install locked CPU environment
         run: uv sync --locked --extra test
       - name: Numerical, data, inference and HTTP tests
-        run: uv run --locked pytest -q
+        run: uv run --locked pytest -q --ignore=tests/test_report_results.py
       - name: Browser replay contract tests
         run: node --test tests/test_replay.mjs
       - name: Train and infer a clearly labeled software fixture
@@ -40,5 +40,30 @@ jobs:
           uv run --locked ghostmesh train --manifest work/ci-fixture/manifest.json --config configs/smoke.json --out work/ci-smoke
           uv run --locked ghostmesh evaluate --manifest work/ci-fixture/manifest.json --checkpoint work/ci-smoke/best.pt --out work/ci-smoke/test.json
           uv run --locked ghostmesh export --manifest work/ci-fixture/manifest.json --checkpoint work/ci-smoke/best.pt --out work/ci-replay.json
+      - name: Reproduce real held-out replay from CSI only
+        run: uv run --locked python scripts/reproduce_demo.py
       - name: Build wheel
         run: uv build --wheel
+      - name: Check installed wheel outside the checkout
+        run: |
+          uv pip install --no-deps --target work/wheel-install dist/*.whl
+          .venv/bin/python scripts/check_wheel.py --site work/wheel-install
+  reporting:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          version: '0.11.20'
+      - name: Install isolated reporting environment
+        run: |
+          uv venv .report-venv --python 3.12
+          uv pip install --python .report-venv/bin/python -r requirements-plots.txt pytest==8.4.2
+      - name: Validate result binding and scientific figures
+        env:
+          MPLCONFIGDIR: ${{ runner.temp }}/ghostmesh-matplotlib
+        run: .report-venv/bin/python -m pytest -q tests/test_report_results.py

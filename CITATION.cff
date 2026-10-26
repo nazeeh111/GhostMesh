@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use GhostMesh, cite this software and the MM-Fi dataset described in docs/REFERENCES.md."
+type: software
+title: "GhostMesh: reproducible Wi-Fi CSI to 2D human pose"
+version: 0.1.0
+authors:
+  - family-names: "Abdul-Hadi"
+    given-names: "Nazeeh"
+repository-code: "https://github.com/nazeeh111/GhostMesh"
+url: "https://github.com/nazeeh111/GhostMesh"
+abstract: "An independent temporal CSI pose system with source-only teacher consistency, held-out subject/environment evaluation and a local replay application. Scope and measured results are documented with the release; no 3D reconstruction is claimed."

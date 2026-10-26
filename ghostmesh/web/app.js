@@ -374,7 +374,7 @@ function render() {
     `FRAME ${String(index + 1).padStart(4, "0")} / ${String(replay.frames.length).padStart(4, "0")}`,
   );
   const statusLabels = {
-    ok: "VALID FRAME",
+    ok: "SIGNAL ACCEPTED",
     low_confidence: "LOW CONFIDENCE",
     invalid_signal: "SIGNAL REJECTED",
     out_of_domain: "DOMAIN WARNING",

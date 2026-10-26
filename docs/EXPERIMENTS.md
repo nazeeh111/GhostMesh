@@ -1,73 +1,127 @@
-# Experimental protocol
+# Cohort20 experimental protocol
 
-Current status: implementation checks passed; real pilot training is live.
-Results are not yet claimed. The initial validation-only timing run trained
-the final-frame control for one epoch. It did not evaluate test labels.
-The preregistered pilot is under `experiments/mmfi-pilot-v1` locally; generated
-raw/prepared datasets and in-progress runs are excluded from Git history.
+The release study is the frozen `cohort20` suite at
+`experiments/cohort20-final-v1`. Its final results and release study bundle are
+pending completion and review. Settings, software checks, partial runs and
+artifact directories do not establish sensing efficacy. The earlier A02+A06
+pilot was stopped and superseded by this study; it is not efficacy evidence
+and its outputs must not be relabeled as cohort20 results.
 
-## Required evidence
+## Cohort and held-out protocols
 
-1. Complete exact-frame pairing, finite 2D annotations, source/data license and
-   consent basis, sensor layout, content hashes and split audit.
-2. Separate source/validation/final-test people; hold E04 out of environment
-   development. Environment/person changes remain confounded in MM-Fi.
-3. Reproducible last-frame neural and no-signal mean-pose baselines. The
-   last-frame encoder shares causal-window normalization, so it is not a raw
-   history-free baseline. Compare it against the temporal/no-consistency
-   configuration to isolate the temporal encoder more closely.
-4. Fixed settings and seed budget before final test evaluation. Best epochs
-   use validation normalized joint error. Test scores never choose an epoch.
-5. PCK, normalized joint error, joint-level results, window/metric coverage,
-   per-domain performance, confidence reliability and measured latency.
-6. Normalization, augmentation and teacher-consistency ablations; repeated
-   training seeds; paired sequence and subject-cluster uncertainty intervals.
-7. Current-source real-data replay with recorded provenance, successes and
-   failures. Diagnostic/synthetic files cannot establish sensing efficacy.
+The prepared cohort contains **27 actions, 20 people, four environments,
+540 sequences and 160,380 synchronized frames**, with 297 frames per sequence.
+It includes the people whose complete 27-action recordings were available
+before the documented provider quota blocked the 40-person expansion. It is
+not the full 40-person dataset. All evaluated actions occur in training.
 
-## Pilot and full-action separation
+| Protocol | Training | Validation | Final test |
+|---|---|---|---|
+| Cross subject | 12 people; 324 sequences | 4 people; 108 sequences | 4 people; 108 sequences |
+| Cross environment | 12 people; 324 sequences in E01–E03 | 3 people; 81 sequences in E01–E03 | 5 people; 135 sequences in E04 |
 
-The A02+A06 pilot contains 80 sequences and 23,760 frames. Its settings are in
-`configs/subset-*.json`. It exercises the full experiment pipeline and provides
-a bounded initial comparison. It cannot establish coverage of all actions.
+People are disjoint across training, validation and test. Cross-subject splits
+retain all four environments. E04 is excluded from environment-protocol
+training and validation. Environment and participant identity change together,
+so the E04 test measures combined room/person transfer, not isolated room
+invariance. No unseen-action, 3D or cross-dataset conclusion follows.
 
-The complete modality-selected MM-Fi inventory contains 1,080 sequences,
-320,760 synchronized frames and 27 actions. Its acquisition and preparation
-must finish and be audited independently. Full-action experiments require
-separately identified configurations and output directories. Pilot scores may
-not be relabeled as full-dataset results.
+The manifests record exact sequence assignments. The
+[cohort provenance receipt](cohort-provenance.json) binds the subject manifest,
+prepared sequence hashes and importer-recorded raw-source hashes. Its evidence
+basis is receipt compilation, not an independent second read of every raw
+source file. Dataset licensing, annotation provenance and consent basis are
+recorded there and in [the model card](MODEL_CARD.md).
 
-## Definitions and uncertainty
+## Frozen comparisons and training
 
-Coordinates use a declared isotropic annotation plane. PCK@0.2 counts a valid
-joint whose Euclidean error is at most 0.2 times the valid reference pose's
-bounding-box diagonal. NJE averages error divided by that diagonal. Degenerate
-boxes are excluded and counted. No metric is measured in 3D or millimeters.
+The suite contains **12 neural arms, each with a 40-epoch budget**:
 
-Gaussian confidence is model-implied radial mass inside a stated radius in
-the reference plane. It is uncalibrated; reliability bins and expected
-calibration error test this claim against held-out annotations. A confident
-prediction can still be wrong. The supplied teacher labels may also be wrong.
+- Last-frame encoder and temporal-plus-teacher pairs, each at seeds 2027 and
+  2028, for both protocols: eight arms.
+- Cross-subject removal of teacher consistency, normalization or augmentation,
+  plus raw-coordinate consistency: four ablations, seed 2027 only.
 
-The comparison bootstrap resamples entire sequence blocks. A separate
-subject-cluster analysis keeps both action sequences for a person together.
-Intervals quantify the observed sample, not an independent number of frames,
-a causal mechanism or all future rooms. Two training seeds are a sensitivity
-check, not a reliable distribution of training variance.
+All arms use an eight-frame causal window, packet-moment encoder of width 64,
+batch size 64, one CPU thread, training/validation stride 8 and final-test
+stride 1. Temporal arms use the frozen direct temporal kernel and dilations
+1, 2 and 4. The last-frame encoder shares the same causal-window preprocessing
+and normalization as the combined model; it is not a raw history-free control.
+The no-normalization arm is the declared exception to normalization.
 
-Model FPS excludes file access, preprocessing, acquisition and browser
-rendering. Replay export also measures preprocessing plus forward pass;
-warmup/context and the original 10 Hz sampling rate remain separate.
+The combined strategy uses source-only perturbation and an exponential moving
+average teacher. The teacher sees unperturbed source examples and evolves only
+from source training; validation and test examples update neither network.
+The frozen primary consistency loss scales coordinate differences by detached
+teacher variance bounded to `[0.05², 0.5²]`, with weight 0.2. Raw consistency is
+retained as a separate ablation. Removing augmentation also removes student/
+teacher perturbation diversity, so that ablation changes a coupled mechanism.
+Settings are frozen; teacher weights are not held constant during training.
 
-## Failure accounting
+The runner writes preregistration before training, completes **every arm's
+training before computing final-test predictions or scores**, and selects each checkpoint
+only by validation normalized joint error. It then evaluates the frozen
+checkpoints and the training-label mean-pose prior on matched test windows.
+The static prior consumes no CSI input or action IDs and fits no held-out
+labels. Test scores never select settings, an epoch, or a model.
 
-Reports retain every strided complete candidate window and the accepted,
-rejected and metric-eligible counts. Reasons can overlap. Startup context and
-stride are disclosed separately. Replay withholds invalid signal predictions
-instead of presenting a stale skeleton. Unseen/unknown domain status comes
-from metadata, not a learned out-of-distribution detector.
+Preregistration binds configs, manifests, runtime modules, runner and runtime
+environment. Reports bind the exact checkpoint, config, source and manifest
+bytes. Resuming requires identical frozen inputs and verifies completed
+artifacts; epoch recovery retains student, teacher, optimizer and random-state
+information. No partial final-test inspection is used to revise the study.
 
-Any final result must state whether temporal learning improves the matched
-baseline and the static prior, whether the effect survives ablation and seed
-changes, and whether it holds on unseen environments. Negative or ambiguous
-results remain part of the release.
+## Metrics and uncertainty
+
+PCK@.05, .1 and .2 are valid-joint success fractions at those multiples of each
+frame's valid ground-truth 2D bounding-box diagonal. Normalized joint error
+(NJE) is mean Euclidean error divided by that diagonal. Coordinates use a
+declared isotropic 640×640 annotation plane; neither metric is millimeters or
+3D error. Degenerate boxes are excluded and counted. Reports disclose
+candidate, accepted, rejected and metric-eligible windows and valid joint N;
+overlapping windows are not independent observations.
+
+Absolute metrics pool valid joints. Paired changes instead weight sequence
+means equally and report candidate minus reference. The suite's paired
+percentile-bootstrap 95% intervals resample whole sequences; subject-cluster
+sensitivity retains all action sequences for each resampled person. These
+intervals describe held-out sampling for fixed checkpoints, not training-seed
+variance or a causal mechanism. Four or five held-out people limit cluster
+inference. Two training seeds are sensitivity checks. Paired-change intervals
+must not become error bars on absolute scores.
+
+Expected calibration error uses the event that joint Euclidean error is at
+most .05 in normalized image coordinates. This absolute-radius event differs
+from bounding-box-normalized PCK@.05. Gaussian radial confidence is evaluated
+without post-hoc calibration and need not be reliable. Model-only latency
+reports measured median, p95 and reciprocal-median FPS for batch-one forward
+calls, after warmup; it excludes preprocessing, disk, network and rendering.
+
+## Reproduction and release
+
+With the prepared manifests at the paths below, run the exact suite from the
+repository root. The destination must be new; add `--resume` only to continue
+an existing suite with identical preregistration and frozen artifacts.
+
+```sh
+uv run python scripts/run_suite.py \
+  --subject-manifest data/mmfi-cohort20/manifest.json \
+  --environment-manifest data/mmfi-cohort20/cross-environment.json \
+  --profile cohort20 --device cpu --out experiments/cohort20-final-v1
+```
+
+Only after the suite is complete, render into the planned new results path:
+
+```sh
+.report-venv/bin/python scripts/report_results.py \
+  --suite experiments/cohort20-final-v1 \
+  --out results/cohort20-v1 \
+  --provenance docs/cohort-provenance.json
+```
+
+[Results format and plotting setup](RESULTS_FORMAT.md) describes the separate
+reporting environment, strict artifact checks, raw tables and scientific
+figures. The release study bundle remains pending until complete results,
+current-source figures and selected checkpoint/replay artifacts are verified.
+Negative and ambiguous comparisons must remain visible alongside favorable
+ones. No efficacy claim is made here.

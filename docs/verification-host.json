@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "processor": "Apple M4",
+  "physical_cpu_cores": 10,
+  "logical_cpu_cores": 10,
+  "memory_bytes": 34359738368,
+  "macos": "26.6.2",
+  "architecture": "arm64",
+  "device": "cpu",
+  "torch_threads": 1,
+  "scope": "Shared workstation measurements; background load not controlled. Model-only timings exclude acquisition/preprocessing/I/O/rendering.",
+  "scheduling_note": "taskpolicy -B applied only to owned training process at raw_consistency epoch7 to remove possible Darwin background scheduling. Shared workstation load not controlled; no model/data/training hyperparameters changed.",
+  "training_scheduling": "Five arms completed serially. Raw-consistency resumed from committed epoch12; remaining registered arms used at most3independent training subprocesses with1Torch CPUthread each. All training finishes before serial final evaluation. Seed/config/source/device unchanged.",
+  "runtime_environment": {
+    "python": "3.12.13",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "torch": "2.9.0",
+    "numpy": "2.2.6",
+    "torch_threads": 1,
+    "torch_cuda_build": null
+  },
+  "mps_probe": {
+    "purpose": "synthetic backend support check only; no dataset or method selection",
+    "mps_available_with_native_permission": true,
+    "model_status": "unsupported",
+    "torch": "2.9.0",
+    "operation": "adaptive_avg_pool1d: 114 input subcarriers to32bins",
+    "error": "Adaptive pool MPS: input sizes must be divisible by output sizes. Non-divisible input sizes are not implemented on MPS device yet.",
+    "effect": "CPU study and source/configs unchanged; no MPS timing or efficacy result",
+    "probe_script_sha256": "eff6661cd53536f1eb31e26037f55a3dc61a980b22ebfdcb439f45d63402fd96"
+  },
+  "cpu_execution_probe": {
+    "purpose": "small synthetic operation timing only, under uncontrolled shared load",
+    "sandbox_median_seconds": 0.2765456250635907,
+    "native_median_seconds": 0.15106070798356086,
+    "interpretation": "Five timed repetitions per condition, sequential checks with overlapping timing ranges. No reliable whole-training causal speedup established; existing CPU run scheduling retained."
+  }
+}

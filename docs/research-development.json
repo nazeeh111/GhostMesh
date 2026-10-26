@@ -386,5 +386,159 @@
     "Three epochs and one seed do not establish convergence or training-variance certainty.",
     "Temporal-kernel ratios are not whole-system speedups or accuracy gains.",
     "Full final evaluation and original method ablations must use the separately frozen main experiment."
-  ]
+  ],
+  "validation_only_objective_trial": {
+    "scope": "One matched five-epoch source/validation run on the 27-action,20-person cohort. No final test data evaluated and no production integration.",
+    "hypothesis": "Direct normalized joint-distance supervision plus a small detached-residual uncertainty NLL might improve pose accuracy by removing direct uncertainty precision weighting from pose gradients.",
+    "decision": "Rejected: validation NJE and aggregate PCK worsened; retain the frozen Gaussian NLL recipe.",
+    "summary_sha256": "52080fec0f68f57c4f4b434ad9f1faf7eaa33d55c3b5cb6fb6591f9661a4afc8",
+    "objective_sha256": "34519b44ee9a02d891990801bea06baa2b4d602f5fb419381d19b1d2dd02bb21",
+    "selected_checkpoint_sha256": "1decc523e8f183e152ea7490f15c2eb1732d66fd7ac5350eed83d7e635d30be2",
+    "summary": {
+      "best_delta_nje": 0.0020118572899502085,
+      "paired_frame_win_fraction": 0.46396396396396394,
+      "candidate_history": [
+        {
+          "epoch": 1,
+          "training_nll_plus_consistency": -0.32111033155872776,
+          "validation_pck": 0.7953688983100747,
+          "validation_nje": 0.13905710260127171
+        },
+        {
+          "epoch": 2,
+          "training_nll_plus_consistency": -0.43885106347503766,
+          "validation_pck": 0.8019342872284049,
+          "validation_nje": 0.14201030614241042
+        },
+        {
+          "epoch": 3,
+          "training_nll_plus_consistency": -0.4593334465890795,
+          "validation_pck": 0.8080874992639698,
+          "validation_nje": 0.14051905726336947
+        },
+        {
+          "epoch": 4,
+          "training_nll_plus_consistency": -0.47597218485605647,
+          "validation_pck": 0.7819437084142966,
+          "validation_nje": 0.14500441836456565
+        },
+        {
+          "epoch": 5,
+          "training_nll_plus_consistency": -0.48513612565812886,
+          "validation_pck": 0.7768651003945122,
+          "validation_nje": 0.14505636388319523
+        }
+      ],
+      "selected": {
+        "baseline": {
+          "epoch": 1,
+          "nje": 0.1370452453113215,
+          "pck": 0.8130483424601072,
+          "calibration_ece": 0.06267559089359617,
+          "wrists_ankles": [
+            {
+              "joint": 9,
+              "count": 3996,
+              "pck": 0.5082582582582582,
+              "nje": 0.2270341281230967,
+              "name": "left_wrist"
+            },
+            {
+              "joint": 10,
+              "count": 3996,
+              "pck": 0.5307807807807807,
+              "nje": 0.22029401058653109,
+              "name": "right_wrist"
+            },
+            {
+              "joint": 15,
+              "count": 3996,
+              "pck": 0.8833833833833834,
+              "nje": 0.10569074079761791,
+              "name": "left_ankle"
+            },
+            {
+              "joint": 16,
+              "count": 3996,
+              "pck": 0.9136636636636637,
+              "nje": 0.09077066068248332,
+              "name": "right_ankle"
+            }
+          ],
+          "mean_confidence_radius05": 0.4885183274745941,
+          "observed_success_radius05": 0.4275304716481187,
+          "precision_ratio_head_to_extremities": 1.3341279685767244
+        },
+        "candidate": {
+          "epoch": 1,
+          "nje": 0.13905710260127171,
+          "pck": 0.7953688983100747,
+          "calibration_ece": 0.06340002074265419,
+          "wrists_ankles": [
+            {
+              "joint": 9,
+              "count": 3996,
+              "pck": 0.5165165165165165,
+              "nje": 0.22346505163947913,
+              "name": "left_wrist"
+            },
+            {
+              "joint": 10,
+              "count": 3996,
+              "pck": 0.556056056056056,
+              "nje": 0.2138291944022127,
+              "name": "right_wrist"
+            },
+            {
+              "joint": 15,
+              "count": 3996,
+              "pck": 0.8240740740740741,
+              "nje": 0.11888134924520995,
+              "name": "left_ankle"
+            },
+            {
+              "joint": 16,
+              "count": 3996,
+              "pck": 0.8631131131131131,
+              "nje": 0.10797346162705533,
+              "name": "right_ankle"
+            }
+          ],
+          "mean_confidence_radius05": 0.4728938639163971,
+          "observed_success_radius05": 0.4339780957428016,
+          "precision_ratio_head_to_extremities": 1.3124648219772515
+        }
+      },
+      "by_subject": [
+        {
+          "subject": "S04",
+          "frames": 999,
+          "baseline_frame_mean_nje": 0.12977008187948091,
+          "candidate_frame_mean_nje": 0.12710329793578634,
+          "delta_candidate_minus_baseline": -0.002666783943694587
+        },
+        {
+          "subject": "S14",
+          "frames": 999,
+          "baseline_frame_mean_nje": 0.11620567433712088,
+          "candidate_frame_mean_nje": 0.11206126871121233,
+          "delta_candidate_minus_baseline": -0.004144405625908547
+        },
+        {
+          "subject": "S24",
+          "frames": 999,
+          "baseline_frame_mean_nje": 0.13702113993618573,
+          "candidate_frame_mean_nje": 0.1393455591596008,
+          "delta_candidate_minus_baseline": 0.002324419223415064
+        },
+        {
+          "subject": "S34",
+          "frames": 999,
+          "baseline_frame_mean_nje": 0.16518408509249838,
+          "candidate_frame_mean_nje": 0.1777182845984875,
+          "delta_candidate_minus_baseline": 0.012534199505989121
+        }
+      ]
+    }
+  }
 }
