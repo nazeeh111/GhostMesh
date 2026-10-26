@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>GhostMesh · Wireless pose laboratory</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="masthead">
+      <a class="brand" href="/" aria-label="GhostMesh home"
+        ><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span
+        >GhostMesh<span class="brand-small">LAB</span></a
+      >
+      <div class="masthead-right">
+        <span class="local"><span aria-hidden="true"></span>LOCAL REPLAY</span
+        ><button id="open-replay" class="button load-button">
+          <span aria-hidden="true">↗</span> Open replay</button
+        ><input
+          id="replay-file"
+          type="file"
+          accept=".json,application/json"
+          tabindex="-1"
+          aria-label="Replay JSON file"
+        />
+      </div>
+    </header>
+    <main>
+      <div class="intro">
+        <div>
+          <p class="eyebrow">WIRELESS PERCEPTION / 2D POSE</p>
+          <h1>See the signal.<br /><span>Understand the motion.</span></h1>
+        </div>
+        <p class="intro-note">
+          Channel-state information to human pose. <br />Inspect every frame,
+          confidence and failure.<br /><span
+            >No camera input during inference.</span
+          >
+        </p>
+      </div>
+      <div id="notice" class="notice" role="status">
+        <span class="notice-label">STARTING</span>
+        <p>Loading the local replay…</p>
+      </div>
+      <div id="error" class="error" role="alert" hidden></div>
+      <section class="workspace" aria-label="Synchronized pose and CSI replay">
+        <div class="stage-column">
+          <section class="pose-panel" aria-labelledby="pose-title">
+            <div class="panel-heading">
+              <h2 id="pose-title">
+                <span class="section-index">01</span>Pose reconstruction
+              </h2>
+              <span id="frame-status" class="status-badge neutral"
+                >NO REPLAY</span
+              >
+            </div>
+            <div class="pose-stage">
+              <canvas
+                id="pose-canvas"
+                aria-label="2D pose visualization"
+              ></canvas>
+              <div class="stage-tags">
+                <span id="plot-mode">SEQUENCE FIT / 2D</span
+                ><span id="frame-tag">FRAME —</span>
+              </div>
+              <div id="stage-message" class="stage-message">
+                Open a GhostMesh replay to begin.
+              </div>
+              <div class="stage-legend">
+                <span><i class="predicted"></i>Predicted pose</span
+                ><span id="gt-legend"
+                  ><i class="truth"></i>Reference label</span
+                >
+              </div>
+            </div>
+            <div class="pose-footer">
+              <div>
+                <span class="small-label">JOINT CONFIDENCE</span
+                ><strong id="mean-confidence">—</strong>
+              </div>
+              <div>
+                <span class="small-label">INFERENCE / FRAME</span
+                ><strong id="latency">—</strong>
+              </div>
+              <div>
+                <span class="small-label">SOURCE CADENCE</span
+                ><strong id="cadence">—</strong>
+              </div>
+            </div>
+          </section>
+          <section class="transport" aria-label="Playback controls">
+            <div class="timeline-labels">
+              <span id="current-time">00:00.00</span
+              ><span id="duration">00:00.00</span>
+            </div>
+            <label class="sr-only" for="seek">Replay position</label
+            ><input
+              id="seek"
+              type="range"
+              min="0"
+              max="0"
+              value="0"
+              step="1"
+              disabled
+            />
+            <div class="transport-controls">
+              <div class="play-buttons">
+                <button
+                  id="restart"
+                  class="icon-button"
+                  aria-label="Restart replay"
+                  title="Restart replay"
+                  disabled
+                >
+                  ↤</button
+                ><button id="play" class="play-button" disabled>
+                  <span aria-hidden="true">▶</span> Play replay</button
+                ><button
+                  id="next"
+                  class="icon-button"
+                  aria-label="Next frame"
+                  title="Next frame"
+                  disabled
+                >
+                  ↦
+                </button>
+              </div>
+              <div class="transport-options">
+                <label class="toggle"
+                  ><input id="fit-view" type="checkbox" checked />Fit
+                  pose</label
+                ><label class="toggle"
+                  ><input id="show-gt" type="checkbox" />Reference</label
+                ><label class="speed-label"
+                  ><span class="sr-only">Playback speed</span
+                  ><select id="speed">
+                    <option value="0.25">0.25×</option>
+                    <option value="0.5">0.5×</option>
+                    <option value="1" selected>1×</option>
+                    <option value="2">2×</option>
+                  </select></label
+                >
+              </div>
+            </div>
+          </section>
+        </div>
+        <aside class="signal-column">
+          <section class="signal-panel" aria-labelledby="signal-title">
+            <div class="panel-heading">
+              <h2 id="signal-title">
+                <span class="section-index">02</span>Channel response
+              </h2>
+              <span id="spectrum-shape" class="micro">—</span>
+            </div>
+            <div class="spectrum-wrap">
+              <canvas
+                id="spectrum"
+                aria-label="CSI amplitude map: causal frame horizontally, subcarrier vertically"
+              ></canvas>
+              <div class="spectrum-axis">
+                <span>CAUSAL FRAME →</span><span>SUBCARRIER ↓</span>
+              </div>
+            </div>
+            <div class="signal-key">
+              <span>LOW</span>
+              <div></div>
+              <span>AMPLITUDE</span><span>HIGH</span>
+            </div>
+          </section>
+          <section class="confidence-panel" aria-labelledby="confidence-title">
+            <div class="panel-heading">
+              <h2 id="confidence-title">
+                <span class="section-index">03</span>Joint confidence
+              </h2>
+              <span class="micro">0 — 1</span>
+            </div>
+            <div id="joint-list" class="joint-list">
+              <p class="muted">No joint estimates loaded.</p>
+            </div>
+            <p class="confidence-note">
+              Uncalibrated Gaussian mass within a fixed image radius. Not a
+              probability of correctness. See the model card for its definition.
+            </p>
+          </section>
+        </aside>
+      </section>
+      <section class="evidence" aria-label="Replay evidence and provenance">
+        <div class="evidence-heading">
+          <p class="eyebrow">TRACEABLE BY DESIGN</p>
+          <h2>Know what you’re looking at.</h2>
+          <p id="provenance-note">Replay metadata will appear here.</p>
+        </div>
+        <dl class="provenance-grid">
+          <div>
+            <dt>DATASET / TYPE</dt>
+            <dd id="meta-dataset">—</dd>
+          </div>
+          <div>
+            <dt>SUBJECT / ENVIRONMENT</dt>
+            <dd id="meta-domain">—</dd>
+          </div>
+          <div>
+            <dt>SPLIT / SEQUENCE</dt>
+            <dd id="meta-split">—</dd>
+          </div>
+          <div>
+            <dt>MODEL CHECKPOINT</dt>
+            <dd id="meta-checkpoint">—</dd>
+          </div>
+        </dl>
+        <div id="failure-detail" class="failure-detail">
+          <strong>Frame diagnostics</strong
+          ><span>Load a replay to inspect signal quality.</span>
+        </div>
+        <div id="evaluation" class="evaluation" hidden></div>
+      </section>
+    </main>
+    <footer>
+      <span>GHOSTMESH / RESEARCH INSTRUMENT</span
+      ><span
+        >Consented sensing. Visible uncertainty. Reproducible evidence.</span
+      ><span>2D ONLY</span>
+    </footer>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

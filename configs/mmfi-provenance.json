@@ -1,0 +1,11 @@
+{
+  "dataset": "MM-Fi A02+A06 subset (NeurIPS2023)",
+  "source": "https://github.com/ybhbingo/MMFi_dataset",
+  "license": "CC BY-NC 4.0",
+  "consent_basis": "MM-Fi paper reports participant consent and IRB-2022-1067; noncommercial research use",
+  "coordinate_note": "Explicit640x640 square annotation reference plane; isotropic pixel scaling, camera calibration unknown",
+  "actions": [
+    "A02",
+    "A06"
+  ]
+}

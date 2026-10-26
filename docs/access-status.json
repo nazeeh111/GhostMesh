@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "verified_utc": "2026-10-26T00:22:18.445248+00:00",
+  "target": "MM-Fi E01 public archive, first missing extraction group",
+  "source": "https://drive.google.com/file/d/1ExV3AQeHstQ3Z1VBFOC0z1BDtTD5nZ1B/view",
+  "requested_range": "bytes 12565793522-12579265953/22301071119",
+  "response": {
+    "status": 200,
+    "content_type": "text/html; charset=utf-8",
+    "content_range": null,
+    "content_length": "2040",
+    "page_title": "Google Drive - Quota exceeded",
+    "reason": "Too many recent downloads; provider says availability may take up to24hours to return."
+  },
+  "control_honored": "Stopped all terminal failed downloads; no query/host variation, credential use, automatic retry or scheduled retry. Preserved validated local data.",
+  "range0_observation": "A separate cached bytes0-1023 probe returned206; exact missing range remained blocked. Range0 success doesnot establish full archive access.",
+  "all_four_job_status": "terminal exit1 following strict range protocol rejection; E01 exact missing range independently identified quota page.",
+  "preserved_source_coverage": {
+    "complete_sequences": 641,
+    "paired_frames": 190377,
+    "balanced_all40_actions": [
+      "A02",
+      "A06"
+    ],
+    "balanced_all27_subjects": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S11",
+      "S12",
+      "S13",
+      "S14",
+      "S15",
+      "S21",
+      "S22",
+      "S23",
+      "S24",
+      "S25",
+      "S31",
+      "S32",
+      "S33",
+      "S34",
+      "S35"
+    ],
+    "balanced_all27_sequences": 540,
+    "balanced_all27_frames": 160380
+  },
+  "scope": "Source acquisition status, not trained model evaluation or a full40subject benchmark claim."
+}

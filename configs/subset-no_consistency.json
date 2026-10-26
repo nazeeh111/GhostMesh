@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "protocol": "cross_subject",
+  "seed": 2027,
+  "threads": 2,
+  "model": {
+    "channels": 3,
+    "joints": 17,
+    "width": 32,
+    "temporal": true,
+    "dilations": [
+      1,
+      2,
+      4
+    ]
+  },
+  "data": {
+    "window": 8,
+    "normalize": true,
+    "stride": 4
+  },
+  "training": {
+    "epochs": 20,
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "augmentation_strength": 0.15,
+    "consistency_weight": 0,
+    "ema_decay": 0.99
+  },
+  "evaluation": {
+    "pck_threshold": 0.2
+  },
+  "note": "Bounded MM-Fi two-action subset experiment. No full-MM-Fi or general action coverage claim. Freeze settings before held-out test evaluation.",
+  "name": "subset-no_consistency"
+}

@@ -1,0 +1,390 @@
+{
+  "schema_version": 1,
+  "stage": "pre-freeze development evidence, separate from final held-out evaluation",
+  "validation_selection": {
+    "purpose": "Bounded encoder-width selection using source training and validation only",
+    "dataset": "MM-Fi A02+A06 pilot,40subjects/4environments/80sequences/23760frames",
+    "manifest_sha256": "5937a6b488572f6dd5a0bb125e6acdd0c8941866c8547eaef324e2a65a3aa2e4",
+    "protocol": "cross_subject:24training/8validation/8testsubjects; test samples not decoded for training or evaluated here",
+    "encoder": "Per-antenna packet mean and standard deviation;32 pooled subcarrier bins; two-layer MLP; causal temporal blocks with dilations1,2,4",
+    "coordinate_reference_plane": [
+      640,
+      640
+    ],
+    "pck_threshold": 0.2,
+    "pck_normalizer": "per-frame supplied2D keypoint bounding-box diagonal",
+    "candidates": [
+      {
+        "width": 32,
+        "parameters": 21107,
+        "epochs": 3,
+        "best_epoch": 3,
+        "seed": 2027,
+        "validation_history": [
+          {
+            "epoch": 1,
+            "pck": 0.8849717969379532,
+            "normalized_joint_error": 0.09626808917499265
+          },
+          {
+            "epoch": 2,
+            "pck": 0.9043614020950846,
+            "normalized_joint_error": 0.08749086557440923
+          },
+          {
+            "epoch": 3,
+            "pck": 0.9044621273166801,
+            "normalized_joint_error": 0.0824706212034495
+          }
+        ],
+        "config_sha256": "b13975a976415986db077d827bf48593031d84bcce82e16cf06cf4028d2b6ae8",
+        "report_record": {
+          "task_local_record": "work/fast-trial/width32-report.json",
+          "sha256": "84c8a3928d0286dac1b61a9a74bea6bbf3fe0385b4983d9303ce2fea58290380"
+        }
+      },
+      {
+        "width": 64,
+        "parameters": 54451,
+        "epochs": 3,
+        "best_epoch": 3,
+        "seed": 2027,
+        "validation_history": [
+          {
+            "epoch": 1,
+            "pck": 0.8572723609991942,
+            "normalized_joint_error": 0.10214200929720313
+          },
+          {
+            "epoch": 2,
+            "pck": 0.9170024174053183,
+            "normalized_joint_error": 0.0814467989126849
+          },
+          {
+            "epoch": 3,
+            "pck": 0.919621273166801,
+            "normalized_joint_error": 0.0807404376929939
+          }
+        ],
+        "config_sha256": "24b6f376296817eb64a3d7986ef4b6f847398309e604e54abcfbdc734b5a9a9f",
+        "report_record": {
+          "task_local_record": "work/fast-trial/width64-report.json",
+          "sha256": "32b56d126b01a39f5cad2ae9fed4c275ca9f15dcfaecf41c5ab1766d11f55f32"
+        }
+      }
+    ],
+    "selected_width": 64,
+    "selection_reason": "Width64 had lower validation NJE after the same three source-trained epochs. This selects a development setting, not a held-out efficacy claim.",
+    "prototype_factory_note": "The prototype replaced a CNN encoder after constructing the model. The production factory constructs the chosen encoder directly, so initialization RNG consumption differs. The frozen main experiment retrains from scratch; these prototype weights are not final performance artifacts.",
+    "timing_note": "Width64 fit was intentionally suspended while kernel equivalence was investigated. Its elapsed training/wall time is excluded from cost comparisons."
+  },
+  "temporal_kernel_probe": {
+    "scope": "three temporal blocks on random latent activations; batch-one forward and optimizer step",
+    "excludes": [
+      "CSI acquisition",
+      "data loading",
+      "signal preprocessing",
+      "frame encoder",
+      "EMA teacher",
+      "network/server",
+      "rendering",
+      "end-to-end FPS",
+      "pose accuracy"
+    ],
+    "test_data_used": false,
+    "runtime": {
+      "python": "3.12.13",
+      "platform": "macOS-26.6.2-arm64-arm-64bit",
+      "machine": "arm64",
+      "torch": "2.9.0",
+      "numpy": "2.2.6",
+      "torch_interop_threads": 10
+    },
+    "source_sha256": {
+      "ghostmesh/models.py": "fcf061fbd19d5770099a29d6e4fcd918b5a71ddad792421e10ff148a5a9f5ab9",
+      "scripts/benchmark_kernels.py": "e7e668efa5209b712a9a9f16c77dd5ef6c2336d5a6c0bf35309b8b61a89b8a15"
+    },
+    "parity": {
+      "status": "passed",
+      "cases": 8,
+      "max_forward_abs_difference": 1.9073486328125e-06,
+      "max_gradient_abs_difference": 1.1175870895385742e-07,
+      "coverage": "Full three-block chains,width32/64,float32/64,batch1/32,time8; forward,gradients,native checkpoint reload,prefix causality"
+    },
+    "measurements": [
+      {
+        "width": 32,
+        "torch_threads": 1,
+        "timesteps": 8,
+        "forward_batch_size": 1,
+        "train_batch_size": 32,
+        "warmup_steps_per_kernel": 2,
+        "statistics_ms": {
+          "native": {
+            "forward_wall_ms": {
+              "median": 0.615541,
+              "p95": 1.9203081999999991
+            },
+            "forward_cpu_ms": {
+              "median": 0.616,
+              "p95": 1.1245999999999996
+            },
+            "train_wall_ms": {
+              "median": 41.286625,
+              "p95": 63.6758872
+            },
+            "train_cpu_ms": {
+              "median": 26.448,
+              "p95": 26.7531
+            }
+          },
+          "direct": {
+            "forward_wall_ms": {
+              "median": 0.224834,
+              "p95": 1.6734161999999975
+            },
+            "forward_cpu_ms": {
+              "median": 0.226,
+              "p95": 0.7968999999999999
+            },
+            "train_wall_ms": {
+              "median": 6.875959,
+              "p95": 6.9307456
+            },
+            "train_cpu_ms": {
+              "median": 4.039,
+              "p95": 5.0119
+            }
+          }
+        },
+        "native_over_direct_median_ratio": {
+          "forward_wall_ms": 2.737757634521469,
+          "forward_cpu_ms": 2.725663716814159,
+          "train_wall_ms": 6.004489701000254,
+          "train_cpu_ms": 6.548155484030701
+        }
+      },
+      {
+        "width": 64,
+        "torch_threads": 1,
+        "timesteps": 8,
+        "forward_batch_size": 1,
+        "train_batch_size": 32,
+        "warmup_steps_per_kernel": 2,
+        "statistics_ms": {
+          "native": {
+            "forward_wall_ms": {
+              "median": 1.798709,
+              "p95": 2.7081830999999985
+            },
+            "forward_cpu_ms": {
+              "median": 1.353,
+              "p95": 2.0615999999999994
+            },
+            "train_wall_ms": {
+              "median": 72.480958,
+              "p95": 80.9808586
+            },
+            "train_cpu_ms": {
+              "median": 51.92,
+              "p95": 52.2557
+            }
+          },
+          "direct": {
+            "forward_wall_ms": {
+              "median": 0.303666,
+              "p95": 0.6946791999999998
+            },
+            "forward_cpu_ms": {
+              "median": 0.259,
+              "p95": 0.6782999999999999
+            },
+            "train_wall_ms": {
+              "median": 6.573459,
+              "p95": 7.3366212
+            },
+            "train_cpu_ms": {
+              "median": 5.307,
+              "p95": 5.3421
+            }
+          }
+        },
+        "native_over_direct_median_ratio": {
+          "forward_wall_ms": 5.923313772368325,
+          "forward_cpu_ms": 5.223938223938224,
+          "train_wall_ms": 11.026304111731738,
+          "train_cpu_ms": 9.783305068777086
+        }
+      },
+      {
+        "width": 32,
+        "torch_threads": 2,
+        "timesteps": 8,
+        "forward_batch_size": 1,
+        "train_batch_size": 32,
+        "warmup_steps_per_kernel": 2,
+        "statistics_ms": {
+          "native": {
+            "forward_wall_ms": {
+              "median": 15.018042,
+              "p95": 97.58230439999996
+            },
+            "forward_cpu_ms": {
+              "median": 3.522,
+              "p95": 5.544099999999999
+            },
+            "train_wall_ms": {
+              "median": 294.973541,
+              "p95": 316.8570041
+            },
+            "train_cpu_ms": {
+              "median": 108.216,
+              "p95": 109.377
+            }
+          },
+          "direct": {
+            "forward_wall_ms": {
+              "median": 0.877792,
+              "p95": 4.306345399999992
+            },
+            "forward_cpu_ms": {
+              "median": 0.647,
+              "p95": 1.2374999999999996
+            },
+            "train_wall_ms": {
+              "median": 8.193041,
+              "p95": 21.1071041
+            },
+            "train_cpu_ms": {
+              "median": 5.066,
+              "p95": 5.7014000000000005
+            }
+          }
+        },
+        "native_over_direct_median_ratio": {
+          "forward_wall_ms": 17.108884564908315,
+          "forward_cpu_ms": 5.443585780525502,
+          "train_wall_ms": 36.00293724881885,
+          "train_cpu_ms": 21.361231741018553
+        }
+      },
+      {
+        "width": 64,
+        "torch_threads": 2,
+        "timesteps": 8,
+        "forward_batch_size": 1,
+        "train_batch_size": 32,
+        "warmup_steps_per_kernel": 2,
+        "statistics_ms": {
+          "native": {
+            "forward_wall_ms": {
+              "median": 5.605125,
+              "p95": 6.5874714
+            },
+            "forward_cpu_ms": {
+              "median": 4.817,
+              "p95": 5.3763
+            },
+            "train_wall_ms": {
+              "median": 175.398709,
+              "p95": 192.2021581
+            },
+            "train_cpu_ms": {
+              "median": 163.728,
+              "p95": 176.54399999999998
+            }
+          },
+          "direct": {
+            "forward_wall_ms": {
+              "median": 0.419,
+              "p95": 1.4909830999999998
+            },
+            "forward_cpu_ms": {
+              "median": 0.389,
+              "p95": 0.9786999999999997
+            },
+            "train_wall_ms": {
+              "median": 3.998792,
+              "p95": 4.1242664
+            },
+            "train_cpu_ms": {
+              "median": 3.989,
+              "p95": 4.1357
+            }
+          }
+        },
+        "native_over_direct_median_ratio": {
+          "forward_wall_ms": 13.37738663484487,
+          "forward_cpu_ms": 12.383033419023135,
+          "train_wall_ms": 43.86292385300361,
+          "train_cpu_ms": 41.04487340185511
+        }
+      }
+    ],
+    "interpretation": "Ratios apply only to the measured temporal kernels. Wall latency is affected by competing work; process CPU time sums this process's CPU use. These are not whole-system speedups or accuracy improvements.",
+    "raw_record": {
+      "task_local_record": "work/fast-trial/public-kernels.json",
+      "sha256": "fe0e59d190ceca639a2ce1f68392037e882d151fcb25cd6f66443eebc6715e6a"
+    },
+    "reproduce": "python scripts/benchmark_kernels.py --out NEW_PATH.json --widths 32 64 --threads 1 2 --repeats 3 --warmup 2",
+    "earlier_equivalence_probe": {
+      "record": {
+        "task_local_record": "work/fast-trial/kernel_parity.json",
+        "sha256": "bd62b7eaa775f7a1b7a25e4bd742b6502a572fc6fbc6b1d545394b6412779679"
+      },
+      "status": "passed",
+      "cases": 24,
+      "additional_full_model_cases": 4
+    },
+    "excluded_probe": "shift_kernel.json first CNN timing case was contaminated by a deliberate process suspension and is not used in this record."
+  },
+  "consistency_unit_diagnostic": {
+    "purpose": "source_only_consistency_scale_diagnostic",
+    "test_data_used": false,
+    "teacher_proxy": "Same selected student weights on unaugmented source CSI; actual EMA weights were not retained.",
+    "source_windows": 12,
+    "records": [
+      {
+        "width": 32,
+        "selected_epoch": 3,
+        "checkpoint_sha256": "4b57d61f5e8c1971e87aa15aa9164f2f47444ad9296147a00bb25063b86b5465",
+        "nll": -6.605961799621582,
+        "raw_consistency_mse": 2.5705487132654525e-05,
+        "weighted_raw_consistency": 5.141097517480375e-06,
+        "raw_to_nll_pose_gradient_ratio": 3.474271215964109e-05,
+        "teacher_median_sigma": 0.02196035534143448,
+        "teacher_median_precision": 2064.029296875,
+        "bounded_precision_to_nll_pose_gradient_ratio": 0.04136250168085098
+      },
+      {
+        "width": 64,
+        "selected_epoch": 3,
+        "checkpoint_sha256": "eaec5ce53f4bcd351ab16f205cfb953a95081ed1ec9bd0fe3df23d769171bd47",
+        "nll": -7.133747100830078,
+        "raw_consistency_mse": 2.3808017431292683e-05,
+        "weighted_raw_consistency": 4.761603577208007e-06,
+        "raw_to_nll_pose_gradient_ratio": 3.312124317744747e-05,
+        "teacher_median_sigma": 0.018748197704553604,
+        "teacher_median_precision": 2823.517578125,
+        "bounded_precision_to_nll_pose_gradient_ratio": 0.045265186578035355
+      }
+    ],
+    "raw_record": {
+      "task_local_record": "work/fast-trial/consistency_scale.json",
+      "sha256": "65c38d7efc6bf4a13e356cfb42436c5aef8966999dce0a0a8595eaf4b92e6133"
+    },
+    "limitations": [
+      "The teacher proxy isolates augmentation disagreement; actual EMA mismatch can alter residual magnitude and direction.",
+      "A gradient scale ratio is not a causal efficacy result.",
+      "No alternative regularizer was fitted or chosen using held-out tests."
+    ],
+    "recommendation": "If source-only EMA consistency is retained, consider a bounded detached teacher-precision weighted coordinate discrepancy to make its units comparable with the Gaussian NLL. Cap inverse variance, retain source supervised anchor/rampup, and test a preregistered raw-vs-normalized ablation on validation before any final test. A negligible raw regularizer should not receive a claimed causal benefit."
+  },
+  "evidence_access_note": "Task-local SHA256 references identify preserved development records. They are not repository runtime dependencies. The public benchmark command produces fresh complete raw timing/parity records on the receiving machine.",
+  "limits": [
+    "No held-out pose test was evaluated in this development investigation.",
+    "Three epochs and one seed do not establish convergence or training-variance certainty.",
+    "Temporal-kernel ratios are not whole-system speedups or accuracy gains.",
+    "Full final evaluation and original method ablations must use the separately frozen main experiment."
+  ]
+}

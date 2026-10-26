@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "name": "temporal-without-gain-subcarrier-augmentation",
+  "protocol": "cross_subject",
+  "seed": 2027,
+  "threads": 2,
+  "model": {"channels": 3, "joints": 17, "width": 64, "temporal": true, "dilations": [1, 2, 4]},
+  "data": {"window": 8, "normalize": true, "stride": 1},
+  "training": {"epochs": 40, "batch_size": 32, "learning_rate": 0.001, "weight_decay": 0.01, "augmentation_strength": 0.0, "consistency_weight": 0.2, "ema_decay": 0.99},
+  "evaluation": {"pck_threshold": 0.2},
+  "note": "Consistency has zero perturbation when augmentation is off; this is a joint augmentation/teacher perturbation ablation."
+}

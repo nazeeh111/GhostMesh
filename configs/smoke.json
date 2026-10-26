@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "name": "software-smoke-only",
+  "protocol": "cross_subject",
+  "seed": 2027,
+  "threads": 2,
+  "model": {
+    "channels": 3,
+    "joints": 17,
+    "width": 16,
+    "temporal": true,
+    "dilations": [
+      1,
+      2
+    ],
+    "encoder": "packet_moment",
+    "bins": 8,
+    "temporal_kernel": "direct"
+  },
+  "data": {
+    "window": 8,
+    "normalize": true,
+    "stride": 2,
+    "cache_windows": true
+  },
+  "training": {
+    "epochs": 2,
+    "batch_size": 8,
+    "learning_rate": 0.003,
+    "weight_decay": 0.01,
+    "augmentation_strength": 0.1,
+    "consistency_weight": 0.2,
+    "ema_decay": 0.9,
+    "consistency_mode": "bounded_precision"
+  },
+  "evaluation": {
+    "pck_threshold": 0.2
+  },
+  "note": "Runs mechanics on synthetic fixtures; scores do not measure wireless perception or generalization."
+}

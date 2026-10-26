@@ -1,0 +1,9 @@
+{
+  "dataset": "MM-Fi research data",
+  "source": "https://github.com/ybhbingo/MMFi_dataset/tree/c9c1e3a8d5099779a618eae1bb351e253daa52d0",
+  "license": "CC-BY-NC-4.0",
+  "consent_basis": "MM-Fi paper section 4.1 reports signed participant consent; appendix A.1 reports NTU IRB-2022-1067. Public de-identified research data. https://arxiv.org/html/2305.10345v2",
+  "attribution": "Jianfei Yang, He Huang, Yunjiao Zhou, Xinyan Chen, Yuecong Xu, Shenghai Yuan, Han Zou, Chris Xiaoxuan Lu and Lihua Xie. MM-Fi: Multi-Modal Non-Intrusive 4D Human Dataset for Versatile Wireless Sensing. NeurIPS 2023.",
+  "reference_canvas_note": "Declared 640x640 annotation reference plane; actual source image dimensions not established. Isotropic division preserves pixel-space geometry.",
+  "usage": "Attributed noncommercial research. CSI amplitude and supplied 2D keypoints only; no RGB images."
+}

@@ -1,0 +1,44 @@
+name: Reproducibility checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  software:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          version: '0.11.20'
+      - name: Install locked CPU environment
+        run: uv sync --locked --extra test
+      - name: Numerical, data, inference and HTTP tests
+        run: uv run --locked pytest -q
+      - name: Browser replay contract tests
+        run: node --test tests/test_replay.mjs
+      - name: Train and infer a clearly labeled software fixture
+        run: |
+          uv run --locked ghostmesh fixture --out work/ci-fixture
+          uv run --locked ghostmesh train --manifest work/ci-fixture/manifest.json --config configs/smoke.json --out work/ci-smoke
+          uv run --locked ghostmesh evaluate --manifest work/ci-fixture/manifest.json --checkpoint work/ci-smoke/best.pt --out work/ci-smoke/test.json
+          uv run --locked ghostmesh export --manifest work/ci-fixture/manifest.json --checkpoint work/ci-smoke/best.pt --out work/ci-replay.json
+      - name: Build wheel
+        run: uv build --wheel

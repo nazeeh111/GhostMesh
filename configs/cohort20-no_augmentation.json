@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "protocol": "cross_subject",
+  "seed": 2027,
+  "threads": 1,
+  "model": {
+    "channels": 3,
+    "joints": 17,
+    "width": 64,
+    "temporal": true,
+    "dilations": [
+      1,
+      2,
+      4
+    ],
+    "encoder": "packet_moment",
+    "bins": 32,
+    "temporal_kernel": "direct"
+  },
+  "data": {
+    "window": 8,
+    "normalize": true,
+    "stride": 8,
+    "cache_windows": true,
+    "split_stride": {
+      "train": 8,
+      "validation": 8,
+      "test": 1
+    }
+  },
+  "training": {
+    "epochs": 40,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "augmentation_strength": 0,
+    "consistency_weight": 0.2,
+    "ema_decay": 0.99,
+    "consistency_mode": "bounded_precision"
+  },
+  "evaluation": {
+    "pck_threshold": 0.2
+  },
+  "note": "Balanced MM-Fi cohort: 27 actions, 20 subjects, four environments. These settings are frozen before final testing. The 40-subject expansion is blocked by a documented provider quota. No 3D or unseen-action claim.",
+  "name": "cohort20-no_augmentation"
+}
