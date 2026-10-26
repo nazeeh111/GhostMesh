@@ -453,10 +453,14 @@ input[type="range"]:disabled {
   margin-left: 8px;
 }
 select {
-  background: transparent;
+  appearance: none;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M1 1l3 3 3-3' fill='none' stroke='%23526758' stroke-width='1.25'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
   color: #526758;
   border: 1px solid #c8d4c5;
-  padding: 10px 6px;
+  padding: 10px 22px 10px 6px;
   font: 11px var(--mono);
   border-radius: 3px;
 }

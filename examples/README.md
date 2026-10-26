@@ -32,3 +32,8 @@ MM-Fi excerpts and derived replays retain [CC BY-NC 4.0](../data/LICENSE.md)
 terms, attribution and noncommercial scope. Aggregate accuracy belongs to the
 [full held-out report](../results/cohort20-v1/results.md), rather than one
 selected animation.
+
+`unseen-room-csi.npz` is the separately preselected E04/S31/A02 example.
+Use `models/ghostmesh-environment.pt`, whose development excludes E04, and
+`unseen-room-replay.json`. Both recordings reproduced all 290 valid predictions
+and confidence values exactly in the verified release environment.

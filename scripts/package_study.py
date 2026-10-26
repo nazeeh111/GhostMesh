@@ -14,6 +14,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 from pathlib import Path
 import tarfile
 
@@ -22,6 +23,23 @@ PREFIX = "ghostmesh-study-v1"
 EXTRAS = (
     "scripts/report_results.py",
     "scripts/package_study.py",
+    "scripts/package_cohort.py",
+    "scripts/qualitative.py",
+    "scripts/run_study.py",
+    "scripts/run_signal_controls.py",
+    "ghostmesh/controls.py",
+    "configs/signal-controls-v1.json",
+    "docs/SIGNAL_CONTROLS.md",
+    "docs/REPRODUCE.md",
+    "results/README.md",
+    "results/signal-controls-v1/plan.json",
+    "results/signal-controls-v1/results.json",
+    "results/signal-controls-v1/results.csv",
+    "results/signal-controls-v1/README.md",
+    "results/qualitative-v1/cases.json",
+    "results/qualitative-v1/qualitative.png",
+    "results/qualitative-v1/qualitative.svg",
+    "results/qualitative-v1/render_manifest.json",
     "requirements-plots.txt",
     "LICENSE",
     "NOTICE.md",
@@ -150,12 +168,18 @@ Original software is MIT licensed. MM-Fi-derived artifacts retain CC BY-NC
 """
 
 
-def write_archive(out, entries):
+def write_archive(out, entries, prefix=PREFIX, compresslevel=9, max_bytes=None):
     """Write sorted canonical regular files, retaining any failed .partial file.
 
     Each entry has source (Path) or data (bytes), sha256 and size. This small
     helper permits a software-only archive layout check without fake studies.
     """
+    if not isinstance(prefix, str) or not re.fullmatch(
+        r"[A-Za-z0-9][A-Za-z0-9._-]*", prefix
+    ):
+        raise ValueError("Unsafe archive prefix")
+    if not isinstance(compresslevel, int) or not 0 <= compresslevel <= 9:
+        raise ValueError("gzip compresslevel must be between 0 and 9")
     out = Path(out).absolute()
     partial = out.with_name(out.name + ".partial")
     require_new(out)
@@ -172,7 +196,7 @@ def write_archive(out, entries):
     # Exclusive creation refuses concurrent builders and existing failed partials.
     with partial.open("xb") as raw:
         with gzip.GzipFile(
-            filename="", mode="wb", fileobj=raw, mtime=0, compresslevel=9
+            filename="", mode="wb", fileobj=raw, mtime=0, compresslevel=compresslevel
         ) as compressed:
             with tarfile.open(
                 fileobj=compressed, mode="w", format=tarfile.USTAR_FORMAT
@@ -188,7 +212,7 @@ def write_archive(out, entries):
                         or sha256(content).hexdigest() != entry["sha256"]
                     ):
                         raise ValueError(f"Input changed before archival: {name}")
-                    member = tarfile.TarInfo(f"{PREFIX}/{name}")
+                    member = tarfile.TarInfo(f"{prefix}/{name}")
                     member.size = len(content)
                     member.mtime = member.uid = member.gid = 0
                     member.mode = 0o644
@@ -200,6 +224,10 @@ def write_archive(out, entries):
     for name, entry in entries.items():
         if "source" in entry and digest(entry["source"]) != entry["sha256"]:
             raise ValueError(f"Input changed during archival: {name}")
+    if max_bytes is not None and partial.stat().st_size >= max_bytes:
+        raise ValueError(
+            f"Archive must be smaller than {max_bytes} bytes; retained .partial"
+        )
     # An exclusive hard link publishes the finished file without replacing a race winner.
     os.link(partial, out)
     partial.unlink()

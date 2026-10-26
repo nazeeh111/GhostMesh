@@ -1,24 +1,35 @@
 # GhostMesh
 
-**Human pose from Wi-Fi CSI. Camera-free inference, inspectable uncertainty, reproducible experiments.**
+[![Reproducibility checks](https://github.com/nazeeh111/GhostMesh/actions/workflows/ci.yml/badge.svg)](https://github.com/nazeeh111/GhostMesh/actions/workflows/ci.yml)
+
+**Camera-free 2D pose inference. Real held-out data. Inspectable uncertainty.**
 
 Channel-state information (CSI) describes how Wi-Fi signals change along radio
-paths. GhostMesh turns aligned CSI recordings into a 17-joint 2D
-skeleton. Its local application plays real recorded inference with a signal
-map, joint uncertainty, reference overlays and explicit failure states. No
-boards, camera, cloud account or billed API are required for replay.
+paths. GhostMesh implements an original CSI-to-pose pipeline and a local
+application for inspecting its 17-joint predictions, signal maps, confidence
+and reference annotations. Inference consumes CSI alone.
 
-**Research status:** software checks have passed and the final experimental
-cohort is prepared: 27 actions, 20 people, four environments and 160,380 frames.
-The full 40-person expansion is blocked by a verified Google Drive quota.
-Final held-out experiments are being frozen; no accuracy improvement or “10×”
-claim is established yet. See
-[experiment scope](docs/EXPERIMENTS.md) and [data provenance](docs/DATA_ACCESS.md).
+**Research finding:** the completed study is mixed. Temporal encoding and
+teacher consistency did not consistently improve the simpler neural baseline.
+Room-specific pose priors are strong, fine joint accuracy remains low, and
+unseen-room confidence is unreliable. This release documents those limits
+alongside the working software. Robust dynamic pose recovery and “10×”
+superiority are not established.
+
+![Actual held-out CSI replay with predicted and supplied reference skeletons](docs/assets/demo-v1/ghostmesh-demo.gif)
+
+*Actual E01/S05/A02 test recording, selected before test scores. Teal is the
+prediction; dashed orange is the supplied 2D teacher annotation, attached after
+inference. Motion is captured from the application at source timestamps.*
+
+[Run the app](#run-locally) · [Measured findings](results/README.md) ·
+[Model card](docs/MODEL_CARD.md) · [Reproduce](docs/REPRODUCE.md) ·
+[Release downloads](https://github.com/nazeeh111/GhostMesh/releases/tag/v0.1.0)
 
 ## Run locally
 
 Python 3.12 and [uv](https://docs.astral.sh/uv/) are the tested environment.
-Start with a fresh checkout:
+The recorded viewer needs only Python's standard library:
 
 ```bash
 git clone https://github.com/nazeeh111/GhostMesh.git
@@ -26,62 +37,109 @@ cd GhostMesh
 uv run --isolated --no-project --python 3.12 python -m ghostmesh serve
 ```
 
-Open the localhost address printed by the command. This plays the bundled
-held-out predictions with Python's standard library, without installing the ML
-stack. It does not recompute predictions in the browser.
+Open the printed localhost address. Play, pause, step, seek, change speed and
+toggle reference labels or the fixed isotropic viewport. The app shows the
+causal CSI amplitude map and per-joint uncertainty. Invalid signal withholds
+the pose; domain warnings identify known or unverified domains. Opening another
+replay stays inside the browser. The viewer plays saved predictions.
 
-For training, evaluation or CSI-only inference, install the locked environment:
+To compute predictions from the shipped CSI-only sample, install the ML stack:
 
 ```bash
 uv sync --locked --extra test
-uv run ghostmesh serve
+uv run ghostmesh infer-recording --recording examples/heldout-csi.npz \
+  --checkpoint models/ghostmesh.pt --out examples/recomputed.json
+uv run ghostmesh serve --replay examples/recomputed.json
+uv run python scripts/reproduce_demo.py
 ```
 
-The viewer provides play/pause, frame stepping, timestamp seeking, playback
-speed, reference labels, a fixed sequence viewport and a full annotation-plane
-view. Invalid signal clears the prediction. Unknown domains and low confidence
-remain visible. Uploading a replay stays in the browser.
+Both released examples reproduced all **290 valid frames exactly** from files
+containing only CSI and timestamps. Seven initial frames provide causal context.
+The separate [E04 replay](examples/unseen-room-replay.json) uses its own model:
+
+```bash
+uv run ghostmesh serve --replay examples/unseen-room-replay.json
+```
+
+No boards, camera, cloud account or billed API are required for these paths.
+
+## Measured study
+
+The cohort contains **27 actions, 20 people, four environments, 540 sequences
+and 160,380 paired frames**. Twelve neural arms each trained for 40 epochs;
+epochs were selected by validation error. Test windows are dense and remain
+within held-out people. All action categories occur in development.
+
+The predeclared temporal-plus-teacher model, seed 2027:
+
+| Test protocol | People | PCK@.05 | PCK@.2 | NJE ↓ | Forward median / FPS |
+|---|---:|---:|---:|---:|---:|
+| New people, represented rooms | 4 | 13.20% | 82.74% | 0.13429 | 1.060 ms / 943 |
+| E04 room/person transfer | 5 | 2.36% | 49.22% | 0.21440 | 0.827 ms / 1,209 |
+
+PCK counts joints within the stated fraction of the reference body's bounding-box
+diagonal. NJE is mean error divided by that diagonal. References are supplied
+model-generated 2D labels. Forward timing is batch-one CPU computation on an
+Apple M4, excluding preprocessing, acquisition, I/O and rendering. The recording
+remains **10 Hz**, with about **0.7 seconds** of initial context.
+
+- **Temporal gains are inconsistent.** The primary cross-subject model loses
+  to the last-frame encoder. E04 improves at seed 2027 and reverses at seed 2028.
+- **Static room information matters.** A source-trained room mean with oracle
+  room metadata reaches NJE 0.13012 / PCK@.2 85.38%, beating both seed-2027
+  cross-subject neural models.
+- **Signal correspondence is modest.** Fixed within-room CSI permutation
+  increases primary temporal NJE from 0.13429 to 0.13760 in cross-subject testing
+  and from 0.21440 to 0.21725 in E04. These are descriptive controls, not proof
+  of causal motion sensing. E04 baseline PCK improves under permutation.
+- **Confidence needs caution.** Primary expected calibration error is 0.1406
+  in cross-subject testing and 0.4183 in E04, for a fixed annotation-plane radius.
+  Joint scores are uncalibrated model quantities.
+
+[All seeds, thresholds, ablations and paired intervals](results/cohort20-v1/results.md) ·
+[Room-prior and permutation diagnostics](results/signal-controls-v1/README.md)
+
+![Held-out primary metrics across both seeds and protocols](results/cohort20-v1/primary_metrics.png)
+
+![Algorithmically selected low- and high-error frames](results/qualitative-v1/qualitative.png)
+
+The qualitative panels are metric-ranked extremes, not typical performance.
+The study uses four or five held-out people per protocol. Room and person
+changes are confounded in E04. Full 40-person, unseen-action, cross-device,
+multi-person, 3D and reliable real-world pose recovery are unvalidated.
 
 ## What is original
 
-- An independently implemented CSI-to-pose pipeline, with exact frame pairing,
-  causal windows, per-link robust normalization and integrity-checked datasets.
-- A compact learned spectral encoder and causal temporal network, paired with a
-  last-frame encoder control. Gaussian joint uncertainty is evaluated rather
-  than presented as a guaranteed probability of correctness.
-- A source-only teacher consistency strategy, tested through normalization,
-  augmentation and consistency ablations. It does not adapt on held-out people
-  or environments.
-- An experiment runner that freezes settings before testing, selects epochs
-  with validation labels, compares a no-signal pose prior, and resamples whole
-  sequences and subjects rather than treating overlapping frames as independent.
-- A local application that exposes the recording, checkpoint, split and failure
-  evidence behind each skeleton.
+- Exact frame pairing, integrity-checked manifests, causal windows and per-link
+  robust normalization, with no statistics fitted on future frames.
+- A compact packet-moment spectral encoder and causal temporal model with
+  54,451 parameters, compared with a last-frame encoder sharing preprocessing.
+- A source-only moving-average teacher with bounded uncertainty weighting,
+  gain perturbation and subcarrier masking, evaluated through declared ablations.
+- Frozen experiment and diagnostic plans, validation-only checkpoint selection,
+  matched static priors, sequence/subject bootstrap intervals and signal controls.
+- An offline replay instrument with real-data provenance and camera-free
+  inference reproduction, backed by meaningful automated checks.
 
-This is an original implementation and experimental study. The components
-build on established ideas; no claim of being the first CSI pose system is made.
-[Model card](docs/MODEL_CARD.md) · [Research references](docs/REFERENCES.md)
+The method builds on established temporal-convolution and mean-teacher ideas.
+Its value is assessed by the measured study; no first-ever or state-of-the-art
+claim is made. No upstream model code, weights, research figures or demos were
+copied. [Research references and source boundaries](docs/REFERENCES.md).
 
-## Reproduce the data path
+## Data and full reproduction
 
-MM-Fi supplies paired CSI and 2D teacher keypoints under CC BY-NC 4.0. GhostMesh
-downloads only those streams, verifies archive contents and pairs files by
-frame number. It does not load camera images or convert the separate 3D labels
-into purported 2D truth.
+The release provides an optional **exact prepared cohort download** and a
+separate study archive containing all selected checkpoints, original reports,
+manifests and hashes. This allows independent evaluation of the 20-person study
+without upstream access. Data and derived assets retain **CC BY-NC 4.0** terms
+and the MM-Fi authors' attribution. [Data terms](data/LICENSE.md).
+
+To acquire from the original source instead:
 
 ```bash
 uv run python scripts/fetch_cohort20.py --dry-run
 uv run python scripts/fetch_cohort20.py --inventory
 uv run python scripts/fetch_cohort20.py --out data/mmfi-raw
-```
-
-This selects the exact 20-person, 27-action cohort across E01–E04. It stops on
-provider errors. After quota access returns, `--resume` verifies and reuses
-identical local files. Follow [the data guide](docs/DATA_ACCESS.md) for access
-limits, the larger 40-person acquisition, consent and split rules.
-Preparation refuses an existing output directory:
-
-```bash
 uv run ghostmesh prepare-mmfi \
   --source data/mmfi-raw --out data/mmfi-prepared \
   --width 640 --height 640 --fps 10 \
@@ -91,77 +149,56 @@ uv run ghostmesh prepare-mmfi \
 uv run ghostmesh audit --manifest data/mmfi-prepared/manifest.json
 ```
 
-The square reference plane is an explicit isotropic normalization convention,
-not a recovered camera resolution. Inspect the coordinate bounds of newly
-acquired actions before choosing it. Distances retain pixel-space geometry.
+The 40-person expansion stopped at a verified provider quota during collection;
+validated local bytes were preserved. The 640-square annotation plane is an
+explicit isotropic convention, not recovered camera calibration. Original
+packet-level synchronization was not independently verified.
+[Data access, consent basis and exact splits](docs/DATA_ACCESS.md).
 
-## Train, evaluate and replay
+For an exact new registered study, first extract the prepared release archive
+and copy its `data/mmfi-cohort20` folder into a fresh checkout, preserving the
+released manifests and matching provenance receipt. Fresh preparation can
+change manifest bytes and needs a separate matching provenance record.
+The launcher freezes supplemental controls before testing and then runs the
+unchanged twelve-arm CPU suite:
 
 ```bash
-uv run ghostmesh train \
-  --manifest data/mmfi-prepared/manifest.json \
+uv run python scripts/run_study.py \
+  --subject-manifest data/mmfi-cohort20/manifest.json \
+  --environment-manifest data/mmfi-cohort20/cross-environment.json \
+  --out experiments/my-study --controls-out results/my-controls
+```
+
+For individual training and evaluation:
+
+```bash
+uv run ghostmesh train --manifest data/mmfi-prepared/manifest.json \
   --config configs/cohort20-temporal.json --out experiments/my-run
-uv run ghostmesh evaluate \
-  --manifest data/mmfi-prepared/manifest.json \
+uv run ghostmesh evaluate --manifest data/mmfi-prepared/manifest.json \
   --checkpoint experiments/my-run/best.pt --out experiments/my-run/test.json
-uv run ghostmesh export \
-  --manifest data/mmfi-prepared/manifest.json \
-  --checkpoint experiments/my-run/best.pt --out examples/my-replay.json
-uv run ghostmesh serve --replay examples/my-replay.json
 ```
 
-Use a configuration matching the prepared data's protocol and intended scope.
-The `cohort20` configurations describe the balanced 27-action, 20-person cohort;
-`subset` configurations retain the earlier two-action pilot.
-For a controlled comparison, run the frozen suite instead of selecting models
-by their test scores:
+[Complete reproduction and recovery guide](docs/REPRODUCE.md) ·
+[Study archive and chart rendering](docs/STUDY_BUNDLE.md)
 
-```bash
-uv run python scripts/run_suite.py \
-  --subject-manifest data/mmfi-prepared/manifest.json \
-  --environment-manifest data/mmfi-prepared/cross-environment.json \
-  --profile cohort20 --out experiments/my-suite
-```
-
-For annotation-free inference, provide only CSI amplitude and timestamps in a
-compatible NPZ recording. Sensor layout is checked against the checkpoint:
-
-```bash
-uv run ghostmesh infer-recording --recording examples/heldout-csi.npz \
-  --checkpoint models/ghostmesh.pt --out examples/recording-replay.json
-```
-
-This mode does not read pose labels. Its domain remains explicitly unverified.
-It cannot make an ESP32 recording compatible with MM-Fi weights by reshaping it.
-
-## Validation
+## Verification
 
 ```bash
 uv run pytest -q --ignore=tests/test_report_results.py
 node --test tests/test_replay.mjs
 ```
 
-Tests cover causal dependencies, gradients, missing-data and timestamp failure
-paths, exact frame joins, manifest integrity, split leakage, validation-only
-selection, metric definitions, uncertainty, paired comparisons, annotation-free
-inference, ESP32 parsing, actual HTTP responses and replay controls.
-
-Scientific figure and report checks run in a separate optional plotting
-environment. See [the reporting guide](docs/RESULTS_FORMAT.md).
-
-The final test evaluates every complete causal endpoint; training and
-validation sample every eighth frame. PCK uses 20% of each frame's valid reference bounding-box diagonal. Normalized
-joint error is Euclidean joint error divided by that diagonal. Reports retain
-excluded-window coverage, per-person/environment/sequence scores, confidence
-reliability and measured processing latency. These 2D metrics are not directly
-comparable with MM-Fi's published 3D millimeter results. The recorded stream is
-10 Hz regardless of model processing FPS.
+Checks cover numerical causality and gradients, real loader contracts, split
+leakage, integrity, validation-only selection, exact epoch recovery, metrics,
+uncertainty, frozen plans, CSI-only inference, serial parsing, actual HTTP
+responses and replay controls. Reporting checks run in a separate optional
+environment. CI also recomputes the real shipped replay and verifies the
+installed wheel outside the checkout. [Evidence and limits](docs/VERIFICATION.md).
 
 ## ESP32 mode
 
-Hardware acquisition is a separate, opt-in signal path. It requires a real
-ESP-CSI device, a chosen serial port and permission from recorded participants.
-No hardware accuracy or cross-device transfer is claimed.
+Hardware acquisition is a separate opt-in signal path. It requires a real
+ESP-CSI device, a selected serial port and consenting participants:
 
 ```bash
 uv sync --locked --extra hardware
@@ -171,20 +208,24 @@ uv run ghostmesh esp-convert --source data/my-session/serial.log \
   --out data/my-session/amplitude.npz
 ```
 
-[Hardware guide and limits](docs/HARDWARE.md)
+The recorder and converter do not estimate ESP32 pose. MM-Fi weights require
+their original sensor layout; transfer by reshaping is rejected. Physical
+capture and ESP32 pose accuracy remain unverified. [Hardware guide](docs/HARDWARE.md).
 
 ## Repository map
 
 | Path | Purpose |
-| --- | --- |
+|---|---|
 | `ghostmesh/` | Preparation, model, training, evaluation, inference and local server |
-| `ghostmesh/web/` | Browser application, without a CDN or build service |
-| `configs/` | Versioned experiment settings and source provenance |
-| `scripts/` | Bounded dataset acquisition, suite execution and demo capture |
-| `tests/` | Numerical, integrity, inference, parser and application checks |
-| `docs/` | Model, data, application, hardware and experiment records |
+| `ghostmesh/web/` | Browser app without a CDN or build service |
+| `configs/` | Versioned model and diagnostic definitions |
+| `models/`, `examples/` | Licensed weights and real CSI-only replay inputs |
+| `results/` | Measured findings, controls, qualitative cases and artifact hashes |
+| `scripts/`, `tests/` | Reproduction, packaging, capture and verification |
+| `docs/` | Model, data, protocols, hardware limits and research references |
 
-Original software: [MIT](LICENSE). MM-Fi data, derived weights and replay assets:
-[separate noncommercial terms](data/LICENSE.md). [Attribution](NOTICE.md).
-Use consenting recordings and authorized sites. GhostMesh is a single-person
-2D research system, not a surveillance, identification or medical safety product.
+Original software: [MIT](LICENSE). MM-Fi data, trained weights and derived
+replay/figure assets: [CC BY-NC 4.0](data/LICENSE.md). [Attribution](NOTICE.md).
+Use authorized recordings from consenting people. GhostMesh is a single-person
+2D research system; it does not provide surveillance, identification or medical
+safety decisions.

@@ -41,7 +41,9 @@ jobs:
           uv run --locked ghostmesh evaluate --manifest work/ci-fixture/manifest.json --checkpoint work/ci-smoke/best.pt --out work/ci-smoke/test.json
           uv run --locked ghostmesh export --manifest work/ci-fixture/manifest.json --checkpoint work/ci-smoke/best.pt --out work/ci-replay.json
       - name: Reproduce real held-out replay from CSI only
-        run: uv run --locked python scripts/reproduce_demo.py
+        run: |
+          uv run --locked python scripts/reproduce_demo.py
+          uv run --locked python scripts/reproduce_demo.py --recording examples/unseen-room-csi.npz --checkpoint models/ghostmesh-environment.pt --reference examples/unseen-room-replay.json
       - name: Build wheel
         run: uv build --wheel
       - name: Check installed wheel outside the checkout

@@ -33,3 +33,16 @@ is claimed. Sensor layouts cannot be made compatible by reshaping their arrays.
 
 MM-Fi-derived weights retain [CC BY-NC 4.0](../data/LICENSE.md) attribution and
 noncommercial terms. The original implementation uses [MIT](../LICENSE).
+
+## Unseen-room checkpoint
+
+`ghostmesh-environment.pt` is the separately trained seed-2027 temporal model
+whose development excludes E04. Its validation-selected checkpoint is epoch 6.
+Use it with `examples/unseen-room-csi.npz` and the E04 replay. SHA-256:
+
+```text
+7a19bdd6f8a81630253a21f3709063c45d85cf7ffc4e2e93748b16a3d12fc5ef
+```
+
+The test results do not establish reliable unseen-room pose recovery; confidence
+is poorly calibrated in that domain. [Integrated findings](../results/README.md).

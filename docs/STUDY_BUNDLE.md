@@ -1,9 +1,10 @@
 # Frozen study bundle
 
 `scripts/package_study.py` creates a compact, independently renderable archive
-of a completed cohort20 study. Packaging and public release remain separate
-actions. The release study bundle is pending until all arms, evaluations and
-final figures are complete and verified.
+of a completed cohort20 study. All twelve arms and their held-out evaluations are complete. The release
+archive preserves their selected models and exact receipts; the separate
+prepared-cohort archive supports independent re-evaluation and retraining.
+Download both from the [v0.1.0 release](https://github.com/nazeeh111/GhostMesh/releases/tag/v0.1.0).
 
 The packager uses only Python's standard library and the reporting validator.
 It calls `report_results.load_suite()` before creating an archive, requiring
@@ -36,7 +37,9 @@ frozen configs, each arm’s standalone `config.json`, `history.json` and
 `run_identity.json`, training and test reports, both mean-pose reports,
 preregistration, suite/process receipts and cohort provenance. It includes the
 five frozen runtime modules, suite runner, results renderer, plotting
-requirement, packager, protocol/reporting documentation and license notices.
+requirement, packagers, protocol/reporting documentation and license notices.
+Supplemental control sources, frozen plan and completed diagnostics, integrated
+findings and the four report-ranked qualitative cases are also retained.
 `README_STUDY.md` provides extraction, hash-verification and rendering commands.
 
 Raw or prepared CSI arrays, raw RGB, prepared NPZ files, window caches,

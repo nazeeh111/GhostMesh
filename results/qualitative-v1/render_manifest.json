@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-26T22:15:30.945088+00:00",
+  "script_sha256": "c49c12a5a01ccff142396be2e2871c441d2c326279230cddb69742a5c96d2d3a",
+  "cases_sha256": "a7636d03b8e8c4c7eeb475fe86f49148cf0123ef2c8981c80c7eb4c3d8fc7989",
+  "matplotlib": "3.11.2",
+  "outputs_sha256": {
+    "qualitative.svg": "6e8401f840cd1508afad043e8378f8aa8b0a705f9d7f02501d6ab38096326cc4",
+    "qualitative.png": "996575fecbbbb90739f1fc1fb6661527df6b3b78943f3d7d371de7ab147db7dc"
+  },
+  "selection": "First lowest_error and first highest_error in each original seed-2027 temporal test report; extremes, not typical or representative frames.",
+  "scope": "Plots saved case arrays only; no training or evaluation."
+}

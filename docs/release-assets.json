@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "version": "0.1.0",
+  "release_url": "https://github.com/nazeeh111/GhostMesh/releases/tag/v0.1.0",
+  "assets": [
+    {
+      "name": "ghostmesh-0.1.0-py3-none-any.whl",
+      "sha256": "1bc13f56d0ca4fb148719c63b5a5d818cf02c39572b12660905c10e691ff9a89",
+      "bytes": 912962
+    },
+    {
+      "name": "ghostmesh-mmfi-cohort20-v1.tar.gz",
+      "sha256": "485efadd0c819493bed83e3eaa891455b475c1767e084d46f7ef7cf39846bf69",
+      "bytes": 1531558056
+    },
+    {
+      "name": "ghostmesh-study-v1.tar.gz",
+      "sha256": "5191426222539599315c3e62f98f159789f4b1f38ddb8efee6d5971650c2d261",
+      "bytes": 31307499
+    }
+  ],
+  "verification": {
+    "prepared_cohort": "549 members, exactly 540 NPZ arrays; every size and SHA256 verified",
+    "study_bundle": "135 members verified; extracted renderer produced byte-identical CSV and identical full results JSON without PyTorch",
+    "wheel": "installed outside checkout; real packaged replay and loopback HTTP verified"
+  },
+  "license": "Original software MIT; MM-Fi-derived data, weights and figures CC BY-NC 4.0 with attribution."
+}

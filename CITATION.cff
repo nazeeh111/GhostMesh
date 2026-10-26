@@ -3,6 +3,7 @@ message: "If you use GhostMesh, cite this software and the MM-Fi dataset describ
 type: software
 title: "GhostMesh: reproducible Wi-Fi CSI to 2D human pose"
 version: 0.1.0
+date-released: 2026-10-26
 authors:
   - family-names: "Abdul-Hadi"
     given-names: "Nazeeh"

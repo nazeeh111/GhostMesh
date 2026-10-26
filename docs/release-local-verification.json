@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-26",
+  "software_checks": {
+    "core_python": 168,
+    "scientific_reporting": 22,
+    "browser_replay": 8,
+    "ruff": "0.16.2 passed",
+    "uv_lock": "passed"
+  },
+  "reproduction": {
+    "cross_subject": {
+      "valid_frames": 290,
+      "max_pose_difference": 0.0,
+      "max_confidence_difference": 0.0
+    },
+    "unseen_room": {
+      "valid_frames": 290,
+      "max_pose_difference": 0.0,
+      "max_confidence_difference": 0.0
+    },
+    "inputs": "CSI and timestamps only; seven warmup frames"
+  },
+  "installed_wheel": "verified outside source checkout; packaged replay, static assets, licenses, metadata and loopback HTTP",
+  "cohort_archive": {
+    "archive": "ghostmesh-mmfi-cohort20-v1.tar.gz",
+    "status": "all_members_verified",
+    "members": 549,
+    "npz_files": 540,
+    "bytes": 1531558056,
+    "sha256": "485efadd0c819493bed83e3eaa891455b475c1767e084d46f7ef7cf39846bf69",
+    "scope": "Exact 540 prepared CSI/2D-label arrays and attribution; no raw images or caches."
+  },
+  "scientific_scope": "Mixed/negative temporal method result; no reliable dynamic pose, calibrated confidence, isolated room invariance, hardware pose or 3D claim",
+  "ci": "Local checks above; see GitHub Actions for independent hosted results."
+}

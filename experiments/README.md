@@ -2,9 +2,11 @@
 
 Generated run directories and raw/prepared data are excluded from Git. The
 release study is `cohort20-final-v1`: 27 actions, 20 people, four environments,
-540 sequences and 160,380 synchronized frames. The earlier two-action pilot
-was stopped and is not efficacy evidence. The final report and release study
-bundle are pending completion and review.
+540 sequences and 160,380 paired frames. The earlier two-action pilot
+was stopped and is not efficacy evidence. All twelve arms and original held-out
+evaluations completed. Read [the measured findings](../results/README.md),
+including inconsistent temporal gains, strong room priors and poor unseen-room
+calibration. Original packet-level synchronization was not independently verified.
 
 The frozen suite has 12 neural arms with 40 epochs each. Primary last-frame/
 temporal-plus-teacher pairs use seeds 2027 and 2028 in cross-subject and E04
@@ -22,22 +24,23 @@ reports carry matching fingerprints. `suite_report.json` and completed process
 status mark successful suite completion; a directory or checkpoint alone does
 not. Partial final-test scores are not used to revise settings.
 
-Reproduce from the repository root with a new destination, or add `--resume`
-only for an identical frozen suite:
+For a new study, install the exact prepared cohort and follow the
+[reproduction guide](../docs/REPRODUCE.md). The launcher freezes supplemental
+controls before the main suite reaches testing; both destinations must be new:
 
 ```sh
-uv run python scripts/run_suite.py \
+uv run python scripts/run_study.py \
   --subject-manifest data/mmfi-cohort20/manifest.json \
   --environment-manifest data/mmfi-cohort20/cross-environment.json \
-  --profile cohort20 --device cpu --out experiments/cohort20-final-v1
+  --out experiments/my-cohort20-study --controls-out results/my-signal-controls
 ```
 
-After completion, render the planned study report:
+After the new study completes, render its report into a new destination:
 
 ```sh
-MPLCONFIGDIR=/private/tmp/ghostmesh-mpl-cache .report-venv/bin/python scripts/report_results.py \
-  --suite experiments/cohort20-final-v1 \
-  --out results/cohort20-v1 \
+MPLCONFIGDIR=/tmp/ghostmesh-mpl-cache .report-venv/bin/python scripts/report_results.py \
+  --suite experiments/my-cohort20-study \
+  --out results/my-cohort20-study \
   --provenance docs/cohort-provenance.json
 ```
 
@@ -46,6 +49,7 @@ settings, splits, metrics and inference limits, and
 [the results format](../docs/RESULTS_FORMAT.md) for plotting setup and output
 hashes. Paired sequence and subject-cluster intervals describe sampling for
 fixed checkpoints, not training variability; absolute bars receive no borrowed
-intervals. Selected small model/replay artifacts and the study bundle require
-final verification before release. Raw datasets and unfinished runs remain
-outside the release bundle.
+intervals. The separate study bundle preserves selected checkpoints and
+completed receipts without raw/prepared CSI or unfinished recovery states.
+The optional prepared-cohort archive supplies the exact NPZ files independently;
+neither archive includes RGB images. See [archive boundaries](../docs/STUDY_BUNDLE.md).

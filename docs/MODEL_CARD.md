@@ -11,6 +11,24 @@ weights or figures were copied from the WiSPPN-derived CSI-Pose/Poseborne model
 whose upstream redistribution grant was unclear. This document describes the
 method and evaluation rules; measured results belong in the experiment reports.
 
+## Measured release findings
+
+The completed 27-action, 20-person study gives mixed or negative evidence for
+its proposed temporal/teacher hypothesis. Primary seed 2027 cross-subject
+PCK@.2/NJE is .82738/.13429; E04 room/person transfer is .49223/.21440.
+The temporal method does not consistently beat the last-frame encoder across
+the two seeds. A source-room mean with oracle metadata beats both primary
+seed 2027 cross-subject neural models (.85379/.13012). Fixed within-room
+permutation causes only small descriptive changes; E04 baseline PCK increases
+when permuted. These results do not establish robust dynamic pose recovery.
+
+Primary ECE rises from .1406 to .4183 in E04 for the stated absolute-radius
+event. Fine joint accuracy and calibration remain limited. All action categories
+occur in development, and room/person changes are confounded. Read the
+[integrated findings](../results/README.md), [full original results](../results/cohort20-v1/results.md)
+and [frozen signal diagnostics](../results/signal-controls-v1/README.md) together.
+The shipped replay is a preselected example, not evidence of typical accuracy.
+
 ## Inputs, outputs and causality
 
 Input is `[batch, time, link, subcarrier, packet]` nonnegative CSI amplitude.

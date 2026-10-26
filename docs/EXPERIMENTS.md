@@ -1,8 +1,8 @@
 # Cohort20 experimental protocol
 
 The release study is the frozen `cohort20` suite at
-`experiments/cohort20-final-v1`. Its final results and release study bundle are
-pending completion and review. Settings, software checks, partial runs and
+`experiments/cohort20-final-v1`. All twelve training arms, dense held-out evaluations, static priors and paired
+comparisons completed successfully. Measured findings are in [the integrated results](../results/README.md). Settings, software checks, partial runs and
 artifact directories do not establish sensing efficacy. The earlier A02+A06
 pilot was stopped and superseded by this study; it is not efficacy evidence
 and its outputs must not be relabeled as cohort20 results.
@@ -10,7 +10,7 @@ and its outputs must not be relabeled as cohort20 results.
 ## Cohort and held-out protocols
 
 The prepared cohort contains **27 actions, 20 people, four environments,
-540 sequences and 160,380 synchronized frames**, with 297 frames per sequence.
+540 sequences and 160,380 paired frames**, with 297 frames per sequence.
 It includes the people whose complete 27-action recordings were available
 before the documented provider quota blocked the 40-person expansion. It is
 not the full 40-person dataset. All evaluated actions occur in training.
@@ -99,29 +99,33 @@ calls, after warmup; it excludes preprocessing, disk, network and rendering.
 
 ## Reproduction and release
 
-With the prepared manifests at the paths below, run the exact suite from the
-repository root. The destination must be new; add `--resume` only to continue
-an existing suite with identical preregistration and frozen artifacts.
+Use the exact prepared cohort archive and matching provenance receipt described
+in [the reproduction guide](REPRODUCE.md). From the repository root, start a new
+study with the launcher so supplemental controls freeze before testing. Both
+output destinations must be new. Recovery uses the unchanged suite runner's
+`--resume` path and the same frozen control plan; see the guide.
 
 ```sh
-uv run python scripts/run_suite.py \
+uv run python scripts/run_study.py \
   --subject-manifest data/mmfi-cohort20/manifest.json \
   --environment-manifest data/mmfi-cohort20/cross-environment.json \
-  --profile cohort20 --device cpu --out experiments/cohort20-final-v1
+  --out experiments/my-cohort20-study --controls-out results/my-signal-controls
 ```
 
-Only after the suite is complete, render into the planned new results path:
+After that new suite completes, render its report into a separate new path:
 
 ```sh
 .report-venv/bin/python scripts/report_results.py \
-  --suite experiments/cohort20-final-v1 \
-  --out results/cohort20-v1 \
+  --suite experiments/my-cohort20-study \
+  --out results/my-cohort20-study \
   --provenance docs/cohort-provenance.json
 ```
 
 [Results format and plotting setup](RESULTS_FORMAT.md) describes the separate
 reporting environment, strict artifact checks, raw tables and scientific
-figures. The release study bundle remains pending until complete results,
-current-source figures and selected checkpoint/replay artifacts are verified.
-Negative and ambiguous comparisons must remain visible alongside favorable
-ones. No efficacy claim is made here.
+figures. The [completed release results](../results/README.md) retain negative
+and ambiguous comparisons alongside favorable ones. Temporal-plus-teacher
+gains are inconsistent, room priors are strong, and unseen-room confidence
+is unreliable. These findings do not establish robust dynamic pose recovery.
+The separate [study bundle](STUDY_BUNDLE.md) preserves the original completed
+reports; rendering those receipts is distinct from rerunning predictions.

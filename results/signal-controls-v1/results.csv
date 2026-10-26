@@ -1,0 +1,11 @@
+protocol,model,mode,pck,normalized_joint_error,valid_joints,valid_frames,excluded_frames
+cross_subject,cohort20-baseline,aligned,0.8297310495079258,0.13275347001215626,532440,31320,0
+cross_subject,cohort20-baseline,permuted,0.8245717827360829,0.1367168134455014,532440,31320,0
+cross_subject,cohort20-temporal,aligned,0.8273796108481707,0.134285134691512,532440,31320,0
+cross_subject,cohort20-temporal,permuted,0.8219405003380663,0.13759713516148778,532440,31320,0
+cross_environment,cohort20-environment-baseline,aligned,0.4677364585681016,0.2181114892969174,665550,39150,0
+cross_environment,cohort20-environment-baseline,permuted,0.4750462023890016,0.21928164612004866,665550,39150,0
+cross_environment,cohort20-environment-temporal,aligned,0.49223499361430395,0.21439868343581045,665550,39150,0
+cross_environment,cohort20-environment-temporal,permuted,0.48551573886259486,0.21725478448765354,665550,39150,0
+cross_subject,source-room-prior-oracle-metadata,prior,0.8537882202689505,0.13012152383033698,532440,31320,0
+cross_environment,source-room-prior-oracle-metadata,prior,0.38704680339568776,0.2333414079706237,665550,39150,0

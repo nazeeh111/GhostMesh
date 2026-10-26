@@ -4,7 +4,7 @@ GhostMesh's primary available source cohort contains **all 27 MM-Fi actions from
 
 An earlier pilot uses **A02, horizontal chest expansion, and A06, mark time**, from all 40 people: 80 sequences and 23,760 frames. The pilot's exact original source fingerprints are in [data-provenance.json](data-provenance.json). Pilot results remain separate from the primary cohort.
 
-## Current access status
+## Access limitation during collection
 
 On October 25, 2026, expansion to all 27 actions stopped at a verified upstream Google Drive quota. The first missing E01 range, bytes `12565793522–12579265953`, returned **HTTP 200, `text/html`, no Content-Range**, with a page titled **Google Drive - Quota exceeded**. It said the file had too many recent downloads and might be unavailable for up to 24 hours. The downloader rejected the HTML response; it did not treat it as CSI. All four download jobs terminated and all validated local bytes were preserved. A cached range near the archive start still returned 206, so a tiny successful probe alone would not prove missing data was accessible. No alternate host, query variation, credential or access bypass was attempted. [Compact response and coverage record](access-status.json).
 
