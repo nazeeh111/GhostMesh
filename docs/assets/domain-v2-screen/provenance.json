@@ -1,0 +1,8 @@
+{
+  "source_sha256": "98c733d2cee93f9eb827dfcc31ebec53606952ae9a729bc4ff593e64c46da868",
+  "script_sha256": "f79ab99d756352609b699f286041ea5b4899edadb29f325b94b0d33ebc1e6641",
+  "outputs": {
+    "domain-transfer.png": "6b4051ea52bb81ed5bc45ce7acd9ce9c04a0ff34cb9515168cbd94ef6f7f2b76",
+    "domain-transfer.svg": "fd6659bb3b9291f9ee41ba6f908520dc7faa04d492c920d31729cf605a22a005"
+  }
+}

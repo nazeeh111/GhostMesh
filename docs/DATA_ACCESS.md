@@ -1,6 +1,16 @@
 # Data, access and evaluation boundaries
 
-GhostMesh's primary available source cohort contains **all 27 MM-Fi actions from 20 people across four environments**, totaling **540 sequences and 160,380 paired frames**. This is a balanced cohort, not the complete 40-person benchmark. Its array validation, split assignment and trained results are established by the corresponding prepared manifest and experiment reports.
+**October 27, 2026 update:** normal official-source access returned after the
+documented quota interval. The full 40-person, 27-action CSI and provided 2D-label
+cohort was downloaded with verified resume. All 641,520 files match official ZIP
+lengths/CRCs; all 1,080 recordings have exactly 297 paired frames. The 16 frozen
+final-record byte hashes are unchanged. E04 arrays remain unopened for v2 tuning.
+See the [v2 research record](DOMAIN_RESEARCH.md) and [byte audit](domain-v2-full40-byte-audit.json).
+
+The collection counts below record the **historical v0.1 collection boundary**.
+Its released 20-person study, prepared-data archive and measured results remain unchanged.
+
+GhostMesh's released v0.1 cohort contains **all 27 MM-Fi actions from 20 people across four environments**, totaling **540 sequences and 160,380 paired frames**. This is a balanced cohort, not the complete 40-person benchmark. Its array validation, split assignment and trained results are established by the corresponding prepared manifest and experiment reports.
 
 An earlier pilot uses **A02, horizontal chest expansion, and A06, mark time**, from all 40 people: 80 sequences and 23,760 frames. The pilot's exact original source fingerprints are in [data-provenance.json](data-provenance.json). Pilot results remain separate from the primary cohort.
 

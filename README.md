@@ -20,6 +20,10 @@ superiority are not established.
 logarithmic; v0.1 adds another nonlinear compression. Its reported results
 remain measurements of that frozen transform. [Details and reproducible unit check](docs/ERRATA.md).
 
+**v2 research:** full 40-person data access is restored and its bytes are verified.
+Corrected-signal and calibration experiments have not established reliable motion
+transfer. [Current findings, failed comparisons and protected final protocol](docs/DOMAIN_RESEARCH.md).
+
 ![Actual held-out CSI replay with predicted and supplied reference skeletons](docs/assets/demo-v1/ghostmesh-demo.gif)
 
 *Actual E01/S05/A02 test recording, selected before test scores. Teal is the
@@ -153,8 +157,10 @@ uv run ghostmesh prepare-mmfi \
 uv run ghostmesh audit --manifest data/mmfi-prepared/manifest.json
 ```
 
-The 40-person expansion stopped at a verified provider quota during collection;
-validated local bytes were preserved. The 640-square annotation plane is an
+The v0.1 40-person expansion stopped at a verified provider quota; its study
+therefore remains the frozen 20-person cohort. Normal access returned during
+v2 research, and the full 40-person acquisition now passes byte verification.
+The 640-square annotation plane is an
 explicit isotropic convention, not recovered camera calibration. Original
 packet-level synchronization was not independently verified.
 [Data access, consent basis and exact splits](docs/DATA_ACCESS.md).
