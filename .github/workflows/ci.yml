@@ -30,6 +30,8 @@ jobs:
           version: '0.11.20'
       - name: Install locked CPU environment
         run: uv sync --locked --extra test
+      - name: Check observed MM-Fi signal units
+        run: uv run --locked python scripts/check_mmfi_units.py
       - name: Numerical, data, inference and HTTP tests
         run: uv run --locked pytest -q --ignore=tests/test_report_results.py
       - name: Browser replay contract tests

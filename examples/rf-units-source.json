@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "dataset": "MM-Fi, Yang et al., NeurIPS2023",
+  "source": "https://github.com/ybhbingo/MMFi_dataset",
+  "license": "CC-BY-NC-4.0; full attribution in NOTICE.md and data/LICENSE.md",
+  "scope": "Three source-development CSI frames only, no images or pose labels. Original float64 fields preserved, packed into NPZ.",
+  "sample_sha256": "88b67074660460cbddd908fffce9137ea9d7dd226931d0aded95ca2eed343602",
+  "records": [
+    {
+      "record": "E01/S03/A12",
+      "frame_number_1based": 151,
+      "raw_mat_sha256": "800fca794cb6cdf0e154a59f0917f8ce51e9ce9c978cc6ee508099e2b6b148f5"
+    },
+    {
+      "record": "E02/S14/A12",
+      "frame_number_1based": 151,
+      "raw_mat_sha256": "49c6bd069387d8ad83a2085437bf7ff51bd60e4bec88c2e98597b51bd2131bff"
+    },
+    {
+      "record": "E03/S25/A12",
+      "frame_number_1based": 151,
+      "raw_mat_sha256": "963af10dbc3efb2a6851ff205a35166220c86d56e37a714226a4f8f93b1634cf"
+    }
+  ],
+  "inference": "Empirically consistent with20log10 complex magnitude in unknown serialized receiver scale, NOTdBm or unprocessed ADC samples."
+}

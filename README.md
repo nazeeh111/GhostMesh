@@ -16,6 +16,10 @@ unseen-room confidence is unreliable. This release documents those limits
 alongside the working software. Robust dynamic pose recovery and “10×”
 superiority are not established.
 
+**Measurement correction:** the audited MM-Fi magnitude field is already
+logarithmic; v0.1 adds another nonlinear compression. Its reported results
+remain measurements of that frozen transform. [Details and reproducible unit check](docs/ERRATA.md).
+
 ![Actual held-out CSI replay with predicted and supplied reference skeletons](docs/assets/demo-v1/ghostmesh-demo.gif)
 
 *Actual E01/S05/A02 test recording, selected before test scores. Teal is the

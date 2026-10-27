@@ -29,6 +29,14 @@ occur in development, and room/person changes are confounded. Read the
 and [frozen signal diagnostics](../results/signal-controls-v1/README.md) together.
 The shipped replay is a preselected example, not evidence of typical accuracy.
 
+## Measurement interpretation correction
+
+The audited MM-Fi `CSIamp` field is empirically consistent with logarithmic
+magnitude in an unknown receiver scale, rather than linear magnitude. The
+v0.1 transform and checkpoints remain unchanged for numerical reproducibility.
+See [the erratum](ERRATA.md) before using different signal units or preprocessing.
+This correction alone does not establish improved pose accuracy.
+
 ## Inputs, outputs and causality
 
 Input is `[batch, time, link, subcarrier, packet]` nonnegative CSI amplitude.
