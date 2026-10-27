@@ -18,10 +18,6 @@ Temporal convolutions and weight-averaged teachers predate GhostMesh. The origin
 - Shaojie Bai, J. Zico Kolter and Vladlen Koltun. [An Empirical Evaluation of Generic Convolutional and Recurrent Networks for Sequence Modeling](https://arxiv.org/abs/1803.01271), 2018. Background for causal temporal convolution; GhostMesh does not reproduce that paper's architecture or benchmarks.
 - Antti Tarvainen and Harri Valpola. [Mean teachers are better role models: Weight-averaged consistency targets improve semi-supervised deep learning results](https://arxiv.org/abs/1703.01780), NeurIPS 2017. Background for exponential moving average teacher consistency. GhostMesh's consistency uses source training data only; no claim is made that this supervised source-only variant reproduces the original semi-supervised results.
 
-## Relationship to Poseborne
-
-The inspected local Poseborne reference was clean at commit `f73195dd4daf957c0c97cf5edf6a42e196b02e57`. Its notice retains CSI-Pose snapshot `02b1001590beea8e7d6daac57a4d8b4a345eb50f` and identifies WiSPPN-derived model code without a separately established redistribution grant. GhostMesh avoids that code entirely, introducing an original compact temporal model and matched baselines. The original researchers' figures and recorded pose results are not GhostMesh assets.
-
 ## Cite the dataset
 
 ```bibtex

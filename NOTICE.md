@@ -4,8 +4,6 @@ GhostMesh is an independent implementation. It does not copy the CSI-Pose,
 WiSPPN or MM-Fi toolbox model/loader source or upstream model weights and
 research figures. It uses licensed MM-Fi CSI and keypoint data, including the
 small derived excerpts and visualizations distributed with this repository.
-Poseborne is the user's existing upstream-derived project and a reference for
-the workflow. No quantitative superiority over Poseborne has been established.
 
 The original Python and browser software uses the MIT license in LICENSE.
 MM-Fi data, supplied 2D teacher annotations, derived replay visualizations and
