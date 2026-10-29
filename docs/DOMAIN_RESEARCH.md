@@ -61,6 +61,14 @@ nominal-clock limitations and public numerical verification commands. All 60
 fitting equations per representation and saved predictions were checked. No
 target references or reserved E04 arrays entered these experiments.
 
+A [coordinate diagnostic](COORDINATE_DIAGNOSTIC.md) separately removes each
+prediction's own translation and scale and fits a constant 2D rotation using
+source validation. Even in that different target space, the frozen predictor
+loses to directly fitted canonical static and clock controls in every room.
+All motion R² values remain negative. This rules out that simple correction as
+a sufficient fix for this predictor; room, person, view and teacher-label
+effects remain confounded. Original image-plane scores are preserved.
+
 ## Calibration is a separate task
 
 A later [fixed-reference covariance experiment](CALIBRATION_RESEARCH.md) uses
