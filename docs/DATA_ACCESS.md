@@ -1,6 +1,16 @@
 # Data, access and evaluation boundaries
 
-GhostMesh's primary available source cohort contains **all 27 MM-Fi actions from 20 people across four environments**, totaling **540 sequences and 160,380 paired frames**. This is a balanced cohort, not the complete 40-person benchmark. Its array validation, split assignment and trained results are established by the corresponding prepared manifest and experiment reports.
+**October 27, 2026 update:** normal official-source access returned after the
+documented quota interval. The full 40-person, 27-action CSI and provided 2D-label
+cohort was downloaded with verified resume. All 641,520 files match official ZIP
+lengths/CRCs; all 1,080 recordings have exactly 297 paired frames. The 16 frozen
+final-record byte hashes are unchanged. E04 arrays remain unopened for v2 tuning.
+See the [v2 research record](DOMAIN_RESEARCH.md) and [byte audit](domain-v2-full40-byte-audit.json).
+
+The collection counts below record the **historical v0.1 collection boundary**.
+Its released 20-person study, prepared-data archive and measured results remain unchanged.
+
+GhostMesh's released v0.1 cohort contains **all 27 MM-Fi actions from 20 people across four environments**, totaling **540 sequences and 160,380 paired frames**. This is a balanced cohort, not the complete 40-person benchmark. Its array validation, split assignment and trained results are established by the corresponding prepared manifest and experiment reports.
 
 An earlier pilot uses **A02, horizontal chest expansion, and A06, mark time**, from all 40 people: 80 sequences and 23,760 frames. The pilot's exact original source fingerprints are in [data-provenance.json](data-provenance.json). Pilot results remain separate from the primary cohort.
 
@@ -8,7 +18,7 @@ An earlier pilot uses **A02, horizontal chest expansion, and A06, mark time**, f
 
 On October 25, 2026, expansion to all 27 actions stopped at a verified upstream Google Drive quota. The first missing E01 range, bytes `12565793522–12579265953`, returned **HTTP 200, `text/html`, no Content-Range**, with a page titled **Google Drive - Quota exceeded**. It said the file had too many recent downloads and might be unavailable for up to 24 hours. The downloader rejected the HTML response; it did not treat it as CSI. All four download jobs terminated and all validated local bytes were preserved. A cached range near the archive start still returned 206, so a tiny successful probe alone would not prove missing data was accessible. No alternate host, query variation, credential or access bypass was attempted. [Compact response and coverage record](access-status.json).
 
-The preserved source inventory contains **641 complete paired sequences, 190,377 paired frames**, and seven incomplete sequence directories excluded from any complete-cohort claim. All 27 actions have complete paired files for **20 people**, S01–S05, S11–S15, S21–S25 and S31–S35, five people per environment. Only A02/A06 cover all 40 people. This permits a separately labeled 20-person, 27-action experiment, while the intended 40-person full-action acquisition remains blocked. Complete file coverage is distinct from successful array validation and training; the prepared experiment manifest and evaluation reports prove those later stages.
+At that collection boundary, the preserved inventory contained **641 complete paired sequences, 190,377 paired frames**, and seven incomplete sequence directories excluded from any complete-cohort claim. All 27 actions had complete paired files for **20 people**, S01–S05, S11–S15, S21–S25 and S31–S35, five people per environment. Only A02/A06 then covered all 40 people. This supported the separately labeled 20-person, 27-action experiment while the full-action expansion was blocked. The October 27 update above supersedes that access limitation. Complete file coverage is distinct from successful array validation and training; prepared manifests and evaluation reports establish those later stages.
 
 ## Rights and consent
 
@@ -22,7 +32,7 @@ The [official toolbox documentation](https://github.com/ybhbingo/MMFi_dataset/tr
 
 | Source | Verified content | GhostMesh use |
 | --- | --- | --- |
-| `E*/S*/A*/wifi-csi/frameNNN.mat` | `CSIamp`, shape `[3,114,10]`; phase is also present | Amplitude input only |
+| `E*/S*/A*/wifi-csi/frameNNN.mat` | `CSIamp`, shape `[3,114,10]`; phase is also present | Frozen v0.1 uses magnitude only; v2 experiments also inspect phase and reconstructed complex coefficients |
 | `E*/S*/A*/rgb/frameNNN.npy` | 17 two-dimensional keypoints, shape `[17,2]` | Supplied teacher annotations; never camera input |
 | `ground_truth.npy` | Separate 3D annotation convention | Not loaded or projected into a claimed 2D truth |
 

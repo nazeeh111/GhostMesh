@@ -1,0 +1,336 @@
+{
+  "scope": "Batch1 CPU quotient preprocessing+RBF inference, warmcheckpoint. Interleaved paired controls, randomized order seed2027; excludes load,acquisition,I/O,rendering. Runtime contention can affect wall latency.",
+  "baseline_commit": "88a9653744510893476ec934bf12903f8ac7ccd9",
+  "measured_calls_per_method": 30,
+  "warmup_per_method": 5,
+  "prediction_max_abs": 0.0,
+  "summary": {
+    "uncached_88a9653": {
+      "wall_median_ms": 14.402875,
+      "cpu_median_ms": 10.4125,
+      "reciprocal_wall_median_fps": 69.43058243579841
+    },
+    "cached": {
+      "wall_median_ms": 4.1419375,
+      "cpu_median_ms": 3.466,
+      "reciprocal_wall_median_fps": 241.432904286943
+    }
+  },
+  "samples": {
+    "uncached_88a9653": [
+      {
+        "end": 7,
+        "wall_ms": 14.55325,
+        "cpu_ms": 11.084
+      },
+      {
+        "end": 11,
+        "wall_ms": 9.664833,
+        "cpu_ms": 9.089
+      },
+      {
+        "end": 14,
+        "wall_ms": 14.562125,
+        "cpu_ms": 10.063
+      },
+      {
+        "end": 18,
+        "wall_ms": 16.426917,
+        "cpu_ms": 10.681
+      },
+      {
+        "end": 21,
+        "wall_ms": 11.544292,
+        "cpu_ms": 8.58
+      },
+      {
+        "end": 25,
+        "wall_ms": 10.668333,
+        "cpu_ms": 9.025
+      },
+      {
+        "end": 28,
+        "wall_ms": 8.308042,
+        "cpu_ms": 7.581
+      },
+      {
+        "end": 32,
+        "wall_ms": 14.849833,
+        "cpu_ms": 12.527
+      },
+      {
+        "end": 35,
+        "wall_ms": 11.203917,
+        "cpu_ms": 10.399
+      },
+      {
+        "end": 39,
+        "wall_ms": 10.856167,
+        "cpu_ms": 9.269
+      },
+      {
+        "end": 43,
+        "wall_ms": 9.453125,
+        "cpu_ms": 8.619
+      },
+      {
+        "end": 46,
+        "wall_ms": 11.00125,
+        "cpu_ms": 9.974
+      },
+      {
+        "end": 50,
+        "wall_ms": 19.06225,
+        "cpu_ms": 11.181
+      },
+      {
+        "end": 53,
+        "wall_ms": 14.2525,
+        "cpu_ms": 9.176
+      },
+      {
+        "end": 57,
+        "wall_ms": 14.715834,
+        "cpu_ms": 10.426
+      },
+      {
+        "end": 60,
+        "wall_ms": 14.757292,
+        "cpu_ms": 11.902
+      },
+      {
+        "end": 64,
+        "wall_ms": 14.186,
+        "cpu_ms": 13.116
+      },
+      {
+        "end": 67,
+        "wall_ms": 10.526375,
+        "cpu_ms": 9.343
+      },
+      {
+        "end": 71,
+        "wall_ms": 18.443584,
+        "cpu_ms": 13.379
+      },
+      {
+        "end": 74,
+        "wall_ms": 13.108459,
+        "cpu_ms": 10.096
+      },
+      {
+        "end": 78,
+        "wall_ms": 11.394166,
+        "cpu_ms": 9.317
+      },
+      {
+        "end": 82,
+        "wall_ms": 14.960667,
+        "cpu_ms": 12.252
+      },
+      {
+        "end": 85,
+        "wall_ms": 13.215584,
+        "cpu_ms": 10.441
+      },
+      {
+        "end": 89,
+        "wall_ms": 20.854834,
+        "cpu_ms": 13.067
+      },
+      {
+        "end": 92,
+        "wall_ms": 18.918916,
+        "cpu_ms": 9.994
+      },
+      {
+        "end": 96,
+        "wall_ms": 24.319084,
+        "cpu_ms": 10.656
+      },
+      {
+        "end": 99,
+        "wall_ms": 18.006791,
+        "cpu_ms": 11.872
+      },
+      {
+        "end": 103,
+        "wall_ms": 19.661667,
+        "cpu_ms": 10.536
+      },
+      {
+        "end": 106,
+        "wall_ms": 47.597291,
+        "cpu_ms": 13.028
+      },
+      {
+        "end": 110,
+        "wall_ms": 12.558916,
+        "cpu_ms": 9.422
+      }
+    ],
+    "cached": [
+      {
+        "end": 7,
+        "wall_ms": 4.986416,
+        "cpu_ms": 4.185
+      },
+      {
+        "end": 11,
+        "wall_ms": 3.584292,
+        "cpu_ms": 2.597
+      },
+      {
+        "end": 14,
+        "wall_ms": 7.349417,
+        "cpu_ms": 4.164
+      },
+      {
+        "end": 18,
+        "wall_ms": 2.73575,
+        "cpu_ms": 2.723
+      },
+      {
+        "end": 21,
+        "wall_ms": 4.270333,
+        "cpu_ms": 3.639
+      },
+      {
+        "end": 25,
+        "wall_ms": 2.931541,
+        "cpu_ms": 2.191
+      },
+      {
+        "end": 28,
+        "wall_ms": 3.991833,
+        "cpu_ms": 3.185
+      },
+      {
+        "end": 32,
+        "wall_ms": 5.011291,
+        "cpu_ms": 3.787
+      },
+      {
+        "end": 35,
+        "wall_ms": 2.751375,
+        "cpu_ms": 2.698
+      },
+      {
+        "end": 39,
+        "wall_ms": 3.185541,
+        "cpu_ms": 2.691
+      },
+      {
+        "end": 43,
+        "wall_ms": 4.160417,
+        "cpu_ms": 3.551
+      },
+      {
+        "end": 46,
+        "wall_ms": 2.592625,
+        "cpu_ms": 2.498
+      },
+      {
+        "end": 50,
+        "wall_ms": 5.237917,
+        "cpu_ms": 2.871
+      },
+      {
+        "end": 53,
+        "wall_ms": 3.776333,
+        "cpu_ms": 2.997
+      },
+      {
+        "end": 57,
+        "wall_ms": 3.156791,
+        "cpu_ms": 2.845
+      },
+      {
+        "end": 60,
+        "wall_ms": 6.122625,
+        "cpu_ms": 3.878
+      },
+      {
+        "end": 64,
+        "wall_ms": 3.229292,
+        "cpu_ms": 3.231
+      },
+      {
+        "end": 67,
+        "wall_ms": 4.576708,
+        "cpu_ms": 3.621
+      },
+      {
+        "end": 71,
+        "wall_ms": 7.054209,
+        "cpu_ms": 4.177
+      },
+      {
+        "end": 74,
+        "wall_ms": 3.183333,
+        "cpu_ms": 3.001
+      },
+      {
+        "end": 78,
+        "wall_ms": 3.609667,
+        "cpu_ms": 3.485
+      },
+      {
+        "end": 82,
+        "wall_ms": 4.683625,
+        "cpu_ms": 2.819
+      },
+      {
+        "end": 85,
+        "wall_ms": 2.752625,
+        "cpu_ms": 2.554
+      },
+      {
+        "end": 89,
+        "wall_ms": 5.259334,
+        "cpu_ms": 4.36
+      },
+      {
+        "end": 92,
+        "wall_ms": 5.629042,
+        "cpu_ms": 3.968
+      },
+      {
+        "end": 96,
+        "wall_ms": 8.034709,
+        "cpu_ms": 4.916
+      },
+      {
+        "end": 99,
+        "wall_ms": 6.551791,
+        "cpu_ms": 3.941
+      },
+      {
+        "end": 103,
+        "wall_ms": 4.339834,
+        "cpu_ms": 3.8
+      },
+      {
+        "end": 106,
+        "wall_ms": 3.536833,
+        "cpu_ms": 3.447
+      },
+      {
+        "end": 110,
+        "wall_ms": 4.123458,
+        "cpu_ms": 3.825
+      }
+    ]
+  },
+  "median_wall_speedup": 3.4773279413318043,
+  "median_cpu_speedup": 3.0041834968263124,
+  "source_sha256": {
+    "scripts/benchmark_kernel_cache.py": "37d1e0cfc4a24fb62e7b494299b3a226a4d2ef7cdb544c92dde0805f69e0d52d",
+    "ghostmesh/local_kernel.py": "001ad72e65fbf8fd5617a8aeb511561d8433be0c543ddad88fa4c9bf27717bfc",
+    "ghostmesh/rf_features.py": "98a1a0d382b72de5c3c593f2f4645ca02a7b84a7aff0584de181ef399b06cf7b"
+  },
+  "model_sha256": "71e9ebb8f78f172d7573a8e2502d6833120c7a9b64622fc02ba3cc8dedd8838a",
+  "recording_sha256": "00c717b0f09e682667d47fc7bcad334b037573c2d2c75dfe2dba4912d78bc3aa",
+  "platform": "macOS-27.2-arm64-arm-64bit",
+  "python": "3.12.13"
+}

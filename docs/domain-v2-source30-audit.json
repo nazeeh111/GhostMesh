@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "scope": "E01-E03 source30 only; no reserved E04 arrays decoded",
+  "source_records": 810,
+  "source_frames": 240570,
+  "invalid_joints": 0,
+  "missing_magnitudes": 10039,
+  "missing_phases": 0,
+  "unit_check_frames_per_record": [
+    1,
+    149,
+    297
+  ],
+  "unit_check_finite_points": 8310505,
+  "unit_check_max_iq_rounding_residual": 2.8421709430404007e-13,
+  "source_cache_array_sha256": {
+    "rf": "59a76867f1e19fc28f733b53e5ca5a0e1090fca82111f95bb59c84d6509c3757",
+    "pose": "88c0a118b3aff822626bc1a170e51c6d5f8c76594596bf646784a7a7f9811fd9",
+    "valid": "dfa853f6477e68153abaa29e8af21977dadeee1380c563ca820f3800a7bb4fa1"
+  },
+  "config_sha256": "6b85a2d32db7138bd19b6f3e0fff7fb9e3fa88dc7de49380101289b260d8412d",
+  "builder_sha256": "000de7fce22dedc1d8ee437dae4a51375b430be88e65514e309df6a1c1dc17c5",
+  "independent_comparison": {
+    "schema_version": 1,
+    "source_receipt_sha256": "52fc6f641277926736daf79ccb87b122e0ae7a7f0fc9e587f567946dec41cd8f",
+    "old_manifest_sha256": "0a97b3e76b896757e3c281f48e068939f100738ed2338ff1e136afc543ebb768",
+    "script_sha256": "f72f3200e6a3cbd6d3a571afffd2f187de70116e8d84526aa8349643d31a8d7b",
+    "full_cache_array_hashes_verified": {
+      "rf": "59a76867f1e19fc28f733b53e5ca5a0e1090fca82111f95bb59c84d6509c3757",
+      "pose": "88c0a118b3aff822626bc1a170e51c6d5f8c76594596bf646784a7a7f9811fd9",
+      "valid": "dfa853f6477e68153abaa29e8af21977dadeee1380c563ca820f3800a7bb4fa1"
+    },
+    "source_records": 810,
+    "source_frames": 240570,
+    "old_source_records_exact_amplitude_pose_validity": 405,
+    "sampled_windows_exact_legacy_and_quotient": 1215,
+    "no_E04_arrays_decoded": true
+  },
+  "dependency_verifier_sha256": "07d507d1c2540866b33bb8cc85c77ea9b2b507d416258056e32d2cdf6aede438",
+  "dependency_checks": {
+    "status": "all_comparison_dependencies_bound",
+    "checked_files": 14,
+    "distinct_checked_files": 13,
+    "cross_receipt_reference_binding": true,
+    "primitive_source_bindings": true
+  },
+  "local_receipts_sha256": {
+    "domain-source30-rf-v1/receipt.json": "52fc6f641277926736daf79ccb87b122e0ae7a7f0fc9e587f567946dec41cd8f",
+    "domain-source30-rf-v1-verification.json": "0081f4a6e95b1f9bef97505177f87b05e08605462e2f865901deeb6e6c267bc5",
+    "domain-source30-rf-v1-dependencies.json": "3d58fef790490c5d9cf57ef789eb9501dc50d80548bbd025e218cc5003104c4a"
+  }
+}

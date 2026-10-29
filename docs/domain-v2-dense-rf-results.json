@@ -1,0 +1,444 @@
+{
+  "schema_version": 1,
+  "status": "Development only; no consistent improvement; no E04 arrays decoded",
+  "metric_definition": "NJE is joint Euclidean error divided by each provided2D pose bounding-box diagonal. PCK05/PCK20 use the same normalizer. MotionR2 centers target and prediction within each entire recording; static gives0, negative means fluctuations worsen squared error.",
+  "source_results_sha256": "45313d1fa2c1bee8f8e92c6e05470831add350ddbfb387bda298b8f133e3bcd9",
+  "registration": {
+    "config": {
+      "epochs": 12,
+      "seed": 2027,
+      "batch_size": 128,
+      "learning_rate": 0.0003,
+      "weight_decay": 0.01,
+      "gradient_clip": 1.0,
+      "source_stride": 8,
+      "training_endpoint_subsample": 1,
+      "temporal_kernel": "native",
+      "dense_supervision": "All 8 past/current frame labels per source window; 63936 source frames per fold, 7992 nonoverlapping windows",
+      "validation_evaluation": "Last endpoint only, complete 8-frame context",
+      "clip_groups": "Three separate norm1 groups: body geometry, root geometry, detached uncertainty heads",
+      "source_validation_subjects": [
+        "S04",
+        "S14",
+        "S24"
+      ],
+      "checkpoint_selection": "source validation NJE only",
+      "body_channels": 7,
+      "root_channels": 3,
+      "architecture": "packet798->128->64, learned ten packet positions/attention, causal TCN64 d1/2/4; completely separate packet-mean342->128->64 root MLP",
+      "loss": "bbox-normalized relative/root Huber beta.1 + .1 bone + .1 uncertainty NLL; uncertainty latents/residuals detached",
+      "clipping": "Final composed pose clipped to [0,1] for reported metrics; raw predictions/root/relative components and coordinate clipping fraction retained",
+      "modes": {
+        "legacy": "per-frame legacy log1p(DB)3 + zero4 body; fixed raw DB342 root spectrum",
+        "db": "per-frame typed DB3 + zero4 body; same fixed DB342 root",
+        "db_phase": "per-frame typed DB3 + four quotient phasors body; same fixed DB342 root",
+        "quotient": "two log-magnitude ratios and four phasors + zero1 body; same fixed DB342 root"
+      },
+      "unused_weights": "legacy/db have four all-zero body input channels; quotient has one. Equal shape/parameter count does not give these weights data gradients.",
+      "units": "inferred log magnitude relative to integer receiver I/Q; not RSSI dBm or calibrated AoA",
+      "scope": "DEVELOPMENT ONLY E01-E03; no E04/final records; 2D teacher annotations, no novelty/SOTA or causal-motion claim",
+      "prior_art": [
+        "https://arxiv.org/abs/1907.03994",
+        "https://arxiv.org/abs/2607.02986"
+      ],
+      "selected_modes": [
+        "legacy",
+        "quotient"
+      ],
+      "device": "mps",
+      "root_input": "Same finite per-frame original DB342 spectrum, fixed (dB-40)/20, for EVERY mode; not RSSI dBm",
+      "runtime": {
+        "torch": "2.9.0",
+        "numpy": "2.2.6",
+        "platform": "macOS-26.6.2-arm64-arm-64bit"
+      }
+    },
+    "sources": {
+      "scripts/domain_rf_probe.py": "4630493acd33733700fe19004901e628403e671b0510e0bf53680de4551c29a5",
+      "ghostmesh/rf_pose.py": "4ba7c5278ba5edba466140f141ef4486201c622ea2b9a7354b86596fc86d0d25",
+      "scripts/domain_structured_probe.py": "30447edaf7bee4b2bf3b6ecfd632e66182480e8070b18e32610091127237a994",
+      "ghostmesh/structured_packet.py": "a9b37caad32e8859afc1d9f522589c0e92816102e2cb3a1680dd3a3ee8664cd2",
+      "ghostmesh/models.py": "f581f556f100a3dd3ec404c243bf5143c9e34d2c8259566ad8d49e5f1f25a6b9",
+      "ghostmesh/engine.py": "05e0faad2c89c2fb7128ea89d22db66987232b0b1c9494557570d460ca8b5e8e",
+      "ghostmesh/data.py": "39828380f885a13e546395a7afc66687067423698b92ffbe0b2792c60943fac0",
+      "ghostmesh/preprocess.py": "85319866a2694b3f6a416a09675e94b11684b33ff1a4f13d5ec03d7a45008c3c",
+      "ghostmesh/metrics.py": "b4827f9f2f33890739f092b30a39e47af99e2ae08b3bc29e173da0134cef48a3",
+      "scripts/domain_stream_cache.py": "be244061ae1bf9fbdf2f78ad73f475a62043a19c6a2d59b7b979e3028d7a5b39",
+      "ghostmesh/rf_features.py": "98a1a0d382b72de5c3c593f2f4645ca02a7b84a7aff0584de181ef399b06cf7b",
+      "scripts/domain_rf_cache.py": "2a37a66537b5d20da738e44f59f4be7bfc934b3fbf1b3f97b5a89578c5b30674",
+      "scripts/domain_raw_cache.py": "783bcaf14985fbfab3e61ed417e5688e126219addef846b819f0b090a811b412"
+    },
+    "reference_sha256": "af66fec90a271b9cd315868a0c6eebb9eb6fd5954dd92f342085cb76a9a5306d",
+    "reference_arrays": {
+      "dynamic.npy": "0ce85ee35b0b2006a2e0f5912632c00fdd8581a990c596bf9c0855be2b930e04",
+      "end.npy": "7504c6ca44f22a72ed4f027dfab6f3f241cfcb5338e31b4dec64c3bf6aeba46d",
+      "moments.npy": "f930d7e4d7b88a42ab680e33fa5e9361808bf00fe343e2a83bd8d9e83a5512ac",
+      "pose.npy": "135e3389e9df630bf1343885304d89d04ec843d9b2ff936b80e5554daead66be",
+      "room.npy": "dc08947b3d49a329b2060cfb8281a62d5f99e7c34b6ea18141308b78b514dae0",
+      "sequence.npy": "295363824e489d4070bb2ee81bcf44ae31667441f0ba3ce813b8592e4af28420",
+      "subject.npy": "ac532939ae48599f40c84e1903a43963c15fce3d722e2e8f4d9ef4c5036b4769",
+      "valid.npy": "ab1ca2291fe65d2561546085e4bf397bcd80a4a07e04922b3b7d7fc3acbf2389"
+    },
+    "stream_array_sha256": {
+      "legacy": "71f2cf761f9426a4b5bae418c5630b51c67e89627d1e16a5a7435213a459e2f5",
+      "db": "208f65683e363d94495937d7d81061eec1eecac97034293a1eba4240a7b1c548",
+      "root_spectrum": "3d2d54fd72647e92ef733c141fb14d3474ac3d08bd850e2b39b0c7fafd11da89",
+      "pose_sequence": "0963667817d6d1329dd21c9a8a0a529536d869bf32fb0b7886848bcef631aee1",
+      "valid_sequence": "3e280cd47d467f61b359704f4bf5cff819b693e951f08b00b34b5ebc085bba6e"
+    },
+    "stream_receipt_sha256": "daab88775dd1ca6b1d6b17a4b80d6a18989d7a2fad4d19ac44be211aff514742",
+    "quotient_sha256": "572c513f82285d7771e141a7264b8363af516c132e337ed30f7078b42b496989",
+    "rf_receipt_sha256": "529d00f3307d8bc2e81f177e4d62fb0b0919fe670748b12fc06c1b471b527b52",
+    "unit_audit_finite_samples": 411369834,
+    "unit_audit_integer_samples": 411369834
+  },
+  "results": [
+    {
+      "room": "E01",
+      "mode": "legacy",
+      "selected_epoch": 1,
+      "parameters": 181303,
+      "counts": {
+        "training_windows": 7992,
+        "training_frames_per_epoch": 63936,
+        "source_validation_endpoints": 1998,
+        "held_development_endpoints": 4995
+      },
+      "seconds": 163.04633287503384,
+      "final_root_geometry_max_difference_from_first_mode": 0.0,
+      "checkpoint_sha256": "e294343e8d03a4a20920e02da3a49cc64db1dd3c50ec37ad10fa094719b1726c",
+      "prediction_sha256": {
+        "source-root.npy": "a87a2536eedcffae49fe1e9aebd265196a3265c547e8ccf05fec51aa9cfc8339",
+        "source-raw_pose.npy": "efe5f39367df92b50ca8b03fbb7218bf5f0a03e57294a51a5b07cfad865ed801",
+        "held-pose.npy": "7f7afe33ce10c95bc0cf5bdad6e3667591e5fd1c8416681e62e82c2e206ea502",
+        "source-relative.npy": "c2dd3cb6f81cee9decb0f21bbe72146faa11383179ae71ddd8a34e5ac6f27528",
+        "held-relative.npy": "ef216fbbbf1717e15af9be56976cbfdab140d6cb2646ec3ef6983788a8a7001e",
+        "source-pose.npy": "efe5f39367df92b50ca8b03fbb7218bf5f0a03e57294a51a5b07cfad865ed801",
+        "held-raw_pose.npy": "7f7afe33ce10c95bc0cf5bdad6e3667591e5fd1c8416681e62e82c2e206ea502",
+        "held-root.npy": "74e6060c51e493a99508b47fbd2ad3968bf8926b9535d33f0289b516afe834de"
+      },
+      "training_index_sha256": "2fb6d246ff855cd87fe9c59cf5e5ba81dc5025814693b1b52913c654189d5823",
+      "held_index_sha256": "026bffac5d95201bbaa86d2458c1a2507b6a7c05b31c2c0e6f41de3eb4af8b7f",
+      "metrics": {
+        "nje": 0.12744540241238925,
+        "pck05": 0.21397868456691987,
+        "pck20": 0.8239180356827416,
+        "valid_frames": 4995,
+        "valid_joints": 84915
+      },
+      "motion": {
+        "absolute": {
+          "within_record_r2": -0.1367553754088695,
+          "prediction_to_teacher_variance": 0.16234783943277475,
+          "alignment_cosine": 0.031758417166973155,
+          "positive_records": 17
+        },
+        "root": {
+          "within_record_r2": -0.23902598346651605,
+          "prediction_to_teacher_variance": 0.274973976049038,
+          "alignment_cosine": 0.03427668796946064,
+          "positive_records": 15
+        },
+        "relative": {
+          "within_record_r2": -0.06423070898928684,
+          "prediction_to_teacher_variance": 0.07400955624920269,
+          "alignment_cosine": 0.01797271828427848,
+          "positive_records": 13
+        }
+      }
+    },
+    {
+      "room": "E01",
+      "mode": "quotient",
+      "selected_epoch": 1,
+      "parameters": 181303,
+      "counts": {
+        "training_windows": 7992,
+        "training_frames_per_epoch": 63936,
+        "source_validation_endpoints": 1998,
+        "held_development_endpoints": 4995
+      },
+      "seconds": 181.29139950009994,
+      "final_root_geometry_max_difference_from_first_mode": 0.0,
+      "checkpoint_sha256": "ea82780f31f0aa870b30c0b185953abb951544d2281494eb9cc5a77a2266f7e2",
+      "prediction_sha256": {
+        "source-root.npy": "a87a2536eedcffae49fe1e9aebd265196a3265c547e8ccf05fec51aa9cfc8339",
+        "source-raw_pose.npy": "e95525a523739194e781a6083217a6d1e566e59cd93c34add32963cce4785cd8",
+        "held-pose.npy": "bcbd8907341adf9163758fb17f20696ea67a732aa31f446b16462c743614e3d3",
+        "source-relative.npy": "8cdfb44b3586ab0b6df6eb3cd1d6abbdf5503d996209f53d336f4f76cceaf25d",
+        "held-relative.npy": "f99d52d7cb89ac178e41b89340b171d5d7c7cab72dcc8735a30b382aee5efe0d",
+        "source-pose.npy": "e95525a523739194e781a6083217a6d1e566e59cd93c34add32963cce4785cd8",
+        "held-raw_pose.npy": "bcbd8907341adf9163758fb17f20696ea67a732aa31f446b16462c743614e3d3",
+        "held-root.npy": "74e6060c51e493a99508b47fbd2ad3968bf8926b9535d33f0289b516afe834de"
+      },
+      "training_index_sha256": "2fb6d246ff855cd87fe9c59cf5e5ba81dc5025814693b1b52913c654189d5823",
+      "held_index_sha256": "026bffac5d95201bbaa86d2458c1a2507b6a7c05b31c2c0e6f41de3eb4af8b7f",
+      "metrics": {
+        "nje": 0.13023541288402882,
+        "pck05": 0.17184243066596008,
+        "pck20": 0.8286168521462639,
+        "valid_frames": 4995,
+        "valid_joints": 84915
+      },
+      "motion": {
+        "absolute": {
+          "within_record_r2": -0.13364647332790436,
+          "prediction_to_teacher_variance": 0.14964794792532662,
+          "alignment_cosine": 0.020682099721498134,
+          "positive_records": 16
+        },
+        "root": {
+          "within_record_r2": -0.2390259845340379,
+          "prediction_to_teacher_variance": 0.27497397176390326,
+          "alignment_cosine": 0.034276683132741244,
+          "positive_records": 15
+        },
+        "relative": {
+          "within_record_r2": -0.05934981475980239,
+          "prediction_to_teacher_variance": 0.05375481614125867,
+          "alignment_cosine": -0.012065943784111226,
+          "positive_records": 14
+        }
+      }
+    },
+    {
+      "room": "E02",
+      "mode": "legacy",
+      "selected_epoch": 5,
+      "parameters": 181303,
+      "counts": {
+        "training_windows": 7992,
+        "training_frames_per_epoch": 63936,
+        "source_validation_endpoints": 1998,
+        "held_development_endpoints": 4995
+      },
+      "seconds": 283.29537608404644,
+      "final_root_geometry_max_difference_from_first_mode": 0.0,
+      "checkpoint_sha256": "dda979b1d27f320a0ee284341e143358e2c94afcde276674c70530527322d86b",
+      "prediction_sha256": {
+        "source-root.npy": "e2034f9f20ce0513da5c49d1570e6b73aac7f4bfb1c55c43c8cf8898e63a49fc",
+        "source-raw_pose.npy": "fac4b98b94112a3d6e4748e90bd11bf56d26a29e0d5073836b7e4e2f8da89d7f",
+        "held-pose.npy": "9f80da9981d06226e7b7dd3bf26139a4d0e17d7dd178aa63520f3095dc82df4a",
+        "source-relative.npy": "62825e2d52d17e0c65e59f7140b563b2176653163de37f8f3fb397fe20b5bdda",
+        "held-relative.npy": "45311f1d42d8d03b17f24c708fbbc10f879353b5dd6bbd420bf9969c82f4d20b",
+        "source-pose.npy": "fac4b98b94112a3d6e4748e90bd11bf56d26a29e0d5073836b7e4e2f8da89d7f",
+        "held-raw_pose.npy": "9f80da9981d06226e7b7dd3bf26139a4d0e17d7dd178aa63520f3095dc82df4a",
+        "held-root.npy": "3217e277cbbfce50be328a4b361b8ae614e64db7dc50ffbedbdb5bfb199aa73c"
+      },
+      "training_index_sha256": "48cb59403b48ab437e8371f18802fb55f725d5724f9b5d026076d60c70852ab9",
+      "held_index_sha256": "33294bb5c69d1bbb6dabe871855faff9446e43d5921cf3aa66da1d93481ab33c",
+      "metrics": {
+        "nje": 0.14653323095978507,
+        "pck05": 0.1384325501972561,
+        "pck20": 0.7945239357004062,
+        "valid_frames": 4995,
+        "valid_joints": 84915
+      },
+      "motion": {
+        "absolute": {
+          "within_record_r2": -0.24902894842159506,
+          "prediction_to_teacher_variance": 0.24543527753431565,
+          "alignment_cosine": -0.003626935336200124,
+          "positive_records": 8
+        },
+        "root": {
+          "within_record_r2": -0.40042272182232774,
+          "prediction_to_teacher_variance": 0.3370876120094043,
+          "alignment_cosine": -0.05454351673606103,
+          "positive_records": 7
+        },
+        "relative": {
+          "within_record_r2": -0.12912044896271468,
+          "prediction_to_teacher_variance": 0.15717404570919438,
+          "alignment_cosine": 0.03538083989003658,
+          "positive_records": 13
+        }
+      }
+    },
+    {
+      "room": "E02",
+      "mode": "quotient",
+      "selected_epoch": 5,
+      "parameters": 181303,
+      "counts": {
+        "training_windows": 7992,
+        "training_frames_per_epoch": 63936,
+        "source_validation_endpoints": 1998,
+        "held_development_endpoints": 4995
+      },
+      "seconds": 161.52944787498564,
+      "final_root_geometry_max_difference_from_first_mode": 0.0,
+      "checkpoint_sha256": "d4d9b428152156b2482630c2d12e7161e6b42cc34b190a00b524d55c13161a44",
+      "prediction_sha256": {
+        "source-root.npy": "e2034f9f20ce0513da5c49d1570e6b73aac7f4bfb1c55c43c8cf8898e63a49fc",
+        "source-raw_pose.npy": "ad5c939758d3890b0e1a38f207c1144d9fd74d377221711138b5b5dab8219e14",
+        "held-pose.npy": "4d05f6c90ee11cca58d7cc9ebcb6fbae13b6143666e8a0db792a6cf21e0b6c02",
+        "source-relative.npy": "8e375faf1aedb6d6f75b5adfaf1631abcaa63e5c45c1fa651362ab68950f48ef",
+        "held-relative.npy": "2ab9a934b732af7dc2cb62c63ea2aa423de3cf91cbdac9b85f462c127cdd345c",
+        "source-pose.npy": "ad5c939758d3890b0e1a38f207c1144d9fd74d377221711138b5b5dab8219e14",
+        "held-raw_pose.npy": "4d05f6c90ee11cca58d7cc9ebcb6fbae13b6143666e8a0db792a6cf21e0b6c02",
+        "held-root.npy": "3217e277cbbfce50be328a4b361b8ae614e64db7dc50ffbedbdb5bfb199aa73c"
+      },
+      "training_index_sha256": "48cb59403b48ab437e8371f18802fb55f725d5724f9b5d026076d60c70852ab9",
+      "held_index_sha256": "33294bb5c69d1bbb6dabe871855faff9446e43d5921cf3aa66da1d93481ab33c",
+      "metrics": {
+        "nje": 0.1482125698731843,
+        "pck05": 0.14081139963492906,
+        "pck20": 0.7805805805805806,
+        "valid_frames": 4995,
+        "valid_joints": 84915
+      },
+      "motion": {
+        "absolute": {
+          "within_record_r2": -0.24751964141703864,
+          "prediction_to_teacher_variance": 0.2315556474829148,
+          "alignment_cosine": -0.016587612052572774,
+          "positive_records": 10
+        },
+        "root": {
+          "within_record_r2": -0.4004227179431932,
+          "prediction_to_teacher_variance": 0.33708761120630926,
+          "alignment_cosine": -0.05454351415198252,
+          "positive_records": 7
+        },
+        "relative": {
+          "within_record_r2": -0.13257816472570116,
+          "prediction_to_teacher_variance": 0.13319054338831318,
+          "alignment_cosine": 0.0008389833824264794,
+          "positive_records": 12
+        }
+      }
+    },
+    {
+      "room": "E03",
+      "mode": "legacy",
+      "selected_epoch": 1,
+      "parameters": 181303,
+      "counts": {
+        "training_windows": 7992,
+        "training_frames_per_epoch": 63936,
+        "source_validation_endpoints": 1998,
+        "held_development_endpoints": 4995
+      },
+      "seconds": 154.93452274997253,
+      "final_root_geometry_max_difference_from_first_mode": 0.0,
+      "checkpoint_sha256": "ff99c121bfdc31f9c57f52a2eb47bed9bed0ee223da1561b03bf151c01d3b90d",
+      "prediction_sha256": {
+        "source-root.npy": "69a5066cad1bba575a11284e71b3c5dc03eedcce447c686cd6d73a31861ba0d2",
+        "source-raw_pose.npy": "62dae1d3a487272e98aa63ec0240a699cd9d5e9c53061e08a957e57b46c1f377",
+        "held-pose.npy": "aa0876207fb17f18cce69d0222190120f335169b154abe75fd8758f389481435",
+        "source-relative.npy": "f0f9d41a097eb67b3f720b0443745cd7fd091c7d265c19b5fad2a6bd2e77958e",
+        "held-relative.npy": "40bf85a3fde4460ae60ce715e68246c278e4bb14a75f1fea9e6cb3b83dbcaa7d",
+        "source-pose.npy": "62dae1d3a487272e98aa63ec0240a699cd9d5e9c53061e08a957e57b46c1f377",
+        "held-raw_pose.npy": "aa0876207fb17f18cce69d0222190120f335169b154abe75fd8758f389481435",
+        "held-root.npy": "4512d841c209b0d0de9b86387e20300fa4702d051b623ec4bffebe46b5aa4393"
+      },
+      "training_index_sha256": "bb4db5bf01f06d77b946f689b8fd27bab63296ff2ce87bb52e5af026acc55a67",
+      "held_index_sha256": "8c39d10cf93d95f89645643cef36395d9a05da08eb34d3b3be914cf1f1c56bab",
+      "metrics": {
+        "nje": 0.14733910646844073,
+        "pck05": 0.094306070776659,
+        "pck20": 0.7947123594182418,
+        "valid_frames": 4995,
+        "valid_joints": 84915
+      },
+      "motion": {
+        "absolute": {
+          "within_record_r2": -0.19799756617483966,
+          "prediction_to_teacher_variance": 0.15752534660983125,
+          "alignment_cosine": -0.05098610134458476,
+          "positive_records": 3
+        },
+        "root": {
+          "within_record_r2": -0.3248505001892621,
+          "prediction_to_teacher_variance": 0.24610604836243163,
+          "alignment_cosine": -0.07936496421959306,
+          "positive_records": 7
+        },
+        "relative": {
+          "within_record_r2": -0.08451923827394414,
+          "prediction_to_teacher_variance": 0.0808752437565073,
+          "alignment_cosine": -0.006406781574497055,
+          "positive_records": 10
+        }
+      }
+    },
+    {
+      "room": "E03",
+      "mode": "quotient",
+      "selected_epoch": 1,
+      "parameters": 181303,
+      "counts": {
+        "training_windows": 7992,
+        "training_frames_per_epoch": 63936,
+        "source_validation_endpoints": 1998,
+        "held_development_endpoints": 4995
+      },
+      "seconds": 112.3428409169428,
+      "final_root_geometry_max_difference_from_first_mode": 0.0,
+      "checkpoint_sha256": "94542657702c3551cb1b16bf452e3ee2dda0eac56e507c064b05f9d0250accc7",
+      "prediction_sha256": {
+        "source-root.npy": "69a5066cad1bba575a11284e71b3c5dc03eedcce447c686cd6d73a31861ba0d2",
+        "source-raw_pose.npy": "c9ae795b71793e7680ec7e0cde08f62f6bb9ef604caf07daa1d12cccf8a63e24",
+        "held-pose.npy": "aab2234e2e2acb48653fca9661caac5db1b9ce599663e790a6a074ee459378f9",
+        "source-relative.npy": "cb9c4b218c6b40753bcbead5657d70fa16a0b3de00f65f2e83792771a52986f1",
+        "held-relative.npy": "243d30815f83156911c18ad817e31e2732dc7ed6d05a835ae70f89fbbe63748e",
+        "source-pose.npy": "c9ae795b71793e7680ec7e0cde08f62f6bb9ef604caf07daa1d12cccf8a63e24",
+        "held-raw_pose.npy": "aab2234e2e2acb48653fca9661caac5db1b9ce599663e790a6a074ee459378f9",
+        "held-root.npy": "4512d841c209b0d0de9b86387e20300fa4702d051b623ec4bffebe46b5aa4393"
+      },
+      "training_index_sha256": "bb4db5bf01f06d77b946f689b8fd27bab63296ff2ce87bb52e5af026acc55a67",
+      "held_index_sha256": "8c39d10cf93d95f89645643cef36395d9a05da08eb34d3b3be914cf1f1c56bab",
+      "metrics": {
+        "nje": 0.13945365763195572,
+        "pck05": 0.11008655714538068,
+        "pck20": 0.82294058764647,
+        "valid_frames": 4995,
+        "valid_joints": 84915
+      },
+      "motion": {
+        "absolute": {
+          "within_record_r2": -0.2036489548471132,
+          "prediction_to_teacher_variance": 0.15286123428840867,
+          "alignment_cosine": -0.06495013299738792,
+          "positive_records": 4
+        },
+        "root": {
+          "within_record_r2": -0.3248504871721265,
+          "prediction_to_teacher_variance": 0.24610604939126668,
+          "alignment_cosine": -0.0793649498970485,
+          "positive_records": 7
+        },
+        "relative": {
+          "within_record_r2": -0.09380169507523006,
+          "prediction_to_teacher_variance": 0.07660256564067637,
+          "alignment_cosine": -0.03107096998014649,
+          "positive_records": 10
+        }
+      }
+    }
+  ],
+  "static_priors": [
+    {
+      "room": "E01",
+      "training_frames": 63936,
+      "nje": 0.1153098412167843,
+      "pck05": 0.20847906730259672,
+      "pck20": 0.8681269504798916
+    },
+    {
+      "room": "E02",
+      "training_frames": 63936,
+      "nje": 0.12464903203310221,
+      "pck05": 0.16368132838721075,
+      "pck20": 0.8511217099452394
+    },
+    {
+      "room": "E03",
+      "training_frames": 63936,
+      "nje": 0.1310044070254959,
+      "pck05": 0.1433904492728022,
+      "pck20": 0.8239298121651063
+    }
+  ]
+}

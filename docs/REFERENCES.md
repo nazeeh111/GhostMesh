@@ -18,6 +18,29 @@ Temporal convolutions and weight-averaged teachers predate GhostMesh. The origin
 - Shaojie Bai, J. Zico Kolter and Vladlen Koltun. [An Empirical Evaluation of Generic Convolutional and Recurrent Networks for Sequence Modeling](https://arxiv.org/abs/1803.01271), 2018. Background for causal temporal convolution; GhostMesh does not reproduce that paper's architecture or benchmarks.
 - Antti Tarvainen and Harri Valpola. [Mean teachers are better role models: Weight-averaged consistency targets improve semi-supervised deep learning results](https://arxiv.org/abs/1703.01780), NeurIPS 2017. Background for exponential moving average teacher consistency. GhostMesh's consistency uses source training data only; no claim is made that this supervised source-only variant reproduces the original semi-supervised results.
 
+## Benchmark compatibility
+
+[MM-Fi Table 3](https://arxiv.org/html/2305.10345v2#S5) evaluates 3D targets in
+millimeters. Its all-action Wi-Fi MPJPE rises from 197.1 mm in the random setting
+to 369.5 mm across environments. Those numbers cannot be compared directly with
+GhostMesh's dimensionless 2D NJE/PCK. Similarity-aligned 3D error uses the test
+reference to fit a transformation; it is not a deployed correction.
+[Pinned evaluation implementation](https://github.com/ybhbingo/MMFi_dataset/blob/c9c1e3a8d5099779a618eae1bb351e253daa52d0/mmfi_lib/evaluate.py).
+
+In the [pinned toolbox split implementation](https://github.com/ybhbingo/MMFi_dataset/blob/c9c1e3a8d5099779a618eae1bb351e253daa52d0/mmfi_lib/mmfi.py#L24),
+`random_split` assigns complete subject/action recordings, selecting subjects
+separately for each action. A person can appear on both sides through different
+actions. This differs from GhostMesh's person-disjoint folds and does not justify
+calling that implementation an adjacent-frame random split.
+
+The [inspected CSI loader](https://github.com/ybhbingo/MMFi_dataset/blob/c9c1e3a8d5099779a618eae1bb351e253daa52d0/mmfi_lib/mmfi.py#L256)
+also min-max normalizes each magnitude frame and fills missing entries using
+their packet-column mean. GhostMesh's transforms
+and targets are documented independently. The references establish neither an
+exact reproduced paper baseline nor a demonstrated solution to the stricter
+unseen-room requirement. Any future 3D auxiliary target needs a verified
+coordinate/joint contract before supporting a camera-independent claim.
+
 ## Relationship to Poseborne
 
 The inspected local Poseborne reference was clean at commit `f73195dd4daf957c0c97cf5edf6a42e196b02e57`. Its notice retains CSI-Pose snapshot `02b1001590beea8e7d6daac57a4d8b4a345eb50f` and identifies WiSPPN-derived model code without a separately established redistribution grant. GhostMesh avoids that code entirely, introducing an original compact temporal model and matched baselines. The original researchers' figures and recorded pose results are not GhostMesh assets.

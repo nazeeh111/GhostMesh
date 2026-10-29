@@ -20,6 +20,26 @@ superiority are not established.
 logarithmic; v0.1 adds another nonlinear compression. Its reported results
 remain measurements of that frozen transform. [Details and reproducible unit check](docs/ERRATA.md).
 
+**v2 research:** full 40-person data access is restored and its bytes are verified.
+Corrected-signal and calibration experiments have not established reliable motion
+transfer. [Current findings, failed comparisons and protected final protocol](docs/DOMAIN_RESEARCH.md).
+
+A separate **local motion diagnostic** now reconstructs later time blocks of one
+recording, with relative motion R² **0.917** and NJE **0.02466**. It uses dense
+references from the same person, room and action. Its compact model and CSI-only
+sample reproduce all 104 held-time predictions. This result supports learning
+from CSI, while unseen-room performance remains unresolved.
+[Evidence, controls and limitations](docs/LOCAL_OBSERVABILITY.md).
+
+The new receiver-covariance candidate also lowers pooled **hip-relative** error
+against a source static prior in three development rooms on three fixed actions.
+Its motion gains are small and reverse for several people and actions. The full
+27-action follow-up loses to the static pose prior in E02. Full pose and useful
+calibrated transfer remain unresolved.
+[Exact scores and reversals](docs/COVARIANCE_RESEARCH.md).
+Further [packet-spectrum experiments](docs/PACKET_TIME_RESEARCH.md) retain
+within-window frequency information, but also fail the consistent transfer gate.
+
 ![Actual held-out CSI replay with predicted and supplied reference skeletons](docs/assets/demo-v1/ghostmesh-demo.gif)
 
 *Actual E01/S05/A02 test recording, selected before test scores. Teal is the
@@ -30,13 +50,20 @@ inference. Motion is captured from the application at source timestamps.*
 [Model card](docs/MODEL_CARD.md) · [Reproduce](docs/REPRODUCE.md) ·
 [Release downloads](https://github.com/nazeeh111/GhostMesh/releases/tag/v0.1.0)
 
+| Path | What is verified | Main limit |
+|---|---|---|
+| [Neural replay](docs/REPRODUCE.md) | Real CSI-only sample recomputation and viewer | Weak unseen-room accuracy and confidence |
+| [Local kernel replay](docs/LOCAL_OBSERVABILITY.md) | Later time blocks of one real recording | Dense references from the same person, room and action |
+| Room-calibration research | [CSI references](docs/CALIBRATION_RESEARCH.md) and [pose-reference correction](docs/RESIDUAL_CALIBRATION.md) checked separately | Neither candidate meets the accuracy gate |
+| [ESP32 acquisition](docs/HARDWARE.md) | Capture adapter and parser software checks | Physical capture and pose transfer remain unvalidated |
+
 ## Run locally
 
 Python 3.12 and [uv](https://docs.astral.sh/uv/) are the tested environment.
 The recorded viewer needs only Python's standard library:
 
 ```bash
-git clone https://github.com/nazeeh111/GhostMesh.git
+git clone --branch research/domain-generalization-v2 https://github.com/nazeeh111/GhostMesh.git
 cd GhostMesh
 uv run --isolated --no-project --python 3.12 python -m ghostmesh serve
 ```
@@ -46,6 +73,9 @@ toggle reference labels or the fixed isotropic viewport. The app shows the
 causal CSI amplitude map and per-joint uncertainty. Invalid signal withholds
 the pose; domain warnings identify known or unverified domains. Opening another
 replay stays inside the browser. The viewer plays saved predictions.
+
+These commands select the published v2 research branch. The frozen v0.1 release
+and its original study remain available from the release downloads.
 
 To compute predictions from the shipped CSI-only sample, install the ML stack:
 
@@ -66,6 +96,33 @@ uv run ghostmesh serve --replay examples/unseen-room-replay.json
 ```
 
 No boards, camera, cloud account or billed API are required for these paths.
+
+### Inspect the local motion diagnostic
+
+This optional example uses 111 dense reference windows from E01/S01/A12 and
+104 separated held-time windows from that same recording. It is a research
+diagnostic. It does not demonstrate unseen-person/room/action transfer or a small
+room-calibration budget. Confidence is explicitly unavailable for this kernel
+model. The default released neural models remain unchanged.
+
+```bash
+uv run ghostmesh serve --replay examples/local-motion-replay.json
+uv run python scripts/local_kernel_replay.py infer \
+  --model models/local-kernel.npz --recording examples/local-csi.npz \
+  --out work/local-recomputed.json
+uv run ghostmesh serve --replay work/local-recomputed.json
+uv run python scripts/reproduce_demo.py --local-kernel --tolerance 1e-9
+```
+
+The second command loads no annotations. The supplied replay adds reference
+overlays after inference. The CSI excerpt, reference CSI inside the checkpoint,
+predictions and overlays retain the [MM-Fi noncommercial data terms](data/LICENSE.md).
+
+![Actual same-person/room/action held-time replay, with confidence unavailable](docs/assets/local-motion-v2/ghostmesh-demo.gif)
+
+*Three seconds captured from the real app at nominal dataset timestamps. Teal
+shows CSI predictions; dashed orange shows supplied annotations attached after
+inference. [Capture provenance](docs/assets/local-motion-v2/capture.json).*
 
 ## Measured study
 
@@ -153,8 +210,10 @@ uv run ghostmesh prepare-mmfi \
 uv run ghostmesh audit --manifest data/mmfi-prepared/manifest.json
 ```
 
-The 40-person expansion stopped at a verified provider quota during collection;
-validated local bytes were preserved. The 640-square annotation plane is an
+The v0.1 40-person expansion stopped at a verified provider quota; its study
+therefore remains the frozen 20-person cohort. Normal access returned during
+v2 research, and the full 40-person acquisition now passes byte verification.
+The 640-square annotation plane is an
 explicit isotropic convention, not recovered camera calibration. Original
 packet-level synchronization was not independently verified.
 [Data access, consent basis and exact splits](docs/DATA_ACCESS.md).
