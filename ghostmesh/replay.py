@@ -166,8 +166,10 @@ def infer_recording(
         "edges": EDGES if standard else [],
         "frames": frames,
     }
+    payload = json.dumps(result, allow_nan=False, separators=(",", ":")) + "\n"
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(result, allow_nan=False, separators=(",", ":")) + "\n")
+    with output.open("x", encoding="utf-8") as handle:
+        handle.write(payload)
     return {"output": str(output), "frames": len(frames), "provenance": provenance}
 
 
@@ -253,8 +255,10 @@ def export_replay(
         "edges": manifest.get("edges", []),
         "frames": frames,
     }
+    payload = json.dumps(result, allow_nan=False, separators=(",", ":")) + "\n"
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(result, allow_nan=False, separators=(",", ":")) + "\n")
+    with output.open("x", encoding="utf-8") as handle:
+        handle.write(payload)
     return {
         "output": str(output),
         "frames": len(frames),
