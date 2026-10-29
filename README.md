@@ -111,6 +111,7 @@ uv run python scripts/local_kernel_replay.py infer \
   --model models/local-kernel.npz --recording examples/local-csi.npz \
   --out work/local-recomputed.json
 uv run ghostmesh serve --replay work/local-recomputed.json
+uv run python scripts/reproduce_demo.py --local-kernel --tolerance 1e-9
 ```
 
 The second command loads no annotations. The supplied replay adds reference

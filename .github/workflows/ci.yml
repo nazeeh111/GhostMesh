@@ -46,6 +46,7 @@ jobs:
         run: |
           uv run --locked python scripts/reproduce_demo.py
           uv run --locked python scripts/reproduce_demo.py --recording examples/unseen-room-csi.npz --checkpoint models/ghostmesh-environment.pt --reference examples/unseen-room-replay.json
+          uv run --locked python scripts/reproduce_demo.py --local-kernel --tolerance 1e-9
       - name: Build wheel
         run: uv build --wheel
       - name: Check installed wheel outside the checkout

@@ -7,9 +7,9 @@ used as evidence that Wi-Fi predicts human pose.
 
 ## Verified research snapshot
 
-Commit `eb35455b43f8257eb9f19b0e0124f6fcd11752a0` passes the
-[Ubuntu, macOS and reporting workflow](https://github.com/nazeeh111/GhostMesh/actions/runs/40834787654).
-That published checkout has 330 core Python tests, 22 isolated reporting tests
+Commit `946f7c80388cae1e4c1777ed83f3624451753200` passes the
+[Ubuntu, macOS and reporting workflow](https://github.com/nazeeh111/GhostMesh/actions/runs/40838007990).
+That published checkout has 372 core Python tests, 22 isolated reporting tests
 and nine browser tests. Both operating systems also reproduce the real CSI-only
 examples, build the wheel and check it outside the source checkout.
 
@@ -18,6 +18,16 @@ An earlier commit exposed a test import-path dependency under the console
 the repository path in pytest configuration. Passing `python -m pytest` alone
 had not caught that difference. These software checks do not establish an
 unseen-room accuracy improvement.
+
+The separate local-kernel reproduction command checks all 104 valid predictions,
+their timestamps, failure withholding and confidence placeholders from typed CSI
+only. Its reference checkpoint and recording hashes are checked before inference;
+the source excerpt accepts no annotation fields. The CI workflow now runs this
+command alongside the two released neural examples. Local replay writers also
+use exclusive output creation: an output created by another writer during
+inference, including a dangling symlink, is preserved. JSON serialization errors
+are rejected before creating the output directory. Regression tests exercise
+these cases through the actual local inference API.
 
 ## Frozen v0.1 software checks
 

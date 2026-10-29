@@ -1,3 +1,5 @@
+import json
+
 import numpy as np
 import pytest
 from scipy.linalg.blas import dgemm
@@ -7,6 +9,7 @@ from ghostmesh.local_kernel import (
     WIDTH,
     design,
     infer_replay,
+    infer_recording,
     load_model,
     predict,
 )
@@ -110,3 +113,76 @@ def test_checkpoint_units_and_shapes_are_enforced(tmp_path):
         np.savez(tmp_path / "bad.npz", **(fields | change))
         with pytest.raises(ValueError):
             load_model(tmp_path / "bad.npz")
+
+
+def recording(tmp_path):
+    _, rf, checkpoint = model(tmp_path)
+    path = tmp_path / "recording.npz"
+    np.savez(
+        path,
+        rf=rf,
+        timestamps=np.arange(len(rf)) / 10.0,
+        magnitude_units=np.asarray("log_magnitude_db"),
+        phase_units=np.asarray("radians"),
+    )
+    return checkpoint, path
+
+
+def test_recording_writer_roundtrip(tmp_path):
+    checkpoint, source = recording(tmp_path)
+    output = tmp_path / "new" / "replay.json"
+    replay = infer_recording(checkpoint, source, output)
+    assert json.loads(output.read_text()) == replay
+    assert len(replay["frames"]) == 12
+    assert sum(frame["pose"] is not None for frame in replay["frames"]) == 5
+
+
+def test_recording_writer_preserves_output_created_during_inference(
+    tmp_path, monkeypatch
+):
+    import ghostmesh.local_kernel as kernel
+
+    checkpoint, source = recording(tmp_path)
+    output = tmp_path / "replay.json"
+    original = b"another writer owns this output\n"
+    actual_infer = kernel.infer_replay
+
+    def concurrent_writer(*args, **kwargs):
+        replay = actual_infer(*args, **kwargs)
+        output.write_bytes(original)
+        return replay
+
+    monkeypatch.setattr(kernel, "infer_replay", concurrent_writer)
+    with pytest.raises(FileExistsError):
+        kernel.infer_recording(checkpoint, source, output)
+    assert output.read_bytes() == original
+
+
+def test_recording_writer_refuses_existing_output_before_input_access(tmp_path):
+    output = tmp_path / "replay.json"
+    output.write_bytes(b"preserve me")
+    with pytest.raises(FileExistsError):
+        infer_recording(tmp_path / "absent-model", tmp_path / "absent-input", output)
+    assert output.read_bytes() == b"preserve me"
+
+
+def test_recording_writer_does_not_follow_dangling_output_symlink(tmp_path):
+    checkpoint, source = recording(tmp_path)
+    output, target = tmp_path / "replay.json", tmp_path / "absent.json"
+    output.symlink_to(target)
+    with pytest.raises(FileExistsError):
+        infer_recording(checkpoint, source, output)
+    assert output.is_symlink()
+    assert not target.exists()
+
+
+def test_recording_serialization_failure_creates_no_output(tmp_path, monkeypatch):
+    import ghostmesh.local_kernel as kernel
+
+    checkpoint, source = recording(tmp_path)
+    output = tmp_path / "absent-directory" / "replay.json"
+    monkeypatch.setattr(kernel, "infer_replay", lambda *args, **kwargs: {"bad": np.nan})
+    with pytest.raises(ValueError):
+        kernel.infer_recording(checkpoint, source, output)
+    assert not output.exists()
+    assert not output.parent.exists()

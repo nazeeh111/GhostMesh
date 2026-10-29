@@ -193,6 +193,8 @@ def infer_recording(model_path, recording_path, output):
         checkpoint_sha256=sha256(model_path),
         recording_sha256=sha256(recording_path),
     )
+    payload = json.dumps(replay, allow_nan=False, separators=(",", ":")) + "\n"
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(replay, allow_nan=False, separators=(",", ":")) + "\n")
+    with output.open("x", encoding="utf-8") as handle:
+        handle.write(payload)
     return replay
