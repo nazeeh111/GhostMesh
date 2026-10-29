@@ -80,6 +80,13 @@ articulation motion R², and within-record prediction shuffling slightly improve
 the primary NJE. Its exact enrollment burden, matched zero-shot controls and
 public model/feature verification remain separate from the results below.
 
+A separate [supervised residual correction](RESIDUAL_CALIBRATION.md) uses the
+same 120 labeled reference windows. Its settings are selected through nested
+source-room validation, with enrollment and query people separated. It worsens
+NJE against the frozen predictor in E01/E02 and selects no correction in E03.
+All three gates fail. The public verifier checks 135 target-kernel equations
+and reproduces all 27 method-by-room prediction sets exactly.
+
 A second objective predicts pose increments between disjoint eight-frame windows
 from the same recording. This removes constant skeletons as a solution to its
 training loss. It used paired initialization, windows and 1,000-step budgets,

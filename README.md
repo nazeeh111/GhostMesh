@@ -50,6 +50,13 @@ inference. Motion is captured from the application at source timestamps.*
 [Model card](docs/MODEL_CARD.md) · [Reproduce](docs/REPRODUCE.md) ·
 [Release downloads](https://github.com/nazeeh111/GhostMesh/releases/tag/v0.1.0)
 
+| Path | What is verified | Main limit |
+|---|---|---|
+| [Neural replay](docs/REPRODUCE.md) | Real CSI-only sample recomputation and viewer | Weak unseen-room accuracy and confidence |
+| [Local kernel replay](docs/LOCAL_OBSERVABILITY.md) | Later time blocks of one real recording | Dense references from the same person, room and action |
+| Room-calibration research | [CSI references](docs/CALIBRATION_RESEARCH.md) and [pose-reference correction](docs/RESIDUAL_CALIBRATION.md) checked separately | Neither candidate meets the accuracy gate |
+| [ESP32 acquisition](docs/HARDWARE.md) | Capture adapter and parser software checks | Physical capture and pose transfer remain unvalidated |
+
 ## Run locally
 
 Python 3.12 and [uv](https://docs.astral.sh/uv/) are the tested environment.
