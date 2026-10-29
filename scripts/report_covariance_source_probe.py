@@ -162,7 +162,7 @@ def run(out):
             displacement="Root-relative pose(t)-pose(t-8), in the same coordinate units. Raw deltaR2 uses ZERO as reference:1-SSE/sum(target_delta^2). No targetmean subtraction in that metric",
             centered_r2="Subtract each predicted/target recording mean separately for evaluation only. This oracle centering is not an inference input or DC recovery",
         ),
-        matched_neural_control="Unavailable in this3action trial. Historical full27action neural runs have different budgets/data and are not paired controls here.",
+        matched_neural_control=f"Unavailable in this{len(config['selected_actions'])}action trial. Historical full27action neural runs have different budgets/data and are not paired controls here.",
         frozen_original_gate=result["continuation_gate"],
         posthoc_motion_continuation=posthoc,
         rooms=rooms,

@@ -60,6 +60,7 @@ def load_model(path):
     values["training_design"] = (training - values["input_mean"]) / values[
         "input_scale"
     ]
+    values["training_squared_norm"] = np.square(values["training_design"]).sum(1)
     return values
 
 
@@ -69,7 +70,9 @@ def predict(model, rf):
     training = model["training_design"]
     cross = dgemm(1.0, query, training.T)
     distance = np.maximum(
-        np.square(query).sum(1)[:, None] + np.square(training).sum(1)[None] - 2 * cross,
+        np.square(query).sum(1)[:, None]
+        + model["training_squared_norm"][None]
+        - 2 * cross,
         0,
     )
     kernel = np.exp(-distance / (2 * float(model["bandwidth_squared"])))

@@ -218,15 +218,23 @@ is a reproducibility aid, not scientific certification or an immutability guaran
 ## Measured diagnostic latency
 
 The compact kernel's batch-one CPU path includes RF preprocessing and regression,
-with the reference checkpoint already loaded. Thirty measured calls after five
-warmups had median wall latency **315.6 ms**, or **3.17 predictions/second**;
-median process CPU time was 13.77 ms. Concurrent local work and scheduling affect
-wall time. This measurement does not establish 10 Hz live inference. Saved replay
-plays at the dataset's nominal 10 Hz. It excludes acquisition, file I/O and
-rendering and is not comparable to the older neural forward-only benchmark.
-[All timing samples and identities](assets/local-motion-v2/latency.json).
+with the reference checkpoint already loaded. Caching its constant reference
+squared norms reduces repeated memory traffic. Thirty paired calls per method,
+after five warmups each and with randomized interleaved order, measured median
+latency **14.40 ms before / 4.14 ms after**, a **3.48×** wall-time speedup.
+Process CPU time improves **10.41 / 3.47 ms**. Predictions match exactly.
+[All paired samples and source identities](assets/local-motion-v2/latency-cache-comparison.json).
+
+The reciprocal optimized median is 241 predictions/second in this measurement.
+The recording remains 10 Hz. Acquisition, file I/O and rendering are excluded;
+this is not an end-to-end hardware benchmark. A prior run under heavier concurrent
+load measured 315.6 ms. The interleaved old/new comparison attributes 3.48× to
+the code change; the larger difference between separate runs includes contention.
+[Preserved earlier timing](assets/local-motion-v2/latency.json).
 
 ```sh
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 \
   python scripts/benchmark_local_kernel.py --out work/local-kernel-latency.json
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 \
+  python scripts/benchmark_kernel_cache.py --out work/local-kernel-paired-latency.json
 ```

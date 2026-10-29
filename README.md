@@ -33,8 +33,9 @@ from CSI, while unseen-room performance remains unresolved.
 
 The new receiver-covariance candidate also lowers pooled **hip-relative** error
 against a source static prior in three development rooms on three fixed actions.
-Its motion gains are small and reverse for several people and actions. Full pose,
-all-action transfer and calibrated use remain under evaluation.
+Its motion gains are small and reverse for several people and actions. The full
+27-action follow-up loses to the static pose prior in E02. Full pose and useful
+calibrated transfer remain unresolved.
 [Exact scores and reversals](docs/COVARIANCE_RESEARCH.md).
 
 ![Actual held-out CSI replay with predicted and supplied reference skeletons](docs/assets/demo-v1/ghostmesh-demo.gif)
@@ -53,7 +54,7 @@ Python 3.12 and [uv](https://docs.astral.sh/uv/) are the tested environment.
 The recorded viewer needs only Python's standard library:
 
 ```bash
-git clone https://github.com/nazeeh111/GhostMesh.git
+git clone --branch research/domain-generalization-v2 https://github.com/nazeeh111/GhostMesh.git
 cd GhostMesh
 uv run --isolated --no-project --python 3.12 python -m ghostmesh serve
 ```
@@ -63,6 +64,9 @@ toggle reference labels or the fixed isotropic viewport. The app shows the
 causal CSI amplitude map and per-joint uncertainty. Invalid signal withholds
 the pose; domain warnings identify known or unverified domains. Opening another
 replay stays inside the browser. The viewer plays saved predictions.
+
+These commands select the published v2 research branch. The frozen v0.1 release
+and its original study remain available from the release downloads.
 
 To compute predictions from the shipped CSI-only sample, install the ML stack:
 
