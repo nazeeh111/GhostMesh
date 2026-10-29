@@ -46,6 +46,23 @@ The frozen channel control correctly has zero motion R². Background subtraction
 
 ## Calibration is a separate task
 
+A second objective predicts pose increments between disjoint eight-frame windows
+from the same recording. This removes constant skeletons as a solution to its
+training loss. It used paired initialization, windows and 1,000-step budgets,
+with checkpoints selected by source-validation motion R². On E02, relative
+increment R² was −0.03302 versus −0.03642 for the matched absolute objective;
+the zero-increment control scores zero. Neither establishes transferable motion.
+The increment model's arbitrary initial skeleton also prevents interpreting it
+as a complete pose decoder. This diagnostic used no target calibration labels or
+reserved E04 data. [Full motion scores, controls and frozen identities](domain-v2-increment-results.json).
+
+A later paired learned-adaptation screen also failed: on the identical eight
+E02 query people, ordinary training plus adaptation reached NJE 0.142987 and
+training through the adaptation step reached 0.144288, versus source mean
+0.112255. Both received the same 120 target-room reference poses from different
+people. The zero-shot variants also lost to the static mean. All learned motion
+R² values were negative. [Exact comparison and independent local-motion positive control](LOCAL_OBSERVABILITY.md).
+
 Two modes are evaluated separately. Zero-shot models receive no target-room references. Room calibration receives explicit labeled reference poses; controls receive exactly the same references. Personal enrollment is additionally labeled as same-person adaptation.
 
 The 120-reference room recipe used 2 people, 6 actions and 10 frames per action. It harmed mean performance in 2 of 3 development rooms. A second 108-reference recipe covered 4 people and all 27 actions, requiring 108 recordings rather than 12. Its best linear temporal Ridge achieved mean NJE 0.121134 versus source prior 0.123644, but motion R² remained negative for all 15 held people. Selected neural shrinkage ignored CSI and returned the calibration mean. A 60-reference personal-enrollment phase/RBF method gave NJE 0.104313 versus personal mean 0.105207, with negative motion R² for every person. Parameter choices minimize mean error on these same 15 development rotations; these are development findings, not independent confirmation or calibrated product claims. Reference collection burden and action coverage must accompany their scores.

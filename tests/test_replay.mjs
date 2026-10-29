@@ -62,6 +62,13 @@ test("timestamp seek follows actual irregular timestamps and clamps at ends", ()
   ])
     assert.equal(frameAtTime(frames, time), index);
 });
+test("models without an uncertainty estimator declare unavailable confidence", () => {
+  const data = fixture();
+  data.provenance.confidence_available = false;
+  assert.equal(validateReplay(data), data);
+  data.provenance.confidence_available = "false";
+  assert.throws(() => validateReplay(data), /availability/);
+});
 test("an invalid signal can withhold pose but must keep the joint contract", () => {
   const data = fixture(),
     f = data.frames[1];

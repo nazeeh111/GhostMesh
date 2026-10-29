@@ -13,6 +13,7 @@ const elements = [
   "frame-tag",
   "stage-message",
   "mean-confidence",
+  "confidence-description",
   "latency",
   "cadence",
   "current-time",
@@ -89,24 +90,32 @@ function loadReplay(data) {
   });
   const p = replay.provenance,
     synthetic = p.kind === "synthetic_diagnostic",
-    recording = p.kind === "recording_inference";
+    recording = p.kind === "recording_inference",
+    localDiagnostic = p.evaluation_scope === "same_condition_held_time";
   ui.notice.className = `notice${synthetic ? " diagnostic" : ""}`;
   ui.notice.replaceChildren();
   const badge = document.createElement("span");
   badge.className = "notice-label";
   badge.textContent = synthetic
     ? "SYNTHETIC DIAGNOSTIC"
+    : localDiagnostic
+      ? "LOCAL MOTION DIAGNOSTIC"
     : recording
       ? "RECORDED CSI INFERENCE"
       : "DATASET INFERENCE";
   const note = document.createElement("p");
   note.textContent = synthetic
     ? "Generated signals and illustrative joints verify the software path. This replay is not evidence of Wi-Fi pose accuracy or generalization."
+    : localDiagnostic
+      ? "Held time blocks from the same person, room and action. Dense reference poses are required. This result does not establish unseen-room or unseen-person performance."
     : recording
       ? "Inference from a CSI recording without pose labels. Subject and environment may be unknown; this replay does not establish held-out accuracy or supported deployment conditions."
       : "Recorded dataset inference. Inspect the dataset, split and checkpoint below. Replay provenance is supplied by the exporter; this viewer does not independently certify it.";
   ui.notice.append(badge, note);
   text(ui["provenance-note"], safeMeta(p.note));
+  text(ui["confidence-description"], p.confidence_available === false
+    ? "Unavailable. This model has no uncertainty estimator. Empty indicators are not confidence scores."
+    : (p.confidence_definition || "Uncalibrated Gaussian mass within a fixed image radius. Not a probability of correctness."));
   text(
     ui["meta-dataset"],
     `${safeMeta(p.dataset)} / ${synthetic ? "diagnostic" : "recorded inference"}`,
@@ -263,7 +272,7 @@ function drawPose(frame) {
         true,
         frame.ground_truth_valid,
       );
-    drawSkeleton(frame.pose, frame.confidence, "#68dfda", project, false);
+    drawSkeleton(frame.pose, replay.provenance.confidence_available === false ? null : frame.confidence, "#68dfda", project, false);
   }
   poseCtx.restore();
 }
@@ -366,6 +375,7 @@ function render() {
   }
   const f = replay.frames[index],
     invalid = f.status === "invalid_signal",
+    confidenceAvailable = replay.provenance.confidence_available !== false,
     warning = ["low_confidence", "out_of_domain"].includes(f.status);
   ui.seek.value = String(index);
   text(ui["current-time"], formatTime(f.time - replay.frames[0].time));
@@ -375,7 +385,7 @@ function render() {
   );
   const statusLabels = {
     ok: "SIGNAL ACCEPTED",
-    low_confidence: "LOW CONFIDENCE",
+    low_confidence: confidenceAvailable ? "LOW CONFIDENCE" : "CONFIDENCE UNAVAILABLE",
     invalid_signal: "SIGNAL REJECTED",
     out_of_domain: "DOMAIN WARNING",
   };
@@ -394,7 +404,7 @@ function render() {
     `2D pose, frame ${index + 1} of ${replay.frames.length}. ${statusLabels[f.status]}. ${invalid ? "Estimate withheld." : `${replay.joint_names.length} predicted joints. Reference labels ${ui["show-gt"].checked ? "shown" : "hidden"}.`}`,
   );
   const mean = f.confidence.reduce((a, b) => a + b, 0) / f.confidence.length;
-  text(ui["mean-confidence"], invalid ? "Withheld" : mean.toFixed(3));
+  text(ui["mean-confidence"], invalid ? "Withheld" : confidenceAvailable ? mean.toFixed(3) : "Unavailable");
   text(
     ui.latency,
     f.latency_ms == null ? "Not measured" : `${f.latency_ms.toFixed(1)} ms`,
@@ -411,8 +421,8 @@ function render() {
     ui["gt-legend"].prepend(dot);
   }
   jointRows.forEach(({ score, fill }, i) => {
-    text(score, invalid ? "—" : f.confidence[i].toFixed(2));
-    fill.style.width = `${invalid ? 0 : f.confidence[i] * 100}%`;
+    text(score, invalid || !confidenceAvailable ? "—" : f.confidence[i].toFixed(2));
+    fill.style.width = `${invalid || !confidenceAvailable ? 0 : f.confidence[i] * 100}%`;
     fill.className = f.confidence[i] < 0.5 ? "low" : "";
   });
   ui["failure-detail"].className =

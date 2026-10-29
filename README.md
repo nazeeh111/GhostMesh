@@ -24,6 +24,19 @@ remain measurements of that frozen transform. [Details and reproducible unit che
 Corrected-signal and calibration experiments have not established reliable motion
 transfer. [Current findings, failed comparisons and protected final protocol](docs/DOMAIN_RESEARCH.md).
 
+A separate **local motion diagnostic** now reconstructs later time blocks of one
+recording, with relative motion R² **0.917** and NJE **0.02466**. It uses dense
+references from the same person, room and action. Its compact model and CSI-only
+sample reproduce all 104 held-time predictions. This result supports learning
+from CSI, while unseen-room performance remains unresolved.
+[Evidence, controls and limitations](docs/LOCAL_OBSERVABILITY.md).
+
+The new receiver-covariance candidate also lowers pooled **hip-relative** error
+against a source static prior in three development rooms on three fixed actions.
+Its motion gains are small and reverse for several people and actions. Full pose,
+all-action transfer and calibrated use remain under evaluation.
+[Exact scores and reversals](docs/COVARIANCE_RESEARCH.md).
+
 ![Actual held-out CSI replay with predicted and supplied reference skeletons](docs/assets/demo-v1/ghostmesh-demo.gif)
 
 *Actual E01/S05/A02 test recording, selected before test scores. Teal is the
@@ -70,6 +83,32 @@ uv run ghostmesh serve --replay examples/unseen-room-replay.json
 ```
 
 No boards, camera, cloud account or billed API are required for these paths.
+
+### Inspect the local motion diagnostic
+
+This optional example uses 111 dense reference windows from E01/S01/A12 and
+104 separated held-time windows from that same recording. It is a research
+diagnostic. It does not demonstrate unseen-person/room/action transfer or a small
+room-calibration budget. Confidence is explicitly unavailable for this kernel
+model. The default released neural models remain unchanged.
+
+```bash
+uv run ghostmesh serve --replay examples/local-motion-replay.json
+uv run python scripts/local_kernel_replay.py infer \
+  --model models/local-kernel.npz --recording examples/local-csi.npz \
+  --out work/local-recomputed.json
+uv run ghostmesh serve --replay work/local-recomputed.json
+```
+
+The second command loads no annotations. The supplied replay adds reference
+overlays after inference. The CSI excerpt, reference CSI inside the checkpoint,
+predictions and overlays retain the [MM-Fi noncommercial data terms](data/LICENSE.md).
+
+![Actual same-person/room/action held-time replay, with confidence unavailable](docs/assets/local-motion-v2/ghostmesh-demo.gif)
+
+*Three seconds captured from the real app at nominal dataset timestamps. Teal
+shows CSI predictions; dashed orange shows supplied annotations attached after
+inference. [Capture provenance](docs/assets/local-motion-v2/capture.json).*
 
 ## Measured study
 
