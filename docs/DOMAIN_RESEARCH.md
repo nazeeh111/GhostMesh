@@ -63,6 +63,15 @@ target references or reserved E04 arrays entered these experiments.
 
 ## Calibration is a separate task
 
+A later [fixed-reference covariance experiment](CALIBRATION_RESEARCH.md) uses
+120 reference endpoints from two people and evaluates eight different people
+per room across all 27 actions. It preserves some static configuration
+information without supplying target joint labels to its primary predictor.
+All three room gates still fail, every fitted representation has negative
+articulation motion R², and within-record prediction shuffling slightly improves
+the primary NJE. Its exact enrollment burden, matched zero-shot controls and
+public model/feature verification remain separate from the results below.
+
 A second objective predicts pose increments between disjoint eight-frame windows
 from the same recording. This removes constant skeletons as a solution to its
 training loss. It used paired initialization, windows and 1,000-step budgets,

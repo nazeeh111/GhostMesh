@@ -5,15 +5,15 @@ verify implementation behavior; the [experiment results](../results/cohort20-v1/
 report accuracy on actual held-out recordings. Synthetic fixtures are never
 used as evidence that Wi-Fi predicts human pose.
 
-## Current research branch
+## Verified research snapshot
 
-Commit `ac9653d3b23bb568439c3fcc3db2e793b8822519` passes the
-[Ubuntu, macOS and reporting workflow](https://github.com/nazeeh111/GhostMesh/actions/runs/40833008901).
-The published checkout has 308 core Python tests, 22 isolated reporting tests
+Commit `eb35455b43f8257eb9f19b0e0124f6fcd11752a0` passes the
+[Ubuntu, macOS and reporting workflow](https://github.com/nazeeh111/GhostMesh/actions/runs/40834787654).
+That published checkout has 330 core Python tests, 22 isolated reporting tests
 and nine browser tests. Both operating systems also reproduce the real CSI-only
 examples, build the wheel and check it outside the source checkout.
 
-The preceding commit exposed a test import-path dependency under the console
+An earlier commit exposed a test import-path dependency under the console
 `pytest` launcher. It was reproduced in a clean checkout and fixed by declaring
 the repository path in pytest configuration. Passing `python -m pytest` alone
 had not caught that difference. These software checks do not establish an
