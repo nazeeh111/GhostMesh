@@ -197,7 +197,6 @@ def package_cohort(out):
     for name in (
         "docs/cohort-provenance.json",
         "docs/mmfi-source.json",
-        "NOTICE.md",
         "LICENSE",
     ):
         add(name, source=ROOT / name, expected=HASHES.get(name))

@@ -91,4 +91,4 @@ See [the protocol](EXPERIMENTS.md) and [results format](RESULTS_FORMAT.md) for
 cohort limits, static-prior comparisons, pooled metrics versus paired changes,
 calibration event and measured timing scope. Software has the MIT license;
 MM-Fi-derived artifacts retain CC BY-NC 4.0 terms under the included
-`NOTICE.md` and `data/LICENSE.md`.
+`data/LICENSE.md`.

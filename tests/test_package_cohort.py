@@ -142,8 +142,7 @@ def tiny_cohort(tmp_path, monkeypatch):
     (root / "docs").mkdir()
     (root / "docs/cohort-provenance.json").write_text(json.dumps(receipt))
     (root / "docs/mmfi-source.json").write_text('{"SOFTWARE_TEST_ONLY": true}')
-    for name in ("NOTICE.md", "LICENSE"):
-        (root / name).write_text("SOFTWARE TEST ONLY\n")
+    (root / "LICENSE").write_text("SOFTWARE TEST ONLY\n")
     (root / "data/LICENSE.md").write_text(
         "SOFTWARE TEST ONLY [receipt](../docs/cohort-provenance.json)\n"
     )
@@ -168,6 +167,9 @@ def test_cohort_exact_members_checksums_exclusions_and_license_links(tiny_cohort
     with tarfile.open(out) as archive:
         names = archive.getnames()
         assert names == sorted(names)
+        assert cohort.PREFIX + "/NOTICE.md" not in names
+        assert cohort.PREFIX + "/LICENSE" in names
+        assert cohort.PREFIX + "/data/LICENSE.md" in names
         assert not any(name.endswith((".mat", ".jpg", "cache.npy")) for name in names)
         assert len([name for name in names if name.endswith(".npz")]) == 540
         manifest = json.load(

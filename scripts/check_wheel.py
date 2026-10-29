@@ -38,7 +38,7 @@ if (dist.metadata.get("Name") != "ghostmesh" or not dist.version
     raise RuntimeError("Wheel metadata lacks its identity, Python requirements or README")
 if dist.metadata.get("License-Expression") != "MIT AND CC-BY-NC-4.0":
     raise RuntimeError("Wheel metadata lacks the declared software/data license")
-licenses = {"LICENSE", "NOTICE.md", "data/LICENSE.md"}
+licenses = {"LICENSE", "data/LICENSE.md"}
 if not licenses <= set(dist.metadata.get_all("License-File") or []):
     raise RuntimeError("Wheel metadata omits a required license file")
 for name in licenses:
