@@ -5,7 +5,21 @@ verify implementation behavior; the [experiment results](../results/cohort20-v1/
 report accuracy on actual held-out recordings. Synthetic fixtures are never
 used as evidence that Wi-Fi predicts human pose.
 
-## Observed software checks
+## Current research branch
+
+Commit `ac9653d3b23bb568439c3fcc3db2e793b8822519` passes the
+[Ubuntu, macOS and reporting workflow](https://github.com/nazeeh111/GhostMesh/actions/runs/40833008901).
+The published checkout has 308 core Python tests, 22 isolated reporting tests
+and nine browser tests. Both operating systems also reproduce the real CSI-only
+examples, build the wheel and check it outside the source checkout.
+
+The preceding commit exposed a test import-path dependency under the console
+`pytest` launcher. It was reproduced in a clean checkout and fixed by declaring
+the repository path in pytest configuration. Passing `python -m pytest` alone
+had not caught that difference. These software checks do not establish an
+unseen-room accuracy improvement.
+
+## Frozen v0.1 software checks
 
 | Check | Observed result | Reproduce |
 |---|---|---|
@@ -47,8 +61,10 @@ network transport and browser rendering. The source recording remains 10 Hz.
 The [study bundle](STUDY_BUNDLE.md) preserves exact selected model and report
 bytes for inspecting and re-rendering stored findings. Re-rendering tables is
 different from independently re-evaluating the models or retraining them.
-The full 40-person expansion stopped at the documented provider quota during collection;
-ESP32 pose accuracy and original packet-level synchronization remain unverified.
+The v0.1 collection stopped at a provider quota. Normal access later returned;
+the full 40-person acquisition now passes the [v2 byte audit](domain-v2-full40-byte-audit.json).
+The released study and its original cohort remain frozen. ESP32 pose accuracy
+and original packet-level synchronization remain unverified.
 
 
 ## Release artifacts checked locally

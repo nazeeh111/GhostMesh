@@ -44,6 +44,23 @@ A subsequent raw-complex differential test uses the expanded 30-person source co
 
 The frozen channel control correctly has zero motion R². Background subtraction improves relative pose error in only one room and fails the preset continuation gate for positive motion in all rooms. These restricted learners do not establish that raw CSI lacks pose information; projection can lose information and subtraction can remove slow motion. They provide no evidence for adopting this candidate or increasing neural training on this hypothesis. [Complete compact scores, selection grids and source identities](domain-v2-background-results.json).
 
+### Packet spectra and power normalization
+
+A different representation retains nominal signed-frequency power within each
+causal CSI window. Its raw-power and pointwise normalized versions use all 810
+source recordings and 26,554 common endpoints. Normalization improves the matched
+nonlinear displacement model in all three rooms, but the actual source-selected
+family scores full-joint lag-eight displacement R² .002087/.000641/−.006688.
+The E01 packet-permuted
+control also beats its natural-order counterpart. Current full-pose NJE loses to
+the static mean in two rooms. Both frozen continuation gates fail.
+
+The [complete comparison](PACKET_TIME_RESEARCH.md) retains the stronger local
+raw-CSI controls, every family and permutation arm, person/action reversals,
+nominal-clock limitations and public numerical verification commands. All 60
+fitting equations per representation and saved predictions were checked. No
+target references or reserved E04 arrays entered these experiments.
+
 ## Calibration is a separate task
 
 A second objective predicts pose increments between disjoint eight-frame windows

@@ -37,6 +37,8 @@ Its motion gains are small and reverse for several people and actions. The full
 27-action follow-up loses to the static pose prior in E02. Full pose and useful
 calibrated transfer remain unresolved.
 [Exact scores and reversals](docs/COVARIANCE_RESEARCH.md).
+Further [packet-spectrum experiments](docs/PACKET_TIME_RESEARCH.md) retain
+within-window frequency information, but also fail the consistent transfer gate.
 
 ![Actual held-out CSI replay with predicted and supplied reference skeletons](docs/assets/demo-v1/ghostmesh-demo.gif)
 
