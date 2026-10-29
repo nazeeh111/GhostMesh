@@ -7,9 +7,9 @@ used as evidence that Wi-Fi predicts human pose.
 
 ## Verified research snapshot
 
-Commit `946f7c80388cae1e4c1777ed83f3624451753200` passes the
-[Ubuntu, macOS and reporting workflow](https://github.com/nazeeh111/GhostMesh/actions/runs/40838007990).
-That published checkout has 372 core Python tests, 22 isolated reporting tests
+Commit `c0f6208090eed96169d00d5ca8f392418878d81c` passes the
+[Ubuntu, macOS and reporting workflow](https://github.com/nazeeh111/GhostMesh/actions/runs/40970879643).
+That published checkout has 377 core Python tests, 22 isolated reporting tests
 and nine browser tests. Both operating systems also reproduce the real CSI-only
 examples, build the wheel and check it outside the source checkout.
 

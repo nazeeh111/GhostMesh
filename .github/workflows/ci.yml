@@ -30,6 +30,8 @@ jobs:
           version: '0.11.20'
       - name: Install locked CPU environment
         run: uv sync --locked --extra test
+      - name: Python lint
+        run: uvx ruff==0.16.2 check .
       - name: Check observed MM-Fi signal units
         run: uv run --locked python scripts/check_mmfi_units.py
       - name: Numerical, data, inference and HTTP tests

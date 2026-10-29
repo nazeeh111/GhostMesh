@@ -104,7 +104,17 @@ training through the adaptation step reached 0.144288, versus source mean
 people. The zero-shot variants also lost to the static mean. All learned motion
 R² values were negative. [Exact comparison and independent local-motion positive control](LOCAL_OBSERVABILITY.md).
 
-Two modes are evaluated separately. Zero-shot models receive no target-room references. Room calibration receives explicit labeled reference poses; controls receive exactly the same references. Personal enrollment is additionally labeled as same-person adaptation.
+Zero-shot and labeled calibration are evaluated separately. Zero-shot models receive no target-room references. Room calibration receives explicit labeled reference poses; controls receive exactly the same references. Personal enrollment is additionally labeled as same-person adaptation.
+
+A separate [unlabeled startup experiment](STARTUP_CALIBRATION.md) freezes a
+reference from each query recording's early CSI. It assumes a known reset
+boundary and consumes 3.9–7.1 nominal seconds of startup context. It is reported
+separately from both no-enrollment zero-shot inference and labeled calibration.
+The primary has tiny NJE gains over a static mean in all three development
+rooms, but negative motion R² and worse fine-joint PCK in each. All three gates
+fail. A local continuous-session positive control also fails after independent
+resets and is weaker than the matched raw-current model. The public numerical
+verifiers reproduce these outcomes without refitting.
 
 The 120-reference room recipe used 2 people, 6 actions and 10 frames per action. It harmed mean performance in 2 of 3 development rooms. A second 108-reference recipe covered 4 people and all 27 actions, requiring 108 recordings rather than 12. Its best linear temporal Ridge achieved mean NJE 0.121134 versus source prior 0.123644, but motion R² remained negative for all 15 held people. Selected neural shrinkage ignored CSI and returned the calibration mean. A 60-reference personal-enrollment phase/RBF method gave NJE 0.104313 versus personal mean 0.105207, with negative motion R² for every person. Parameter choices minimize mean error on these same 15 development rotations; these are development findings, not independent confirmation or calibrated product claims. Reference collection burden and action coverage must accompany their scores.
 
