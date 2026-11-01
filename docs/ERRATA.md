@@ -28,7 +28,7 @@ uv run python scripts/check_mmfi_units.py
 
 [Sample provenance](../examples/rf-units-source.json) records their original
 MAT hashes. MM-Fi data remains CC BY-NC 4.0 with the authors' attribution in
-[NOTICE](../NOTICE.md) and [data terms](../data/LICENSE.md).
+[the data terms](../data/LICENSE.md).
 
 ## Effect on version 0.1.0
 

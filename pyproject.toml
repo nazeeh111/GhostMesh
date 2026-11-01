@@ -9,7 +9,7 @@ description = "Reproducible, uncertainty-aware temporal Wi-Fi CSI to 2D pose res
 readme = "README.md"
 requires-python = ">=3.11,<3.14"
 license = "MIT AND CC-BY-NC-4.0"
-license-files = ["LICENSE", "NOTICE.md", "data/LICENSE.md"]
+license-files = ["LICENSE", "data/LICENSE.md"]
 dependencies = ["numpy==2.2.6", "scipy==1.16.3", "torch==2.9.0"]
 
 [project.optional-dependencies]

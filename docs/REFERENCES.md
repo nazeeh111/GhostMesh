@@ -44,10 +44,6 @@ exact reproduced paper baseline nor a demonstrated solution to the stricter
 unseen-room requirement. Any future 3D auxiliary target needs a verified
 coordinate/joint contract before supporting a camera-independent claim.
 
-## Relationship to Poseborne
-
-The inspected local Poseborne reference was clean at commit `f73195dd4daf957c0c97cf5edf6a42e196b02e57`. Its notice retains CSI-Pose snapshot `02b1001590beea8e7d6daac57a4d8b4a345eb50f` and identifies WiSPPN-derived model code without a separately established redistribution grant. GhostMesh avoids that code entirely, introducing an original compact temporal model and matched baselines. The original researchers' figures and recorded pose results are not GhostMesh assets.
-
 ## Cite the dataset
 
 ```bibtex

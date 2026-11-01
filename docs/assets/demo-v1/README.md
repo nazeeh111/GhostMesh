@@ -15,4 +15,4 @@ retain CC BY-NC 4.0. Dataset: Jianfei Yang, He Huang, Yunjiao Zhou, Xinyan Chen,
 Yuecong Xu, Shenghai Yuan, Han Zou, Chris Xiaoxuan Lu and Lihua Xie, MM-Fi,
 NeurIPS 2023. Source: https://ntu-aiot-lab.github.io/mm-fi . Changes: original
 CSI model inference, skeleton rendering, signal maps and screen capture.
-No endorsement is implied. See ../../../NOTICE.md and ../../../data/LICENSE.md.
+No endorsement is implied. See ../../../data/LICENSE.md.

@@ -77,4 +77,4 @@ the release. [Reproduction guide](../docs/REPRODUCE.md).
 
 MM-Fi-derived data and figures retain [CC BY-NC 4.0](../data/LICENSE.md)
 attribution. References are model-generated annotations, not independently
-audited manual ground truth. [Dataset credit](../NOTICE.md).
+audited manual ground truth. [Dataset credit](../data/LICENSE.md).

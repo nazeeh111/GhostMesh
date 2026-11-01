@@ -173,7 +173,7 @@ def export(args):
         dict(
             schema_version=1,
             selection=SELECTION,
-            license="CC BY-NC 4.0; see NOTICE.md and data/LICENSE.md",
+            license="CC BY-NC 4.0; see data/LICENSE.md",
             source="MM-Fi, Yang et al., NeurIPS 2023; https://ntu-aiot-lab.github.io/mm-fi",
             coordinate_note="Isotropic 640 x 640 annotation reference plane; source timestamps, zero-based frame indices. References are supplied model-generated 2D annotations, not independently audited ground truth.",
             confidence_note="Uncalibrated isotropic Gaussian mass inside radius .05 in the annotation plane.",
@@ -257,7 +257,7 @@ def plot(args):
     fig.text(
         0.5,
         0.035,
-        "Same isotropic annotation plane in all panels. No camera input to model.\nReferences are model-generated annotations; these examples do not establish reliable pose recovery.\nMM-Fi, Yang et al., NeurIPS 2023 | CC BY-NC 4.0 | ntu-aiot-lab.github.io/mm-fi\nDerivative assets: see NOTICE.md and data/LICENSE.md.",
+        "Same isotropic annotation plane in all panels. No camera input to model.\nReferences are model-generated annotations; these examples do not establish reliable pose recovery.\nMM-Fi, Yang et al., NeurIPS 2023 | CC BY-NC 4.0 | ntu-aiot-lab.github.io/mm-fi\nDerivative assets: see data/LICENSE.md.",
         ha="center",
         fontsize=9,
     )

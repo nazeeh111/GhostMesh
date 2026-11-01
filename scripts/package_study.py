@@ -42,7 +42,6 @@ EXTRAS = (
     "results/qualitative-v1/render_manifest.json",
     "requirements-plots.txt",
     "LICENSE",
-    "NOTICE.md",
     "data/LICENSE.md",
     "docs/cohort-provenance.json",
     "docs/RESULTS_FORMAT.md",
@@ -164,7 +163,7 @@ affect archive bytes across platforms even with canonical member metadata.
 Scope: {SCOPE}
 
 Original software is MIT licensed. MM-Fi-derived artifacts retain CC BY-NC
-4.0 terms. Read `LICENSE`, `NOTICE.md` and `data/LICENSE.md` before reuse.
+4.0 terms. Read `LICENSE` and `data/LICENSE.md` before reuse.
 """
 
 

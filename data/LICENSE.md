@@ -1,6 +1,6 @@
 # MM-Fi data attribution
 
-MM-Fi data, supplied 2D labels, and their redistributed processed excerpts retain the original **[Creative Commons Attribution-NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/)** terms. This includes dataset-backed CSI feature maps and supplied keypoint overlays in replay files. The GhostMesh implementation license does not relicense this material.
+MM-Fi data, supplied 2D labels, and their redistributed processed excerpts retain the original **[Creative Commons Attribution-NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/)** terms. This includes dataset-backed CSI feature maps, supplied keypoint overlays in replay files, and MM-Fi-derived trained model artifacts and visualizations. The GhostMesh implementation license does not relicense this material.
 
 **Credit:** Jianfei Yang, He Huang, Yunjiao Zhou, Xinyan Chen, Yuecong Xu, Shenghai Yuan, Han Zou, Chris Xiaoxuan Lu and Lihua Xie. *MM-Fi: Multi-Modal Non-Intrusive 4D Human Dataset for Versatile Wireless Sensing.* NeurIPS 2023 Datasets and Benchmarks Track.
 

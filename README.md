@@ -293,7 +293,7 @@ capture and ESP32 pose accuracy remain unverified. [Hardware guide](docs/HARDWAR
 | `docs/` | Model, data, protocols, hardware limits and research references |
 
 Original software: [MIT](LICENSE). MM-Fi data, trained weights and derived
-replay/figure assets: [CC BY-NC 4.0](data/LICENSE.md). [Attribution](NOTICE.md).
+replay/figure assets: [CC BY-NC 4.0](data/LICENSE.md).
 Use authorized recordings from consenting people. GhostMesh is a single-person
 2D research system; it does not provide surveillance, identification or medical
 safety decisions.
