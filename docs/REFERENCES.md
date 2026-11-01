@@ -17,6 +17,32 @@ Temporal convolutions and weight-averaged teachers predate GhostMesh. The origin
 
 - Shaojie Bai, J. Zico Kolter and Vladlen Koltun. [An Empirical Evaluation of Generic Convolutional and Recurrent Networks for Sequence Modeling](https://arxiv.org/abs/1803.01271), 2018. Background for causal temporal convolution; GhostMesh does not reproduce that paper's architecture or benchmarks.
 - Antti Tarvainen and Harri Valpola. [Mean teachers are better role models: Weight-averaged consistency targets improve semi-supervised deep learning results](https://arxiv.org/abs/1703.01780), NeurIPS 2017. Background for exponential moving average teacher consistency. GhostMesh's consistency uses source training data only; no claim is made that this supervised source-only variant reproduces the original semi-supervised results.
+- Kaiming He et al. [Masked Autoencoders Are Scalable Vision Learners](https://arxiv.org/abs/2111.06377), 2021. Background for masked reconstruction. GhostMesh retains all 95 tokens, including mask tokens, rather than reproducing MAE's visible-token-only encoder or its vision benchmarks.
+- Adrien Bardes, Jean Ponce and Yann LeCun. [VICReg: Variance-Invariance-Covariance Regularization for Self-Supervised Learning](https://arxiv.org/abs/2105.04906), ICLR 2022. Background for explicit variance and covariance regularization. GhostMesh's adjacent-CSI objective is an independently implemented adaptation, not a new general self-supervised learning principle.
+- Yang Chen and Jingcai Guo. [Towards Robust and Realistic Human Pose Estimation via WiFi Signals, DT-Pose](https://arxiv.org/abs/2501.09411v2), 2025 version inspected for the masked pilot. Context for masked wireless pretraining and structured pose decoding. No upstream code or weights were copied. GhostMesh's small fixed-budget 2D development pilot is not a replication of that paper or a comparison to its published scores.
+
+## Benchmark compatibility
+
+[MM-Fi Table 3](https://arxiv.org/html/2305.10345v2#S5) evaluates 3D targets in
+millimeters. Its all-action Wi-Fi MPJPE rises from 197.1 mm in the random setting
+to 369.5 mm across environments. Those numbers cannot be compared directly with
+GhostMesh's dimensionless 2D NJE/PCK. Similarity-aligned 3D error uses the test
+reference to fit a transformation; it is not a deployed correction.
+[Pinned evaluation implementation](https://github.com/ybhbingo/MMFi_dataset/blob/c9c1e3a8d5099779a618eae1bb351e253daa52d0/mmfi_lib/evaluate.py).
+
+In the [pinned toolbox split implementation](https://github.com/ybhbingo/MMFi_dataset/blob/c9c1e3a8d5099779a618eae1bb351e253daa52d0/mmfi_lib/mmfi.py#L24),
+`random_split` assigns complete subject/action recordings, selecting subjects
+separately for each action. A person can appear on both sides through different
+actions. This differs from GhostMesh's person-disjoint folds and does not justify
+calling that implementation an adjacent-frame random split.
+
+The [inspected CSI loader](https://github.com/ybhbingo/MMFi_dataset/blob/c9c1e3a8d5099779a618eae1bb351e253daa52d0/mmfi_lib/mmfi.py#L256)
+also min-max normalizes each magnitude frame and fills missing entries using
+their packet-column mean. GhostMesh's transforms
+and targets are documented independently. The references establish neither an
+exact reproduced paper baseline nor a demonstrated solution to the stricter
+unseen-room requirement. Any future 3D auxiliary target needs a verified
+coordinate/joint contract before supporting a camera-independent claim.
 
 ## Cite the dataset
 

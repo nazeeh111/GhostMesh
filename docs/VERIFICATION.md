@@ -5,7 +5,31 @@ verify implementation behavior; the [experiment results](../results/cohort20-v1/
 report accuracy on actual held-out recordings. Synthetic fixtures are never
 used as evidence that Wi-Fi predicts human pose.
 
-## Observed software checks
+## Verified research snapshot
+
+Commit `c0f6208090eed96169d00d5ca8f392418878d81c` passes the
+[Ubuntu, macOS and reporting workflow](https://github.com/nazeeh111/GhostMesh/actions/runs/40970879643).
+That published checkout has 377 core Python tests, 22 isolated reporting tests
+and nine browser tests. Both operating systems also reproduce the real CSI-only
+examples, build the wheel and check it outside the source checkout.
+
+An earlier commit exposed a test import-path dependency under the console
+`pytest` launcher. It was reproduced in a clean checkout and fixed by declaring
+the repository path in pytest configuration. Passing `python -m pytest` alone
+had not caught that difference. These software checks do not establish an
+unseen-room accuracy improvement.
+
+The separate local-kernel reproduction command checks all 104 valid predictions,
+their timestamps, failure withholding and confidence placeholders from typed CSI
+only. Its reference checkpoint and recording hashes are checked before inference;
+the source excerpt accepts no annotation fields. The CI workflow now runs this
+command alongside the two released neural examples. Local replay writers also
+use exclusive output creation: an output created by another writer during
+inference, including a dangling symlink, is preserved. JSON serialization errors
+are rejected before creating the output directory. Regression tests exercise
+these cases through the actual local inference API.
+
+## Frozen v0.1 software checks
 
 | Check | Observed result | Reproduce |
 |---|---|---|
@@ -47,8 +71,10 @@ network transport and browser rendering. The source recording remains 10 Hz.
 The [study bundle](STUDY_BUNDLE.md) preserves exact selected model and report
 bytes for inspecting and re-rendering stored findings. Re-rendering tables is
 different from independently re-evaluating the models or retraining them.
-The full 40-person expansion stopped at the documented provider quota during collection;
-ESP32 pose accuracy and original packet-level synchronization remain unverified.
+The v0.1 collection stopped at a provider quota. Normal access later returned;
+the full 40-person acquisition now passes the [v2 byte audit](domain-v2-full40-byte-audit.json).
+The released study and its original cohort remain frozen. ESP32 pose accuracy
+and original packet-level synchronization remain unverified.
 
 
 ## Release artifacts checked locally

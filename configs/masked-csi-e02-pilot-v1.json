@@ -1,0 +1,24 @@
+{
+  "purpose": "Frozen recipe record, not an additional CLI configuration parser",
+  "source_registration_sha256": "e9dec3580f9a431882cf7672a158934cd2d7c74f19702f9f4ef636f13a2d2579",
+  "config": {
+    "seed": 2027,
+    "held_room": "E02",
+    "steps": 4000,
+    "batch": 16,
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "gradient_clip": 1.0,
+    "mask_seed": 719,
+    "mask": "Exactly71of95tokens perframe (74.7368percent), full95tokens including masktokens enterencoder; no visible-token deletion",
+    "input": "Log-magnitude dB ONLY, pointwise global frame mean/SD;3receiversx114subcarriersx10packetcolumns, no calibrated packet timing/phase claim",
+    "patch": "3receiversx6subcarriersx2packetcolumns;19x5orderedtokens,2attentionlayers48D/4heads/FF128; no upstream code copied",
+    "context": "8causalframes ending canonicalendpoint, retained40frame quality guard from frozen covariance cache",
+    "pretext": "MeanmaskedpatchMSE+.05*(25adjacentMSE+25variancehinge+covariancedecorrelation); maskedonly omits all temporal terms",
+    "shuffled": "Within same8frame history, roll seven adjacent partner embeddings by4; pairtime distances4or-3, no true adjacent or identical pairing; reconstruction inputs and mask unchanged",
+    "supervision": "Same8rawframes/steps asSSL; standardizedendpoint34coordinateMSE, endpointlabelsTRAINonly; no early stopping. Allarms subsequently same sourceTRAINendpoint labels in frozenRFFprobe",
+    "selection": "Fixed finalstep encoder; independently select source-onlyRFF512 ridgealpha .001/.01/.1/1/10 by equal-source-room validation NJE; ALLchoices saved before heldscores",
+    "scope": "One E02developmentfold/seed, sourceE01/E03TRAINonly optimizer. HIP-ROOT-RELATIVE articulation only, not fullimagepose/hiplocation; no E04,target enrollment,RGB,3D or final efficacy claim",
+    "limits": "Full-frame normalization precedes patch masking: observed values in masked patches contribute two frame mean/SD statistics, so this is not strict masked-raw-target independence. No pose, future, or cross-frame statistics enter. Masked training versus full-unmasked embedding inference distribution differs. Pointwise normalization discards overall frame gain; all encoder frames process independently before8embedding concatenation. Prior source development exposure remains disclosed."
+  }
+}

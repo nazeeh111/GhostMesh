@@ -1,5 +1,22 @@
 # Trained artifacts
 
+`local-kernel.npz` is a separately labeled **same-condition diagnostic** added
+during v2 research. It stores 118 source CSI frames (111 causal reference
+windows), training-only normalization, RBF bandwidth and dual coefficients.
+Its 3.2 MiB compressed representation reconstructs the original double-precision
+kernel design rather than storing that 45 MiB design matrix. It predicts
+separated time blocks of E01/S01/A12; room/person/action transfer is unvalidated.
+The dataset-derived reference CSI and coefficients retain CC BY-NC 4.0 terms.
+No uncertainty estimator is supplied. [Evidence and reproduction](../docs/LOCAL_OBSERVABILITY.md).
+
+```sh
+uv run python scripts/local_kernel_replay.py infer \
+  --model models/local-kernel.npz --recording examples/local-csi.npz \
+  --out work/local-recomputed.json
+```
+
+SHA-256: `71e9ebb8f78f172d7573a8e2502d6833120c7a9b64622fc02ba3cc8dedd8838a`.
+
 `ghostmesh.pt` is the predeclared primary temporal-plus-teacher model, seed 2027,
 selected by validation normalized joint error. It has **54,451 parameters**.
 Training used a 40-epoch budget; the selected checkpoint is epoch 1.

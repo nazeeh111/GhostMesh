@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "frozen_utc": "2026-10-26T22:41:11.379691+00:00",
+  "stage": "Reserved final records frozen before target array decoding or model inference",
+  "protocol_audit_sha256": "1be7a816d1a5122cc126ef703c878dda3eac8a4add4ffacee294dc73c5d097db",
+  "historical_exposure": "E04 aggregate v1 results already public; S36 pilot training person; S40 pilot-reserved test person. No new-room or population claim. The two strata share no actions.",
+  "reserved_records": [
+    {
+      "id": "E04/S36/A01",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "6877916128cc53621bad43e51bd9b6c892f901489f06d795a4c4385d23620b31"
+    },
+    {
+      "id": "E04/S36/A03",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "e7a3b4996eab4ec49c6a9ee21188e68a3bc1a17081586aae8381a60c693eaf2a"
+    },
+    {
+      "id": "E04/S36/A04",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "7cbdd20d0ddff7423c20e9085657afd7a1f0317a8323b3e7de13867feb6f35dd"
+    },
+    {
+      "id": "E04/S36/A05",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "b55c97c25c2fa7941d6d0a51ff34882a81279cac2f1242522c59bfe624065678"
+    },
+    {
+      "id": "E04/S36/A07",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "f161044807dbee8e3950299dcf0fee0d4657b40d1a23f691d5a98c2b2b810bd5"
+    },
+    {
+      "id": "E04/S36/A08",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "a3e34514b486193f720ffc4c407214e9adfa71485fc4d184cea0ff5d8ba6f5fd"
+    },
+    {
+      "id": "E04/S36/A09",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "dfa84328cae8143330225d68f5c4e8aa688134b28d2a549b97f7a777f309d85b"
+    },
+    {
+      "id": "E04/S36/A10",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "12a526f8470f5f816732b3a5e5bf229394f8dc6ed61e635ee037681571edddd2"
+    },
+    {
+      "id": "E04/S36/A11",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "7e561916b8b3279c0c6ae8e33dff1e7b0465e4cd53349d74a1fd27347f248612"
+    },
+    {
+      "id": "E04/S36/A12",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "1b368b6d4559aa998f7e07bd008294dcbd83a4d2be1d79c784de16015b8f7be9"
+    },
+    {
+      "id": "E04/S36/A13",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "a7cedca5eb66caafcaf0bf2913637d12f4abdaa3836fd2534746beab8e7654d2"
+    },
+    {
+      "id": "E04/S36/A14",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "514379d329bca4518a3f340acb68afb7ba351929c83c555e822e09efa535b3b6"
+    },
+    {
+      "id": "E04/S36/A15",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "b818c6761cd130219fa28d411aef0c9d34b959b16c6455888a8049999146370e"
+    },
+    {
+      "id": "E04/S36/A16",
+      "stratum": "fresh_record_pilot_person",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "b18a1b514ceaa8f9ae8bc50f3e7aa900c996c8ce5d1d7c31581b1d4403487e74"
+    },
+    {
+      "id": "E04/S40/A02",
+      "stratum": "fresh_person_two_actions",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "7f0931e5e10a3d20c22f72085180fb946c031f9cf8115dab1c65fc72a99a3bbe"
+    },
+    {
+      "id": "E04/S40/A06",
+      "stratum": "fresh_person_two_actions",
+      "files": 594,
+      "ordered_path_and_file_digest_sha256": "fd5d1de8fd96e72d3fcb2b484fe7b1d33222e8121955a3283d86b4d185dd90f8"
+    }
+  ],
+  "development_rooms": [
+    "E01",
+    "E02",
+    "E03"
+  ],
+  "prohibitions": [
+    "No E04 fitting, architecture selection, early stopping, normalization or confidence calibration",
+    "No test inference before all final checkpoint/config/source identities freeze",
+    "No favorable replacement for rejected records",
+    "Report every seed and each stratum separately; no frame-independent significance claim"
+  ],
+  "primary_metric": "bbox-diagonal normalized joint error; lower is better",
+  "consistency_requirement": "Before claiming consistent baseline improvement: lower NJE for each of five paired training seeds in pooled and both strata; mean PCK@.05 and PCK@.2 must not worsen in either stratum. Report margins, all reversals and sequence-level descriptive intervals. This is a bounded two-person result, not robust arbitrary-room generalization.",
+  "final_seeds": [
+    2027,
+    2028,
+    2029,
+    2030,
+    2031
+  ],
+  "source_comparison": "Same source subjects, labels, feature coverage, training budget and selection rule for matched baseline and candidate; additionally report original released baseline as historical reference."
+}

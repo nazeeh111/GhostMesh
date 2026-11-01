@@ -25,6 +25,9 @@ export function validateReplay(data) {
     );
   if (data.provenance.coordinate_system !== "normalized_image")
     throw new Error("Replay coordinates must use normalized_image.");
+  if (data.provenance.confidence_available != null &&
+      typeof data.provenance.confidence_available !== "boolean")
+    throw new Error("Confidence availability must be a boolean.");
   if (
     !Array.isArray(data.joint_names) ||
     data.joint_names.length < 1 ||

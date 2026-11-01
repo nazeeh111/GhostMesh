@@ -1,0 +1,9 @@
+{
+  "report_sha256": "bca50e7961bc61fbea7dbade0b79be89bd9e28260d5df42b8245e61072ea717f",
+  "plotter_sha256": "6b4dd6fed6dca0161b83750327d6fc448cffb24c4bd9b9fe3203b9f874a65d51",
+  "data": "Actual independently verified E02 development scores, no fitted or simulated values",
+  "files_sha256": {
+    "masked-transfer.png": "6bef502164d3d62a82b2b8f61e1d611eb1c37f67f087baebc45e562c6096e4b9",
+    "masked-transfer.svg": "21164f4e348a299e0943be07caf839cd32cc50727f8fc2e7090542e246d04629"
+  }
+}

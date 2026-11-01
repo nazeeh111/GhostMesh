@@ -1,0 +1,638 @@
+{
+  "registration": {
+    "config": {
+      "seed": 2027,
+      "permutation_seed": 90210,
+      "context": 32,
+      "endpoint_stride": 8,
+      "ema_tau_seconds": 2.0,
+      "nominal_frame_seconds": 0.1,
+      "projection_dimensions": 64,
+      "rff_dimensions": 512,
+      "ridge_alphas": [
+        0.01,
+        0.1,
+        1.0,
+        10.0
+      ],
+      "scale_floor": 0.001,
+      "arms": [
+        "untreated",
+        "ema_residual",
+        "startup_static"
+      ],
+      "targets": [
+        "root_relative_pose",
+        "lag8_root_relative_displacement"
+      ],
+      "selection": "Separate source-validation coordinate MSE per target; first alpha wins ties",
+      "scope": "DEVELOPMENT E01-E03/source30 only; no E04. No novel RF/Doppler/AoA/physical-velocity claim",
+      "continuation_gate": "EMA residual record-centered relative pose R2 and centered displacement R2 positive in every held room; macro pose R2 >=.05; fixed prediction shuffle lowers macro pose R2 >=.05. This is a continuation heuristic, not efficacy/significance proof.",
+      "sources": [
+        "https://arxiv.org/abs/1907.03994",
+        "https://www.cswu.me/papers/mobisys18_widar2.0_paper.pdf"
+      ],
+      "limitations": "Fixed random projection and RFF are restricted learners. Negative findings cannot prove raw CSI lacks information; EMA can remove useful slow motion; nominal frame timing/within-block packet timing are not independently calibrated."
+    },
+    "source_sha256": {
+      "scripts/domain_background_probe.py": "1ccb9887823b0e65a2cc2efbf0528af555ce9f6e6114c2b3be77aeb3a7231bcd",
+      "ghostmesh/causal_channel.py": "2fe97b676f36bcd0b6949f089af0b35e668f6ca7a4501970830f2012e1d6d7b7",
+      "ghostmesh/metrics.py": "b4827f9f2f33890739f092b30a39e47af99e2ae08b3bc29e173da0134cef48a3"
+    },
+    "cache_receipt_sha256": "52fc6f641277926736daf79ccb87b122e0ae7a7f0fc9e587f567946dec41cd8f",
+    "cache_arrays_sha256": {
+      "rf": "59a76867f1e19fc28f733b53e5ca5a0e1090fca82111f95bb59c84d6509c3757",
+      "pose": "88c0a118b3aff822626bc1a170e51c6d5f8c76594596bf646784a7a7f9811fd9",
+      "valid": "dfa853f6477e68153abaa29e8af21977dadeee1380c563ca820f3800a7bb4fa1"
+    },
+    "source30_config": {
+      "schema_version": 1,
+      "name": "source30-typed-rf-v1",
+      "scope": "Development only; E01-E03, all30source people/all27actions. No E04 array decoding. No new untouched-source-person claim after inclusion.",
+      "environments": [
+        "E01",
+        "E02",
+        "E03"
+      ],
+      "subjects_per_environment": 10,
+      "actions": 27,
+      "frames_per_record": 297,
+      "input_fields": [
+        "CSIamp",
+        "CSIphase"
+      ],
+      "magnitude_units": "log_magnitude_db",
+      "phase_units": "radians",
+      "units_limit": "Empirically inferred receiver-relative scale, not calibrated RSSI/dBm or ADC samples",
+      "label_modality": "rgb",
+      "reference_canvas": [
+        640,
+        640
+      ],
+      "coordinate_note": "Declared isotropic reference plane, not recovered camera calibration. Provided2D annotations only; no images decoded.",
+      "fps": 10,
+      "source_validation_subjects": [
+        "S04",
+        "S09",
+        "S14",
+        "S19",
+        "S24",
+        "S29"
+      ],
+      "room_fold_policy": "Hold each E01-E03 room in turn; other2rooms supply16train and4validation people, disjoint whole people/records. Never random frame splits.",
+      "source": "https://github.com/ybhbingo/MMFi_dataset",
+      "license": "CC BY-NC 4.0",
+      "consent_basis": "MM-Fi authors report voluntary signed participant consent and NTU IRB-2022-1067; noncommercial research use."
+    },
+    "numpy": "2.2.6",
+    "platform": "macOS-26.6.2-arm64-arm-64bit"
+  },
+  "results": [
+    {
+      "held_room": "E01",
+      "arm": "untreated",
+      "pose_alpha": 0.01,
+      "delta_alpha": 0.1,
+      "counts": {
+        "train": 14688,
+        "validation": 3672,
+        "held": 9180
+      },
+      "metrics": {
+        "relative_nje": 0.07294277548527724,
+        "relative_pck05": 0.5419069588619762,
+        "pose_motion": {
+          "r2": -0.0026559544928905776
+        },
+        "delta_motion": {
+          "r2": -0.00012725418265757682
+        },
+        "delta_zero_r2": -0.00013134943036008373
+      },
+      "shuffled": {
+        "relative_nje": 0.07292744952761192,
+        "relative_pck05": 0.5421953094963475,
+        "pose_motion": {
+          "r2": -0.0018101503437100153
+        },
+        "delta_motion": {
+          "r2": 1.7117668088539872e-06
+        },
+        "delta_zero_r2": -2.4677541603512765e-06
+      },
+      "source_validation_grid": [
+        {
+          "alpha": 0.01,
+          "validation_mse_pose": 0.0012207671098096134,
+          "validation_mse_delta": 0.0014558013787553494
+        },
+        {
+          "alpha": 0.1,
+          "validation_mse_pose": 0.0012238012605951334,
+          "validation_mse_delta": 0.0014556283815746456
+        },
+        {
+          "alpha": 1.0,
+          "validation_mse_pose": 0.0012250711199608335,
+          "validation_mse_delta": 0.001455669177722558
+        },
+        {
+          "alpha": 10.0,
+          "validation_mse_pose": 0.001225251584694434,
+          "validation_mse_delta": 0.0014556749341374227
+        }
+      ]
+    },
+    {
+      "held_room": "E01",
+      "arm": "ema_residual",
+      "pose_alpha": 10.0,
+      "delta_alpha": 0.1,
+      "counts": {
+        "train": 14688,
+        "validation": 3672,
+        "held": 9180
+      },
+      "metrics": {
+        "relative_nje": 0.07237116627978718,
+        "relative_pck05": 0.556318082788671,
+        "pose_motion": {
+          "r2": -1.5718917456553072e-06
+        },
+        "delta_motion": {
+          "r2": -0.00015056471754704148
+        },
+        "delta_zero_r2": -0.00015514473761735204
+      },
+      "shuffled": {
+        "relative_nje": 0.07237112509670005,
+        "relative_pck05": 0.5563437139561707,
+        "pose_motion": {
+          "r2": 1.2525082346837024e-06
+        },
+        "delta_motion": {
+          "r2": 2.6626256995232467e-05
+        },
+        "delta_zero_r2": 2.1930450839424687e-05
+      },
+      "source_validation_grid": [
+        {
+          "alpha": 0.01,
+          "validation_mse_pose": 0.001226314445686782,
+          "validation_mse_delta": 0.0014558671267665873
+        },
+        {
+          "alpha": 0.1,
+          "validation_mse_pose": 0.0012254150320675542,
+          "validation_mse_delta": 0.0014556077680367772
+        },
+        {
+          "alpha": 1.0,
+          "validation_mse_pose": 0.0012252779976465239,
+          "validation_mse_delta": 0.0014556658186129453
+        },
+        {
+          "alpha": 10.0,
+          "validation_mse_pose": 0.0012252728663569822,
+          "validation_mse_delta": 0.0014556745739208396
+        }
+      ]
+    },
+    {
+      "held_room": "E01",
+      "arm": "startup_static",
+      "pose_alpha": 0.01,
+      "delta_alpha": 0.1,
+      "counts": {
+        "train": 14688,
+        "validation": 3672,
+        "held": 9180
+      },
+      "metrics": {
+        "relative_nje": 0.07309323976628139,
+        "relative_pck05": 0.5424708445469691,
+        "pose_motion": {
+          "r2": 0.0
+        },
+        "delta_motion": {
+          "r2": 0.0
+        },
+        "delta_zero_r2": 4.4169514890057826e-07
+      },
+      "shuffled": {
+        "relative_nje": 0.07309323976628139,
+        "relative_pck05": 0.5424708445469691,
+        "pose_motion": {
+          "r2": 0.0
+        },
+        "delta_motion": {
+          "r2": 0.0
+        },
+        "delta_zero_r2": 4.4169514890057826e-07
+      },
+      "source_validation_grid": [
+        {
+          "alpha": 0.01,
+          "validation_mse_pose": 0.0012108720031815696,
+          "validation_mse_delta": 0.0014556872882009982
+        },
+        {
+          "alpha": 0.1,
+          "validation_mse_pose": 0.0012180477017835142,
+          "validation_mse_delta": 0.0014556749886164115
+        },
+        {
+          "alpha": 1.0,
+          "validation_mse_pose": 0.001224219900397476,
+          "validation_mse_delta": 0.0014556753256267964
+        },
+        {
+          "alpha": 10.0,
+          "validation_mse_pose": 0.0012251617410823372,
+          "validation_mse_delta": 0.0014556755690510687
+        }
+      ]
+    },
+    {
+      "held_room": "E02",
+      "arm": "untreated",
+      "pose_alpha": 0.01,
+      "delta_alpha": 0.01,
+      "counts": {
+        "train": 14688,
+        "validation": 3672,
+        "held": 9180
+      },
+      "metrics": {
+        "relative_nje": 0.07205527915707634,
+        "relative_pck05": 0.5617582980904781,
+        "pose_motion": {
+          "r2": -0.0031204295765021595
+        },
+        "delta_motion": {
+          "r2": -0.00025308244815946956
+        },
+        "delta_zero_r2": -0.0003019242478676798
+      },
+      "shuffled": {
+        "relative_nje": 0.07204735341288068,
+        "relative_pck05": 0.5615596565423555,
+        "pose_motion": {
+          "r2": -0.0025112557235309474
+        },
+        "delta_motion": {
+          "r2": -0.00031895060651376816
+        },
+        "delta_zero_r2": -0.00036774688740948136
+      },
+      "source_validation_grid": [
+        {
+          "alpha": 0.01,
+          "validation_mse_pose": 0.0013113738247151122,
+          "validation_mse_delta": 0.0016299896924633474
+        },
+        {
+          "alpha": 0.1,
+          "validation_mse_pose": 0.001311560950330664,
+          "validation_mse_delta": 0.0016319078115645052
+        },
+        {
+          "alpha": 1.0,
+          "validation_mse_pose": 0.0013124757147516567,
+          "validation_mse_delta": 0.0016321994119307154
+        },
+        {
+          "alpha": 10.0,
+          "validation_mse_pose": 0.0013126118157949635,
+          "validation_mse_delta": 0.0016322300044350586
+        }
+      ]
+    },
+    {
+      "held_room": "E02",
+      "arm": "ema_residual",
+      "pose_alpha": 0.01,
+      "delta_alpha": 0.01,
+      "counts": {
+        "train": 14688,
+        "validation": 3672,
+        "held": 9180
+      },
+      "metrics": {
+        "relative_nje": 0.072572684665795,
+        "relative_pck05": 0.5492182493912597,
+        "pose_motion": {
+          "r2": -0.001280944847330101
+        },
+        "delta_motion": {
+          "r2": -0.00031876821368315156
+        },
+        "delta_zero_r2": -0.00033706850632686525
+      },
+      "shuffled": {
+        "relative_nje": 0.07256314762027592,
+        "relative_pck05": 0.5492951428937588,
+        "pose_motion": {
+          "r2": -0.000990811349839582
+        },
+        "delta_motion": {
+          "r2": -0.0005096984477945821
+        },
+        "delta_zero_r2": -0.0005278667962975714
+      },
+      "source_validation_grid": [
+        {
+          "alpha": 0.01,
+          "validation_mse_pose": 0.0013106347041804897,
+          "validation_mse_delta": 0.0016299080804336875
+        },
+        {
+          "alpha": 0.1,
+          "validation_mse_pose": 0.0013112572143083308,
+          "validation_mse_delta": 0.0016318832177316116
+        },
+        {
+          "alpha": 1.0,
+          "validation_mse_pose": 0.0013123808223662922,
+          "validation_mse_delta": 0.0016321969008825628
+        },
+        {
+          "alpha": 10.0,
+          "validation_mse_pose": 0.0013126010837432403,
+          "validation_mse_delta": 0.0016322297530035326
+        }
+      ]
+    },
+    {
+      "held_room": "E02",
+      "arm": "startup_static",
+      "pose_alpha": 0.1,
+      "delta_alpha": 0.1,
+      "counts": {
+        "train": 14688,
+        "validation": 3672,
+        "held": 9180
+      },
+      "metrics": {
+        "relative_nje": 0.07192621642080235,
+        "relative_pck05": 0.5597334358580033,
+        "pose_motion": {
+          "r2": 1.1102230246251565e-16
+        },
+        "delta_motion": {
+          "r2": 0.0
+        },
+        "delta_zero_r2": -1.6998018312897045e-06
+      },
+      "shuffled": {
+        "relative_nje": 0.07192621642080235,
+        "relative_pck05": 0.5597334358580033,
+        "pose_motion": {
+          "r2": 1.1102230246251565e-16
+        },
+        "delta_motion": {
+          "r2": 0.0
+        },
+        "delta_zero_r2": -1.6998018312897045e-06
+      },
+      "source_validation_grid": [
+        {
+          "alpha": 0.01,
+          "validation_mse_pose": 0.0013133454753917902,
+          "validation_mse_delta": 0.001632234544334749
+        },
+        {
+          "alpha": 0.1,
+          "validation_mse_pose": 0.0013098838571986781,
+          "validation_mse_delta": 0.0016322308242933579
+        },
+        {
+          "alpha": 1.0,
+          "validation_mse_pose": 0.0013121861126576114,
+          "validation_mse_delta": 0.0016322329724640036
+        },
+        {
+          "alpha": 10.0,
+          "validation_mse_pose": 0.00131258093658062,
+          "validation_mse_delta": 0.0016322333730163373
+        }
+      ]
+    },
+    {
+      "held_room": "E03",
+      "arm": "untreated",
+      "pose_alpha": 0.01,
+      "delta_alpha": 0.01,
+      "counts": {
+        "train": 14688,
+        "validation": 3672,
+        "held": 9180
+      },
+      "metrics": {
+        "relative_nje": 0.06942405395821304,
+        "relative_pck05": 0.5814302191464821,
+        "pose_motion": {
+          "r2": -0.003976627736682614
+        },
+        "delta_motion": {
+          "r2": -0.0010606274169231433
+        },
+        "delta_zero_r2": -0.001161633809209972
+      },
+      "shuffled": {
+        "relative_nje": 0.06941604752453694,
+        "relative_pck05": 0.5812764321414841,
+        "pose_motion": {
+          "r2": -0.003768866958199002
+        },
+        "delta_motion": {
+          "r2": -0.00025389224756566797
+        },
+        "delta_zero_r2": -0.00035545778619949786
+      },
+      "source_validation_grid": [
+        {
+          "alpha": 0.01,
+          "validation_mse_pose": 0.0012794238857498962,
+          "validation_mse_delta": 0.0015968592832365383
+        },
+        {
+          "alpha": 0.1,
+          "validation_mse_pose": 0.0012799931088931969,
+          "validation_mse_delta": 0.0015994744738352788
+        },
+        {
+          "alpha": 1.0,
+          "validation_mse_pose": 0.001281805005951747,
+          "validation_mse_delta": 0.0015998821194072393
+        },
+        {
+          "alpha": 10.0,
+          "validation_mse_pose": 0.0012820761149504771,
+          "validation_mse_delta": 0.0015999254605808927
+        }
+      ]
+    },
+    {
+      "held_room": "E03",
+      "arm": "ema_residual",
+      "pose_alpha": 0.01,
+      "delta_alpha": 0.01,
+      "counts": {
+        "train": 14688,
+        "validation": 3672,
+        "held": 9180
+      },
+      "metrics": {
+        "relative_nje": 0.0696927468772174,
+        "relative_pck05": 0.5754004869921825,
+        "pose_motion": {
+          "r2": -0.002092216715082529
+        },
+        "delta_motion": {
+          "r2": -0.0008723642884376215
+        },
+        "delta_zero_r2": -0.0008903346221009745
+      },
+      "shuffled": {
+        "relative_nje": 0.06969665947606317,
+        "relative_pck05": 0.574875048058439,
+        "pose_motion": {
+          "r2": -0.002485426644168287
+        },
+        "delta_motion": {
+          "r2": -0.0004882911871006979
+        },
+        "delta_zero_r2": -0.0005065277209752583
+      },
+      "source_validation_grid": [
+        {
+          "alpha": 0.01,
+          "validation_mse_pose": 0.0012802299462776317,
+          "validation_mse_delta": 0.0015972025175035392
+        },
+        {
+          "alpha": 0.1,
+          "validation_mse_pose": 0.001280509528400555,
+          "validation_mse_delta": 0.0015995054430074172
+        },
+        {
+          "alpha": 1.0,
+          "validation_mse_pose": 0.001281802302195609,
+          "validation_mse_delta": 0.0015998853710366796
+        },
+        {
+          "alpha": 10.0,
+          "validation_mse_pose": 0.0012820745159179386,
+          "validation_mse_delta": 0.0015999257869730918
+        }
+      ]
+    },
+    {
+      "held_room": "E03",
+      "arm": "startup_static",
+      "pose_alpha": 0.1,
+      "delta_alpha": 0.1,
+      "counts": {
+        "train": 14688,
+        "validation": 3672,
+        "held": 9180
+      },
+      "metrics": {
+        "relative_nje": 0.06949217482497956,
+        "relative_pck05": 0.5783672946302704,
+        "pose_motion": {
+          "r2": 0.0
+        },
+        "delta_motion": {
+          "r2": 0.0
+        },
+        "delta_zero_r2": -3.4576725151946874e-06
+      },
+      "shuffled": {
+        "relative_nje": 0.06949217482497956,
+        "relative_pck05": 0.5783672946302704,
+        "pose_motion": {
+          "r2": 0.0
+        },
+        "delta_motion": {
+          "r2": 0.0
+        },
+        "delta_zero_r2": -3.4576725151946874e-06
+      },
+      "source_validation_grid": [
+        {
+          "alpha": 0.01,
+          "validation_mse_pose": 0.001283565266225432,
+          "validation_mse_delta": 0.0015999414640913354
+        },
+        {
+          "alpha": 0.1,
+          "validation_mse_pose": 0.0012768347527374227,
+          "validation_mse_delta": 0.001599927068973539
+        },
+        {
+          "alpha": 1.0,
+          "validation_mse_pose": 0.0012812865367989599,
+          "validation_mse_delta": 0.0015999297133797916
+        },
+        {
+          "alpha": 10.0,
+          "validation_mse_pose": 0.0012820214325361306,
+          "validation_mse_delta": 0.0015999302462973404
+        }
+      ]
+    }
+  ],
+  "static_priors": [
+    {
+      "room": "E01",
+      "fit": "Source training relative-target mean and zero displacement only",
+      "metrics": {
+        "relative_nje": 0.07237211392502386,
+        "relative_pck05": 0.556318082788671,
+        "pose_motion": {
+          "r2": 0.0
+        },
+        "delta_motion": {
+          "r2": 0.0
+        },
+        "delta_zero_r2": 0.0
+      }
+    },
+    {
+      "room": "E02",
+      "fit": "Source training relative-target mean and zero displacement only",
+      "metrics": {
+        "relative_nje": 0.07221651977314163,
+        "relative_pck05": 0.5524734076637191,
+        "pose_motion": {
+          "r2": 1.1102230246251565e-16
+        },
+        "delta_motion": {
+          "r2": 0.0
+        },
+        "delta_zero_r2": 0.0
+      }
+    },
+    {
+      "room": "E03",
+      "fit": "Source training relative-target mean and zero displacement only",
+      "metrics": {
+        "relative_nje": 0.06961676058361904,
+        "relative_pck05": 0.576797385620915,
+        "pose_motion": {
+          "r2": 0.0
+        },
+        "delta_motion": {
+          "r2": 0.0
+        },
+        "delta_zero_r2": 0.0
+      }
+    }
+  ],
+  "seconds": 74.40874650003389,
+  "status": "Development only; fails useful-motion criterion; no final reserved E04 scoring",
+  "source_results_sha256": "ff89b864e63467190294588c75e2f767227d40653b4a4f74e19978253a82695d",
+  "omitted_details": "Per-record and per-joint score rows omitted from this compact index; complete local study retains them with model/prediction hashes."
+}

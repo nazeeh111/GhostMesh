@@ -1,0 +1,20 @@
+{
+  "status": "prospective source-only feasibility protocol before new fitting",
+  "objective": "Improve real2D source-person movement by learning a geometry-supervised RF representation, not another frozen readout",
+  "source_ready_sha256": "303922cdcb0e8007b25b0488c5cc14515487afb635cf60bc9b8b0b3f31786461",
+  "source": "E01/E03 TRAIN16/14124endpoints, VAL4/3546endpoints, all27actions; no numericE02/E04/RGB",
+  "auxiliary": "136 supplied17x3 annotation point-pair distances /per-frameRMSradius. Preserves point index, ignores rotation/reflection/scale/translation, loses chirality/orientation. Auxiliary targets only; output stays17COCOhip-relative2D. No reconstructed3D/units/COCOremap claim",
+  "initialization": "Same original masked_temporal frozen encoder backbone in every arm; new same initialized body/geometry/relation heads. Encoder now fine-tuned",
+  "arms": ["pose_only", "pose_geometry", "pose_geometry_relational", "pose_geometry_permuted"],
+  "primary": "pose_geometry_relational",
+  "schedule": "seed2027,2000steps,8pairs eachstep=4 distinct TRAINpeople per room. Exactsame-record current/pastend difference8; same16endpoint histories all4arms. No action/person/room IDs in predictor",
+  "learning_rates": {"encoder": 0.0001, "heads": 0.001},
+  "optimizer": "AdamW weight_decay.01, gradientclip1 error_if_nonfinite",
+  "pose_loss": ".5 standardized2Dabsolute MSE on both endpoints +.5 standardizedlag8difference MSE. TRAIN poseSDfloor.01/deltaRMSfloor.01; predictedownhipmidpointremoved",
+  "geometry_loss": ".5 standardizedgeometryabsolute MSE+.5 standardizedgeometrylag8difference MSE. TRAINgeometrySDfloor.05/deltaRMSfloor.01. Multiplier.25. Permutedcontrol gets own TRAINpermutedgeometrydeltaRMS, same natural marginal statistics",
+  "relation_loss": "Multiplier.05 KL(teacher||student), cross-room candidates only. Teacher normalized TRAIN-standardized136distance vector, Gaussian squared-distance temperature.5. Student normalized64Dprojection, cosine temperature.2. Labels and teachers detached",
+  "permutation": "fixed seed90210 within each TRAINrecord only, targetpoint geometry permuted across time; action/person/record static statistics preserved. Allauxiliaryarms same sourceannotation type/count; pose-only has no geometry supervision, explicit extra-label boundary",
+  "selection": "fixed finalstep, no sourceVAL checkpoint selection/optimizer updates. Recovery checkpoint every500steps exactmodel/optimizer/CPUandMPSRNG/schedule/config/source/data identity; same device/recipe only",
+  "gate": "Primary SOURCEVAL bodymotionR2>.05, lag8deltaR2>.05, both sourceVALroomsmotionpositive, at least3of4VALpeoplepositive; lowerNJE and PCK05/.2notworse versus all3learnedcontrols and source mean/endpointclock; alignedpredictionNJE better than within-recordshuffled. No newE02score until premise passes",
+  "limits": "Source-development hypothesis, extra source3Dannotation-derived labels, not paper replication or final generalization. WarmstartpriorRFexposure same allarms; no targetcalibration tested here. Final E04 and bothmode efficacy remain unresolved"
+}

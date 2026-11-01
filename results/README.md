@@ -20,6 +20,9 @@ and their environment together. Supplied 2D teacher labels provide the reference
 - [Qualitative cases](qualitative-v1/qualitative.png): the first recorded
   minimum/maximum NJE endpoints for the primary temporal model in each protocol.
   These four extremes are not typical or representative frames.
+- [Latest v2 masked-CSI study](../docs/MASKED_CSI_RESEARCH.md): real zero-shot and
+  labeled calibration results, all 89 prediction sets independently checked,
+  failed transfer gates and source-only movement follow-ups.
 
 ## Conclusions
 
@@ -54,8 +57,9 @@ Signal rejection and metadata domain warnings cannot detect every wrong pose.
 
 ## Scope and artifact identity
 
-The full 40-person expansion stopped at an observed provider quota during
-collection. Room/person changes are confounded in E04. No unseen-action,
+The original release used the 20-person cohort. The later 40-person expansion
+is now fully acquired and byte-verified; its v2 experiments remain separate
+from these frozen release results. Room/person changes are confounded in E04. No unseen-action,
 cross-device, multi-person, 3D or physical ESP32 pose result is claimed.
 Coordinates use a declared isotropic 640-square annotation plane. Timing uses
 reconstructed nominal 10 Hz frame IDs; original packet synchronization was not

@@ -7,3 +7,7 @@
 
 # Preserve exact scientific CSV bytes bound by renderer and bundle hashes.
 *.csv -text
+
+# Machine-readable experiment exports stay linked beside their narrative reports.
+# Collapse them by default in GitHub diffs; all evidence remains inspectable.
+docs/domain-v2-*.json linguist-generated=true

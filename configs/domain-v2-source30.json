@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "name": "source30-typed-rf-v1",
+  "scope": "Development only; E01-E03, all30source people/all27actions. No E04 array decoding. No new untouched-source-person claim after inclusion.",
+  "environments": ["E01", "E02", "E03"],
+  "subjects_per_environment": 10,
+  "actions": 27,
+  "frames_per_record": 297,
+  "input_fields": ["CSIamp", "CSIphase"],
+  "magnitude_units": "log_magnitude_db",
+  "phase_units": "radians",
+  "units_limit": "Empirically inferred receiver-relative scale, not calibrated RSSI/dBm or ADC samples",
+  "label_modality": "rgb",
+  "reference_canvas": [640, 640],
+  "coordinate_note": "Declared isotropic reference plane, not recovered camera calibration. Provided2D annotations only; no images decoded.",
+  "fps": 10,
+  "source_validation_subjects": ["S04", "S09", "S14", "S19", "S24", "S29"],
+  "room_fold_policy": "Hold each E01-E03 room in turn; other2rooms supply16train and4validation people, disjoint whole people/records. Never random frame splits.",
+  "source": "https://github.com/ybhbingo/MMFi_dataset",
+  "license": "CC BY-NC 4.0",
+  "consent_basis": "MM-Fi authors report voluntary signed participant consent and NTU IRB-2022-1067; noncommercial research use."
+}

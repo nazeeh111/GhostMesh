@@ -25,13 +25,14 @@ Issues = "https://github.com/nazeeh111/GhostMesh/issues"
 
 [tool.setuptools]
 packages = ["ghostmesh"]
-include-package-data = true
+include-package-data = false
 
 [tool.setuptools.package-data]
 ghostmesh = ["web/*", "examples/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 
 [tool.ruff]
 line-length = 88
