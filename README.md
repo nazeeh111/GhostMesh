@@ -8,39 +8,15 @@ Channel-state information (CSI) describes changes along Wi-Fi radio paths. Ghost
 
 **Measurement correction:** MM-Fi magnitudes are already logarithmic; v0.1 applies another nonlinear compression. Reported results describe that frozen transform. [Erratum and unit check](docs/ERRATA.md).
 
-**v2 research:** full 40-person data access is restored and its bytes are verified.
-Corrected-signal and calibration experiments have not established reliable motion
-transfer. [Current findings, failed comparisons and protected final protocol](docs/DOMAIN_RESEARCH.md).
+**Current research status:** the full 40-person data are verified. Zero-shot and
+shared-room calibration have not consistently beaten strong baselines. New
+source-only experiments investigate signal timing and cross-room supervision;
+both accuracy gates still fail. [Research map and complete evidence](docs/RESEARCH.md).
 
-The latest [masked-CSI study](docs/MASKED_CSI_RESEARCH.md) independently checks
-89 prediction sets across zero-shot and labeled calibration modes. Neither
-passes its transfer gate. New source-only movement decoders test specific
-failure mechanisms before another room evaluation.
-
-The [geometry-supervised follow-up](docs/GEOMETRY_RESEARCH.md) checks 40 frozen
-readouts and four matched end-to-end models using separate source annotations.
-Its source-person gate also fails; independent CPU replay verifies the results.
-
-The [reference-learning and full-amplitude follow-up](docs/REFERENCE_LEARNING.md)
-trains the CSI representation through reference adaptation and separately tests
-source-person adversarial learning. Both source-only pilots fail their gates;
-the report retains every amplitude checkpoint and independently audited scores.
-
-A separate **local motion diagnostic** now reconstructs later time blocks of one
-recording, with relative motion R² **0.917** and NJE **0.02466**. It uses dense
-references from the same person, room and action. Its compact model and CSI-only
-sample reproduce all 104 held-time predictions. This result supports learning
-from CSI, while unseen-room performance remains unresolved.
-[Evidence, controls and limitations](docs/LOCAL_OBSERVABILITY.md).
-
-The new receiver-covariance candidate also lowers pooled **hip-relative** error
-against a source static prior in three development rooms on three fixed actions.
-Its motion gains are small and reverse for several people and actions. The full
-27-action follow-up loses to the static pose prior in E02. Full pose and useful
-calibrated transfer remain unresolved.
-[Exact scores and reversals](docs/COVARIANCE_RESEARCH.md).
-Further [packet-spectrum experiments](docs/PACKET_TIME_RESEARCH.md) retain
-within-window frequency information, but also fail the consistent transfer gate.
+A separate local diagnostic recovers motion in later blocks of one recording:
+R² **0.917**, NJE **0.02466**, with all 104 CSI-only predictions reproduced.
+It requires dense references from the same person, room and action.
+[Scope, controls and runnable example](docs/LOCAL_OBSERVABILITY.md).
 
 ![Actual held-out CSI replay with predicted and supplied reference skeletons](docs/assets/demo-v1/ghostmesh-demo.gif)
 
