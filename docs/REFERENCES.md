@@ -20,6 +20,9 @@ Temporal convolutions and weight-averaged teachers predate GhostMesh. The origin
 - Kaiming He et al. [Masked Autoencoders Are Scalable Vision Learners](https://arxiv.org/abs/2111.06377), 2021. Background for masked reconstruction. GhostMesh retains all 95 tokens, including mask tokens, rather than reproducing MAE's visible-token-only encoder or its vision benchmarks.
 - Adrien Bardes, Jean Ponce and Yann LeCun. [VICReg: Variance-Invariance-Covariance Regularization for Self-Supervised Learning](https://arxiv.org/abs/2105.04906), ICLR 2022. Background for explicit variance and covariance regularization. GhostMesh's adjacent-CSI objective is an independently implemented adaptation, not a new general self-supervised learning principle.
 - Yang Chen and Jingcai Guo. [Towards Robust and Realistic Human Pose Estimation via WiFi Signals, DT-Pose](https://arxiv.org/abs/2501.09411v2), 2025 version inspected for the masked pilot. Context for masked wireless pretraining and structured pose decoding. No upstream code or weights were copied. GhostMesh's small fixed-budget 2D development pilot is not a replication of that paper or a comparison to its published scores.
+- Luca Bertinetto, João F. Henriques, Philip H. S. Torr and Andrea Vedaldi. [Meta-learning with differentiable closed-form solvers](https://www.robots.ox.ac.uk/~vgg/publications/2019/bertinetto19/), ICLR 2019. Background for training a representation through a ridge-regression adaptation step. GhostMesh's reference-residual solver and CSI implementation are independent; this established meta-learning principle is not claimed as a new general method.
+
+- Yaroslav Ganin et al. [Domain-Adversarial Training of Neural Networks](https://www.jmlr.org/papers/v17/15-239.html), JMLR 2016. Background for gradient reversal. The amplitude pilot applies a nuisance loss to source-person IDs only; it does not use unlabeled target-room data or reproduce full DANN.
 
 ## Benchmark compatibility
 
@@ -36,13 +39,16 @@ separately for each action. A person can appear on both sides through different
 actions. This differs from GhostMesh's person-disjoint folds and does not justify
 calling that implementation an adjacent-frame random split.
 
-The [inspected CSI loader](https://github.com/ybhbingo/MMFi_dataset/blob/c9c1e3a8d5099779a618eae1bb351e253daa52d0/mmfi_lib/mmfi.py#L256)
+The [inspected CSI loader](https://github.com/ybhbingo/MMFi_dataset/blob/c9c1e3a8d5099779a618eae1bb351e253daa52d0/mmfi_lib/mmfi.py#L221)
 also min-max normalizes each magnitude frame and fills missing entries using
 their packet-column mean. GhostMesh's transforms
 and targets are documented independently. The references establish neither an
 exact reproduced paper baseline nor a demonstrated solution to the stricter
-unseen-room requirement. Any future 3D auxiliary target needs a verified
-coordinate/joint contract before supporting a camera-independent claim.
+unseen-room requirement. An anatomical 3D output needs a verified coordinate/joint
+contract before supporting a reconstruction claim. The
+[geometry pilot](GEOMETRY_RESEARCH.md) instead uses explicitly indexed,
+dimensionless point-pair distances. This requires no guessed anatomical
+remapping and establishes no 3D reconstruction.
 
 ## Cite the dataset
 

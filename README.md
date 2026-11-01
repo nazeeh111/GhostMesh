@@ -21,6 +21,11 @@ The [geometry-supervised follow-up](docs/GEOMETRY_RESEARCH.md) checks 40 frozen
 readouts and four matched end-to-end models using separate source annotations.
 Its source-person gate also fails; independent CPU replay verifies the results.
 
+The [reference-learning and full-amplitude follow-up](docs/REFERENCE_LEARNING.md)
+trains the CSI representation through reference adaptation and separately tests
+source-person adversarial learning. Both source-only pilots fail their gates;
+the report retains every amplitude checkpoint and independently audited scores.
+
 A separate **local motion diagnostic** now reconstructs later time blocks of one
 recording, with relative motion R² **0.917** and NJE **0.02466**. It uses dense
 references from the same person, room and action. Its compact model and CSI-only
@@ -60,7 +65,7 @@ Python 3.12 and [uv](https://docs.astral.sh/uv/) are the tested environment.
 The recorded viewer needs only Python's standard library:
 
 ```bash
-git clone --branch research/domain-generalization-v2 https://github.com/nazeeh111/GhostMesh.git
+git clone https://github.com/nazeeh111/GhostMesh.git
 cd GhostMesh
 uv run --isolated --no-project --python 3.12 python -m ghostmesh serve
 ```
@@ -71,8 +76,9 @@ causal CSI amplitude map and per-joint uncertainty. Invalid signal withholds
 the pose; domain warnings identify known or unverified domains. Opening another
 replay stays inside the browser. The viewer plays saved predictions.
 
-These commands select the published v2 research branch. The frozen v0.1 release
-and its original study remain available from the release downloads.
+The main branch contains the verified v2 software and research reports. The
+frozen v0.1 release and its original study remain available from the release
+downloads.
 
 To compute predictions from the shipped CSI-only sample, install the ML stack:
 
