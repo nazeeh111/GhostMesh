@@ -17,6 +17,9 @@ Temporal convolutions and weight-averaged teachers predate GhostMesh. The origin
 
 - Shaojie Bai, J. Zico Kolter and Vladlen Koltun. [An Empirical Evaluation of Generic Convolutional and Recurrent Networks for Sequence Modeling](https://arxiv.org/abs/1803.01271), 2018. Background for causal temporal convolution; GhostMesh does not reproduce that paper's architecture or benchmarks.
 - Antti Tarvainen and Harri Valpola. [Mean teachers are better role models: Weight-averaged consistency targets improve semi-supervised deep learning results](https://arxiv.org/abs/1703.01780), NeurIPS 2017. Background for exponential moving average teacher consistency. GhostMesh's consistency uses source training data only; no claim is made that this supervised source-only variant reproduces the original semi-supervised results.
+- Kaiming He et al. [Masked Autoencoders Are Scalable Vision Learners](https://arxiv.org/abs/2111.06377), 2021. Background for masked reconstruction. GhostMesh retains all 95 tokens, including mask tokens, rather than reproducing MAE's visible-token-only encoder or its vision benchmarks.
+- Adrien Bardes, Jean Ponce and Yann LeCun. [VICReg: Variance-Invariance-Covariance Regularization for Self-Supervised Learning](https://arxiv.org/abs/2105.04906), ICLR 2022. Background for explicit variance and covariance regularization. GhostMesh's adjacent-CSI objective is an independently implemented adaptation, not a new general self-supervised learning principle.
+- Yang Chen and Jingcai Guo. [Towards Robust and Realistic Human Pose Estimation via WiFi Signals, DT-Pose](https://arxiv.org/abs/2501.09411v2), 2025 version inspected for the masked pilot. Context for masked wireless pretraining and structured pose decoding. No upstream code or weights were copied. GhostMesh's small fixed-budget 2D development pilot is not a replication of that paper or a comparison to its published scores.
 
 ## Benchmark compatibility
 

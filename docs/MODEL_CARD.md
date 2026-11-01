@@ -29,6 +29,12 @@ occur in development, and room/person changes are confounded. Read the
 and [frozen signal diagnostics](../results/signal-controls-v1/README.md) together.
 The shipped replay is a preselected example, not evidence of typical accuracy.
 
+The [later masked-CSI models and conditional movement screens](MASKED_CSI_RESEARCH.md)
+are research candidates, with independently checked failed transfer gates.
+They have not replaced the released weights. Their hip-relative outputs,
+source-fitted full-image heads and labeled calibration protocols have separate
+contracts and should not inherit the released model's confidence or timing.
+
 ## Measurement interpretation correction
 
 The audited MM-Fi `CSIamp` field is empirically consistent with logarithmic

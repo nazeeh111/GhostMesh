@@ -24,6 +24,11 @@ remain measurements of that frozen transform. [Details and reproducible unit che
 Corrected-signal and calibration experiments have not established reliable motion
 transfer. [Current findings, failed comparisons and protected final protocol](docs/DOMAIN_RESEARCH.md).
 
+The latest [masked-CSI study](docs/MASKED_CSI_RESEARCH.md) independently checks
+89 prediction sets across zero-shot and labeled calibration modes. Neither
+passes its transfer gate. New source-only movement decoders test specific
+failure mechanisms before another room evaluation.
+
 A separate **local motion diagnostic** now reconstructs later time blocks of one
 recording, with relative motion R² **0.917** and NJE **0.02466**. It uses dense
 references from the same person, room and action. Its compact model and CSI-only

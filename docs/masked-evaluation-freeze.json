@@ -1,0 +1,47 @@
+{
+  "stage": "frozen_before_first_E02_query_metrics",
+  "time_utc": "2026-10-30T00:42:52.541946+00:00",
+  "seed": 2027,
+  "development_room": "E02",
+  "held_query_metrics_already_computed": false,
+  "reference_people": [
+    "S11",
+    "S12"
+  ],
+  "calibrated_query_people": [
+    "S13",
+    "S14",
+    "S15",
+    "S16",
+    "S17",
+    "S18",
+    "S19",
+    "S20"
+  ],
+  "zero_query_people": [
+    "S11",
+    "S12",
+    "S13",
+    "S14",
+    "S15",
+    "S16",
+    "S17",
+    "S18",
+    "S19",
+    "S20"
+  ],
+  "reference_labels": 120,
+  "primary_zero": "masked_temporal",
+  "primary_calibrated": "masked_temporal/residual_krr",
+  "gates": "Exact prospectively frozen fitter score functions; no modifications. Positive record-centered motion, NJE/PCK controls and query-shuffle requirements retained. Hip-relative and full-image targets stay separate. No new E04 decoding/scoring. One exposed source-development fold/seed is not final generalization.",
+  "frozen_sha256": {
+    "work/domain-masked-pretrain-e02-v1/source-ready.json": "303922cdcb0e8007b25b0488c5cc14515487afb635cf60bc9b8b0b3f31786461",
+    "work/domain-masked-fullpose-e02-v1/fullpose-source-ready.json": "281083b85c587053ad3246062c5bc61135e530195a887361152b71b4651934dd",
+    "work/domain-masked-calibration-e02-v1/calibration-ready.json": "dc6f1bf7ca60c4228680df64d18a26ac15ea2d3fdd41c1775523bde1e1e6b5c2",
+    "work/domain-masked-fullimage-calibration-e02-v1/fullimage-calibration-ready.json": "5641ec94f2707bd322ce49dffd6c291525b74e24c8a51ca4a9b404fa169d1473",
+    "work/domain-masked-source-verification-v1.json": "a4eb22bf7b72dda43e38715dc29fa6a7516d2dae288178a82b02b874cff4880a",
+    "work/domain-masked-fullpose-verification-v1.json": "3553818fd24a61a47c411445f609a9f9323a3107b463c3b127a08903c88ba7dc",
+    "work/domain-masked-calibration-verification-v1.json": "73cb802f1174f5a370c0c2f2548046cab041620f1ff04a8e5f7cebd3bbc7a173",
+    "work/domain-masked-fullimage-calibration-verification-v1.json": "24738a2f6e17d110880a1b89eba9a069edbb67ef6e82f770d0142a668a47c63d"
+  }
+}

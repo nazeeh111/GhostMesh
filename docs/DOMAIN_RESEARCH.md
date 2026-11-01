@@ -2,6 +2,12 @@
 
 **Status: incomplete. No replacement model has demonstrated consistent baseline improvement.** The released application and v0.1 weights remain the supported replay path. This research branch preserves unsuccessful experiments and keeps its final E04 recording arrays sealed.
 
+The latest [masked-CSI representation and movement-decoder study](MASKED_CSI_RESEARCH.md)
+adds matched pretraining ablations, separately frozen full-image and hip-relative
+heads, reference-person-held calibration and independent reconstruction of all
+89 scored prediction sets. All four transfer gates fail. Source-only follow-ups
+test conditional and pooled movement mappings without another E02 query score.
+
 ## What the measurements establish
 
 The original MM-Fi magnitude interpretation was incorrect. Original double-precision magnitude and phase reconstruct integer complex coefficients for all 411,369,834 finite source samples when magnitude is interpreted as 20 log10, with maximum rounding residual 3.979e-13. This is empirical evidence of receiver-relative log magnitude, not calibrated RSSI/dBm or ADC samples. See the [measurement erratum](ERRATA.md). An interpretation correction does not establish a model improvement; old measured scores remain valid for their frozen transforms.
