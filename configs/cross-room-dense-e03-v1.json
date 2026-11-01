@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "held_room": "E03",
+  "source_validation_people": [
+    "S04",
+    "S09",
+    "S14",
+    "S19"
+  ],
+  "seed": 2027,
+  "steps": 3000,
+  "checkpoint_every": 500,
+  "learning_rate": 0.0002,
+  "weight_decay": 0.01,
+  "alignment_weight": 0.1,
+  "ridge": 0.1,
+  "reference_count_convention": 24,
+  "pose_scale_floor": 0.01,
+  "delta_scale_floor": 0.01,
+  "source_reference_people": {
+    "E01": [
+      "S01",
+      "S02"
+    ],
+    "E02": [
+      "S11",
+      "S12"
+    ]
+  },
+  "reference_actions": [
+    "A03",
+    "A07",
+    "A12"
+  ],
+  "references_per_record": 20,
+  "arms": [
+    "ordinary",
+    "cross_room",
+    "teacher_permuted"
+  ],
+  "primary": "cross_room",
+  "input": "32RFmomentframes through targetframe+4, explicit400ms nominaloutputbuffer. Complete114subcarriers retained. AbsoluteTRAINnormalization pluswithin-history centered/RMSscaled channel, noquerypose/hip/root/recordmean",
+  "hypothesis": "Direct continuous2Dpose similarity across two differentSOURCErooms, not merely differentpeople inone room; denseTRAINendpoint exposure, samearchitecture/supervision/96000RFendpointbudgetallarms. No E03 weights/stats/annotations",
+  "teacher": "OnlydifferentSOURCEroom pairs; cosineCSI/.1 logits, softmax negativestandardizedpose squared distance/(2*.5^2). IDs TRAINloss only, teacherposesdetached. Controlrotatespersonpairswithinroom; modelforwardRFonly",
+  "prototypes": "128deterministic sourceTRAINbody-pose kmeans centroids, prior proportional TRAINcluster counts, initialhead zero => weightedsourceposeprior. No E03weights/statistics/labels",
+  "schedule": "3000stepsx32histories:16TRAINpeopleeachoneexactlag8pair. Sameinit/schedule/labels/architectureallarms; ordinarylossweight0,primary/corruptteacher.1",
+  "selection": "All3fullbudgets beforeanyVALscore;all21states0/500/.../3000 retained;independentzero/cal maxSOURCEVALbodyR2/lowerNJE/earlierstep",
+  "calibration": "120refsPERsourceROOM=240total;sourcequery4VALpeople. Separateunit128code ridge perroom lambda.1*120/24. Rawlinear/RBFsame120/room/context/reference-onlyCV. RoomcheckpointselectionknowninCALmode, no roomID input toforward. Not unseenroomcalibration",
+  "gate": "Separatezero/cal body/deltaR2>.05,bothsourceROOMpositive,3of4peoplepositive,NJEbeatscontrols/PCKnotworse/shuffleworse. Zeroincludesstrongdiagnosticroomoraclepriors. CalbeatsmatchedbestzeroANDowncalcheckpointzero. NoE03querybeforeaudit/newtargetfreeze",
+  "references": [
+    "https://openaccess.thecvf.com/content_ICCV_2019/html/Tung_Similarity-Preserving_Knowledge_Distillation_ICCV_2019_paper.html",
+    "https://arxiv.org/abs/2004.11362"
+  ],
+  "limits": "E01/E02sourcepersondevelopment only;repeatedVAL, denseTRAIN labels differfromearlierpilotbutidenticalnewarms. E03historicallyprojectDEVheldroomunseenbythismodel;E04sealed. 2Dhiprelativebody/400msnominalbuffer,notfullposition/3D/reliablesensing/personalcalibration",
+  "source_rooms": [
+    "E01",
+    "E02"
+  ],
+  "expected_source_train": 108956,
+  "expected_source_validation": 3435,
+  "source_reference_rows_per_room": 120,
+  "source_reference_rows_total": 240,
+  "TRAIN_endpoint_stride": 1,
+  "VAL_endpoint_stride": 8
+}
