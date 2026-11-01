@@ -112,6 +112,10 @@ def plot(report, out):
     out.mkdir(parents=True)
     fig.savefig(out / "masked-transfer.png", dpi=180, facecolor=fig.get_facecolor())
     fig.savefig(out / "masked-transfer.svg", facecolor=fig.get_facecolor())
+    svg = out / "masked-transfer.svg"
+    svg.write_text(
+        "\n".join(line.rstrip() for line in svg.read_text().splitlines()) + "\n"
+    )
     plt.close(fig)
     (out / "provenance.json").write_text(
         json.dumps(
