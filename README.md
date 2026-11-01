@@ -1,24 +1,12 @@
 # GhostMesh
 
-[![Reproducibility checks](https://github.com/nazeeh111/GhostMesh/actions/workflows/ci.yml/badge.svg)](https://github.com/nazeeh111/GhostMesh/actions/workflows/ci.yml)
+**Inspect 2D pose predictions from Wi-Fi recordings.**
 
-**Camera-free 2D pose inference. Real held-out data. Inspectable uncertainty.**
+Channel-state information (CSI) describes changes along Wi-Fi radio paths. GhostMesh turns CSI into 17-joint pose predictions and exposes signal maps, uncertainty and reference annotations in a local replay viewer. Inference consumes CSI alone.
 
-Channel-state information (CSI) describes how Wi-Fi signals change along radio
-paths. GhostMesh implements an original CSI-to-pose pipeline and a local
-application for inspecting its 17-joint predictions, signal maps, confidence
-and reference annotations. Inference consumes CSI alone.
+**Research preview:** fine joint accuracy is low and unseen-room confidence is unreliable. The measured study below includes strong static baselines and mixed temporal-model results.
 
-**Research finding:** the completed study is mixed. Temporal encoding and
-teacher consistency did not consistently improve the simpler neural baseline.
-Room-specific pose priors are strong, fine joint accuracy remains low, and
-unseen-room confidence is unreliable. This release documents those limits
-alongside the working software. Robust dynamic pose recovery and “10×”
-superiority are not established.
-
-**Measurement correction:** the audited MM-Fi magnitude field is already
-logarithmic; v0.1 adds another nonlinear compression. Its reported results
-remain measurements of that frozen transform. [Details and reproducible unit check](docs/ERRATA.md).
+**Measurement correction:** MM-Fi magnitudes are already logarithmic; v0.1 applies another nonlinear compression. Reported results describe that frozen transform. [Erratum and unit check](docs/ERRATA.md).
 
 ![Actual held-out CSI replay with predicted and supplied reference skeletons](docs/assets/demo-v1/ghostmesh-demo.gif)
 
@@ -68,6 +56,8 @@ uv run ghostmesh serve --replay examples/unseen-room-replay.json
 No boards, camera, cloud account or billed API are required for these paths.
 
 ## Measured study
+
+Temporal encoding and teacher consistency did not consistently improve the simpler neural baseline. Room-specific pose priors are strong; neither robust dynamic pose recovery nor “10×” superiority is established.
 
 The cohort contains **27 actions, 20 people, four environments, 540 sequences
 and 160,380 paired frames**. Twelve neural arms each trained for 40 epochs;
@@ -186,6 +176,8 @@ uv run ghostmesh evaluate --manifest data/mmfi-prepared/manifest.json \
 [Study archive and chart rendering](docs/STUDY_BUNDLE.md)
 
 ## Verification
+
+[Reproducibility workflow](https://github.com/nazeeh111/GhostMesh/actions/workflows/ci.yml)
 
 ```bash
 uv run pytest -q --ignore=tests/test_report_results.py
