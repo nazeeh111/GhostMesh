@@ -29,6 +29,10 @@ The latest [masked-CSI study](docs/MASKED_CSI_RESEARCH.md) independently checks
 passes its transfer gate. New source-only movement decoders test specific
 failure mechanisms before another room evaluation.
 
+The [geometry-supervised follow-up](docs/GEOMETRY_RESEARCH.md) checks 40 frozen
+readouts and four matched end-to-end models using separate source annotations.
+Its source-person gate also fails; independent CPU replay verifies the results.
+
 A separate **local motion diagnostic** now reconstructs later time blocks of one
 recording, with relative motion R² **0.917** and NJE **0.02466**. It uses dense
 references from the same person, room and action. Its compact model and CSI-only
